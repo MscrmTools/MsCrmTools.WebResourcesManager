@@ -152,9 +152,9 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 resource.Node.SelectedImageIndex = resource.Node.SelectedImageIndex - 12;
             }
 
-            if (e.NewState == WebresourceState.Draft)
+            if (e.NewState != WebresourceState.None)
             {
-                var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Draft /*&& w.SyncedWithCrm*/).ToList();
+                var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Draft).ToList();
 
                 if (waitingUpdateResources.Count > 0)
                 {
@@ -164,6 +164,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         waitingUpdateResources.Count > 1 ? "" : "s");
 
                     pnlWaitingPublish.Visible = true;
+                }
+                else
+                {
+                    pnlWaitingPublish.Visible = false;
                 }
             }
         }
@@ -938,7 +942,13 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
         private void llUpdateResources_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var webresources = WebResources.Where(x => x.State == WebresourceState.Draft && x.SyncedWithCrm).ToList();
+            var webresources = WebResources.Where(x => x.State == WebresourceState.Draft).ToList();
+            if(webresources.Count == 0)
+            {
+                MessageBox.Show("No webresource need to be updated!");
+                pnlWaitingPublish.Visible = false;
+                return;
+            }
 
             var dialog = new UpdateOptionsDialog(webresources);
             if(dialog.ShowDialog(ParentForm) == DialogResult.OK)

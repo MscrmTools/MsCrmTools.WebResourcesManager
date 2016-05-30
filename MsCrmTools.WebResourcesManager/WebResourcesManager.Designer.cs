@@ -160,6 +160,7 @@
             this.webresourceTreeView1.TabIndex = 0;
             this.webresourceTreeView1.WebResourceContextMenuRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceContextMenuRequestedEventArgs>(this.webresourceTreeView1_WebResourceContextMenuRequested);
             this.webresourceTreeView1.WebResourceSelected += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceSelectedEventArgs>(this.webresourceTreeView1_WebResourceSelected);
+            this.webresourceTreeView1.WebResourceUpdateRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.AppCode.EventHandlers.WebResourceUpdateRequestedEventArgs>(this.WebresourceTreeView1_WebResourceUpdateRequested);
             // 
             // panelControl
             // 
