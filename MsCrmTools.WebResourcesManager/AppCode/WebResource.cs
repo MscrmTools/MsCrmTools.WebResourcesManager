@@ -94,6 +94,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             {
                 state = value;
 
+                // Associated Map and TS files won't have a Node.  Skip updating UI.
+                if (Node == null)
+                {
+                    return;
+                }
+
                 switch (value)
                 {
                     case WebresourceState.None:
