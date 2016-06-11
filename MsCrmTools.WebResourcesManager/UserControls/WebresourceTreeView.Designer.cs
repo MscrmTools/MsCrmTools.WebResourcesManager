@@ -186,6 +186,7 @@
             this.tv.Size = new System.Drawing.Size(614, 955);
             this.tv.TabIndex = 88;
             this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
+            this.tv.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tv_BeforeSelect);
             this.tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterSelect);
             this.tv.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_DragDrop);
             this.tv.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_DragOver);

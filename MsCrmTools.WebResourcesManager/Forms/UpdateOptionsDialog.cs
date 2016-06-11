@@ -6,6 +6,7 @@
 using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.Forms
@@ -26,10 +27,13 @@ namespace MsCrmTools.WebResourcesManager.Forms
             foreach (var webresource in webresources)
             {
                 lvWebresources.Items.Add(webresource.Entity.GetAttributeValue<string>("name"));
+                lvWebresources.Items[lvWebresources.Items.Count - 1].Checked = true;
             }
         }
 
         public WebResourceUpdateOption SelectedOption {get;set;}
+
+        public List<string> WebResourcesToUpdate { get { return lvWebresources.CheckedItems.Cast<ListViewItem>().Select(e => e.Text).ToList(); } }
 
         private void BtnCancelClick(object sender, EventArgs e)
         {

@@ -21,10 +21,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.WebResourcesManager
 {
-    public partial class WebResourcesManager : PluginControlBase
+    public partial class WebResourcesManager : PluginControlBase, IGitHubPlugin, IHelpPlugin
     {
         #region Variables
 
@@ -38,6 +39,30 @@ namespace MsCrmTools.WebResourcesManager
         /// Scripts Manager
         /// </summary>
         private AppCode.WebResourceManager wrManager;
+
+        public string RepositoryName
+        {
+            get
+            {
+                return "MsCrmTools.WebResourcesManager";
+            }
+        }
+
+        public string UserName
+        {
+            get
+            {
+                return "MscrmTools";
+            }
+        }
+
+        public string HelpUrl
+        {
+            get
+            {
+                return "https://github.com/MscrmTools/MsCrmTools.WebResourcesManager/wiki";
+            }
+        }
 
         #endregion Variables
 
@@ -1477,6 +1502,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 if (ctrl != null)
                 {
+                    ctrl.Name = "webresourceContentControl";
                     ctrl.Dock = DockStyle.Fill;
                     panelControl.Controls.Add(ctrl);
 

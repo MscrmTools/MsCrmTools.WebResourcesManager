@@ -159,8 +159,8 @@
             this.webresourceTreeView1.Size = new System.Drawing.Size(344, 875);
             this.webresourceTreeView1.TabIndex = 0;
             this.webresourceTreeView1.WebResourceContextMenuRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceContextMenuRequestedEventArgs>(this.webresourceTreeView1_WebResourceContextMenuRequested);
-            this.webresourceTreeView1.WebResourceSelected += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceSelectedEventArgs>(this.webresourceTreeView1_WebResourceSelected);
             this.webresourceTreeView1.WebResourceUpdateRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.AppCode.EventHandlers.WebResourceUpdateRequestedEventArgs>(this.WebresourceTreeView1_WebResourceUpdateRequested);
+            this.webresourceTreeView1.WebResourceSelected += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceSelectedEventArgs>(this.webresourceTreeView1_WebResourceSelected);
             // 
             // panelControl
             // 
@@ -329,7 +329,7 @@
             this.tsbMinifyJS.Image = ((System.Drawing.Image)(resources.GetObject("tsbMinifyJS.Image")));
             this.tsbMinifyJS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMinifyJS.Name = "tsbMinifyJS";
-            this.tsbMinifyJS.Size = new System.Drawing.Size(112, 35);
+            this.tsbMinifyJS.Size = new System.Drawing.Size(120, 35);
             this.tsbMinifyJS.Text = "Compress";
             this.tsbMinifyJS.ToolTipText = "This feature compress/minify a script web resource. It does not obfuscate the cod" +
     "e, just remove useless formatting.\r\nBe careful when using this feature! There is" +
@@ -342,7 +342,7 @@
             this.tsbPreviewHtml.Image = ((System.Drawing.Image)(resources.GetObject("tsbPreviewHtml.Image")));
             this.tsbPreviewHtml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPreviewHtml.Name = "tsbPreviewHtml";
-            this.tsbPreviewHtml.Size = new System.Drawing.Size(92, 35);
+            this.tsbPreviewHtml.Size = new System.Drawing.Size(100, 35);
             this.tsbPreviewHtml.Text = "Preview";
             this.tsbPreviewHtml.ToolTipText = "This feature allows you to preview HTML pages. It does not warn about script erro" +
     "r, so the HTML page could not render or behave as expected";
@@ -354,7 +354,7 @@
             this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
             this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBeautify.Name = "tsbBeautify";
-            this.tsbBeautify.Size = new System.Drawing.Size(95, 35);
+            this.tsbBeautify.Size = new System.Drawing.Size(103, 35);
             this.tsbBeautify.Text = "Beautify";
             this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
     "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
@@ -376,7 +376,7 @@
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(110, 35);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(118, 35);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.TsmiGetLatestVersionClick);
             // 
@@ -397,7 +397,7 @@
             this.tsbComment.Image = ((System.Drawing.Image)(resources.GetObject("tsbComment.Image")));
             this.tsbComment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbComment.Name = "tsbComment";
-            this.tsbComment.Size = new System.Drawing.Size(23, 35);
+            this.tsbComment.Size = new System.Drawing.Size(28, 35);
             this.tsbComment.Text = "Comment";
             this.tsbComment.Click += new System.EventHandler(this.tsbComment_Click);
             // 
@@ -407,7 +407,7 @@
             this.tsbnUncomment.Image = ((System.Drawing.Image)(resources.GetObject("tsbnUncomment.Image")));
             this.tsbnUncomment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbnUncomment.Name = "tsbnUncomment";
-            this.tsbnUncomment.Size = new System.Drawing.Size(23, 35);
+            this.tsbnUncomment.Size = new System.Drawing.Size(28, 35);
             this.tsbnUncomment.Text = "Uncomment";
             this.tsbnUncomment.Click += new System.EventHandler(this.tsbnUncomment_Click);
             // 
@@ -644,7 +644,6 @@
             // 
             // cmsWebResourceTreeView
             // 
-            this.cmsWebResourceTreeView.ImageScalingSize = new System.Drawing.Size(16, 16);
             this.cmsWebResourceTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewWebResourceToolStripMenuItem,
             this.addNewEmptyWebResourceToolStripMenuItem,

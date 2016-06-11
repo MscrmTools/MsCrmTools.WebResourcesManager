@@ -50,6 +50,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public string LastFolderUsed { get; set; }
         public bool SaveOnDisk { get; set; }
         public bool PushTsMapFiles { get; set; }
+        public bool AutoSaveWhenLeaving { get; set; }
 
         public void Save()
         {

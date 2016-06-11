@@ -166,10 +166,12 @@
             // rdbUpdatePublish
             // 
             this.rdbUpdatePublish.AutoSize = true;
+            this.rdbUpdatePublish.Checked = true;
             this.rdbUpdatePublish.Location = new System.Drawing.Point(6, 154);
             this.rdbUpdatePublish.Name = "rdbUpdatePublish";
             this.rdbUpdatePublish.Size = new System.Drawing.Size(157, 24);
             this.rdbUpdatePublish.TabIndex = 1;
+            this.rdbUpdatePublish.TabStop = true;
             this.rdbUpdatePublish.Text = "Update & Publish";
             this.rdbUpdatePublish.UseMnemonic = false;
             this.rdbUpdatePublish.UseVisualStyleBackColor = true;
@@ -177,12 +179,10 @@
             // rdbUpdate
             // 
             this.rdbUpdate.AutoSize = true;
-            this.rdbUpdate.Checked = true;
             this.rdbUpdate.Location = new System.Drawing.Point(13, 25);
             this.rdbUpdate.Name = "rdbUpdate";
             this.rdbUpdate.Size = new System.Drawing.Size(87, 24);
             this.rdbUpdate.TabIndex = 0;
-            this.rdbUpdate.TabStop = true;
             this.rdbUpdate.Text = "Update";
             this.rdbUpdate.UseVisualStyleBackColor = true;
             // 
@@ -198,6 +198,7 @@
             // 
             // lvWebresources
             // 
+            this.lvWebresources.CheckBoxes = true;
             this.lvWebresources.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.lvWebresources.Dock = System.Windows.Forms.DockStyle.Fill;

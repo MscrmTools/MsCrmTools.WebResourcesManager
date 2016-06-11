@@ -21,6 +21,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             Options.Instance.SaveOnDisk = chkSaveOnDisk.Checked;
             Options.Instance.PushTsMapFiles = chkPushMapAndTsFiles.Checked;
+            Options.Instance.AutoSaveWhenLeaving = chkAutoSaveEnabled.Checked;
             Options.Instance.AfterUpdateCommand = txtUpdateEvent.Text;
             Options.Instance.AfterPublishCommand = txtPublishEvent.Text;
 
@@ -32,7 +33,8 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             chkSaveOnDisk.Checked = Options.Instance.SaveOnDisk;
             chkPushMapAndTsFiles.Checked = Options.Instance.PushTsMapFiles;
-            txtUpdateEvent.Text = Options.Instance.AfterUpdateCommand;
+            chkAutoSaveEnabled.Checked = Options.Instance.AutoSaveWhenLeaving;
+            txtPublishEvent.Text = Options.Instance.AfterPublishCommand;
             txtPublishEvent.Text = Options.Instance.AfterPublishCommand;
         }
     }

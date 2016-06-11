@@ -133,6 +133,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public bool FoldingEnabled { get; private set; }
 
+        public bool IsDirty { get { return innerContent != originalContent; } }
+
         #endregion Properties
 
         #region Handlers

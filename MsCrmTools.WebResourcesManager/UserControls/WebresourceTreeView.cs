@@ -5,6 +5,7 @@ using MsCrmTools.WebResourcesManager.Forms;
 using MsCrmTools.WebResourcesManager.New.EventHandlers;
 using MsCrmTools.WebResourcesManager.New.Extensions;
 using MsCrmTools.WebResourcesManager.Properties;
+using MsCrmTools.WebResourcesManager.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -146,29 +147,26 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         private void Wr_WebresourceStateChanged(object sender, WebresourceStateChangedArgs e)
         {
             var resource = (WebResource)sender;
-            if(resource.Node.ImageIndex > 11 && (e.NewState == WebresourceState.Saved || e.NewState == WebresourceState.Published))
+            if (resource.Node.ImageIndex > 11 && (e.NewState == WebresourceState.Saved || e.NewState == WebresourceState.Published))
             {
                 resource.Node.ImageIndex = resource.Node.ImageIndex - 12;
                 resource.Node.SelectedImageIndex = resource.Node.SelectedImageIndex - 12;
             }
 
-            if (e.NewState != WebresourceState.None)
+            var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Draft).ToList();
+
+            if (waitingUpdateResources.Count > 0)
             {
-                var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Draft).ToList();
+                lblWaitingPublish.Text = string.Format("{0} resource{1} need{2} to be updated and published to CRM server",
+                    waitingUpdateResources.Count,
+                    waitingUpdateResources.Count > 1 ? "s" : "",
+                    waitingUpdateResources.Count > 1 ? "" : "s");
 
-                if (waitingUpdateResources.Count > 0)
-                {
-                    lblWaitingPublish.Text = string.Format("{0} resource{1} need{2} to be updated and published to CRM server",
-                        waitingUpdateResources.Count,
-                        waitingUpdateResources.Count > 1 ? "s" : "",
-                        waitingUpdateResources.Count > 1 ? "" : "s");
-
-                    pnlWaitingPublish.Visible = true;
-                }
-                else
-                {
-                    pnlWaitingPublish.Visible = false;
-                }
+                pnlWaitingPublish.Visible = true;
+            }
+            else
+            {
+                pnlWaitingPublish.Visible = false;
             }
         }
 
@@ -955,11 +953,43 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             {
                 WebResourceUpdateRequested(this, new WebResourceUpdateRequestedEventArgs
                 {
-                    WebResources = webresources,
+                    WebResources = webresources.Where(w=> dialog.WebResourcesToUpdate.Contains(w.Entity.GetAttributeValue<string>("name"))).ToList(),
                     Action = dialog.SelectedOption
                 });
 
-                pnlWaitingPublish.Visible = false;
+                //pnlWaitingPublish.Visible = false;
+            }
+        }
+
+        private void tv_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            var selectedNode = tv.SelectedNode;
+            if (selectedNode != null)
+            {
+                var resource = selectedNode.Tag as WebResource;
+                if (resource != null && Options.Instance.AutoSaveWhenLeaving)
+                {
+                    Control c = this;
+                    do
+                    {
+                        c = c.Parent;
+                    }
+                    while (!(c is WebResourcesManager));
+                    var ctrl = (WebResourcesManager)c;
+
+
+                    var saveCtrls = ctrl.Controls.Find("toolStripScriptContent", true);
+                    var codeCtrls = ctrl.Controls.Find("webresourceContentControl", true);
+
+                    if (saveCtrls.Length == 1 && codeCtrls.Length == 1)
+                    {
+                        if (((CodeControl)codeCtrls[0]).IsDirty)
+                        {
+                            var fileMenu = (ToolStripDropDownButton)((ToolStrip)saveCtrls[0]).Items.Cast<ToolStripItem>().First(t => t.Name == "toolStripDropDownButton1");
+                            fileMenu.DropDownItems.Cast<ToolStripItem>().First(t => t.Name == "fileMenuSave").PerformClick();
+                        }
+                    }
+                }
             }
         }
     }
