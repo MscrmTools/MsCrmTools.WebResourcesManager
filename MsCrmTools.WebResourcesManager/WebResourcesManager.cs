@@ -92,6 +92,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             Guid solutionId = Guid.Empty;
             List<int> typesToload;
+            bool hideMicrosoftWebresources;
 
             // If from solution, display the solution picker so that user can
             // select the solution containing the web resources he wants to
@@ -110,10 +111,11 @@ namespace MsCrmTools.WebResourcesManager
             }
 
             // Display web resource types selection dialog
-            var dialog = new WebResourceTypeSelectorDialog();
+            var dialog = new WebResourceTypeSelectorDialog(fromSolution, ConnectionDetail.OrganizationMajorVersion);
             if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 typesToload = dialog.TypesToLoad;
+                hideMicrosoftWebresources = dialog.HideMicrosoftWebresources;
             }
             else
             {
@@ -125,12 +127,12 @@ namespace MsCrmTools.WebResourcesManager
 
             WorkAsync(new WorkAsyncInfo("Loading web resources...", e =>
             {
-                var args = (Tuple<Guid, List<int>>)e.Argument;
+                var args = (Tuple<Guid, List<int>, bool>)e.Argument;
 
-                webresourceTreeView1.LoadWebResourcesFromServer(args.Item1, args.Item2);
+                webresourceTreeView1.LoadWebResourcesFromServer(args.Item1, args.Item2, args.Item3);
             })
             {
-                AsyncArgument = new Tuple<Guid, List<int>>(solutionId, typesToload),
+                AsyncArgument = new Tuple<Guid, List<int>, bool>(solutionId, typesToload, hideMicrosoftWebresources),
                 PostWorkCallBack = e =>
                 {
                     webresourceTreeView1.DisplayWebResources();

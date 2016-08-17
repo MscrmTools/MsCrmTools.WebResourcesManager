@@ -6,11 +6,17 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class WebResourceTypeSelectorDialog : Form
     {
-        public WebResourceTypeSelectorDialog()
+        public WebResourceTypeSelectorDialog(bool fromSolution, int majorVersion)
         {
             InitializeComponent();
+
+            if (majorVersion < 8 || fromSolution)
+            {
+                chkLoadResourcesFromMicrosoft.Visible = false;
+            }
         }
 
+        public bool HideMicrosoftWebresources { get; internal set; }
         public List<int> TypesToLoad { get; private set; }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -22,6 +28,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void btnOk_Click(object sender, EventArgs e)
         {
             TypesToLoad = new List<int>();
+            HideMicrosoftWebresources = !chkLoadResourcesFromMicrosoft.Checked;
 
             foreach (string s in webResourceTypePicker1.CheckedExtensions)
             {

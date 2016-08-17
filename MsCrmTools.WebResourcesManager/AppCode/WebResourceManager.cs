@@ -194,7 +194,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         /// Retrieves all web resources that are customizable
         /// </summary>
         /// <returns>List of web resources</returns>
-        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types)
+        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types, bool hideMicrosoftWebresources = true)
         {
             try
             {
@@ -229,6 +229,14 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         },
                         Orders = { new OrderExpression("name", OrderType.Ascending) }
                     };
+
+                    if (hideMicrosoftWebresources)
+                    {
+                        qe.Criteria.Filters.First().Conditions.AddRange(
+                            new ConditionExpression("name", ConditionOperator.DoesNotBeginWith, "cc_MscrmControls"),
+                            new ConditionExpression("name", ConditionOperator.DoesNotBeginWith, "msdyn_")
+                            );
+                    }
 
                     return innerService.RetrieveMultiple(qe);
                 }

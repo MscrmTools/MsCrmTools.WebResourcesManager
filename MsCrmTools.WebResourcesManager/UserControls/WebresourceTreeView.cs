@@ -409,12 +409,12 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         /// </summary>
         /// <param name="solutionId">Solution unique identifier</param>
         /// <param name="typesToLoad">Web resources types to load</param>
-        public void LoadWebResourcesFromServer(Guid solutionId, List<int> typesToLoad)
+        public void LoadWebResourcesFromServer(Guid solutionId, List<int> typesToLoad, bool hideMicrosoftWebresources = true)
         {
             WebResources.Clear();
 
             var wrManager = new WebResourceManager(Service);
-            var webResourcesCollection = wrManager.RetrieveWebResources(solutionId, typesToLoad);
+            var webResourcesCollection = wrManager.RetrieveWebResources(solutionId, typesToLoad, hideMicrosoftWebresources);
             WebResources = webResourcesCollection.Entities.Select(e => new WebResource(e)).ToList();
         }
 

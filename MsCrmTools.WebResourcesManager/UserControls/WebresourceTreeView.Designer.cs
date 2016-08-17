@@ -79,8 +79,8 @@
             this.pnlBottom.Controls.Add(this.lblSeparator);
             this.pnlBottom.Controls.Add(this.llExpandAll);
             this.pnlBottom.Controls.Add(this.chkSelectAll);
-            this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 1005);
+            this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlBottom.Location = new System.Drawing.Point(0, 0);
             this.pnlBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(614, 26);
@@ -143,7 +143,7 @@
             this.pnlWaitingPublish.Controls.Add(this.llUpdateResources);
             this.pnlWaitingPublish.Controls.Add(this.lblWaitingPublish);
             this.pnlWaitingPublish.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlWaitingPublish.Location = new System.Drawing.Point(0, 0);
+            this.pnlWaitingPublish.Location = new System.Drawing.Point(0, 26);
             this.pnlWaitingPublish.Name = "pnlWaitingPublish";
             this.pnlWaitingPublish.Size = new System.Drawing.Size(614, 50);
             this.pnlWaitingPublish.TabIndex = 87;
@@ -179,7 +179,7 @@
             this.tv.HideSelection = false;
             this.tv.ImageIndex = 0;
             this.tv.ImageList = this.ilWebResourceTypes;
-            this.tv.Location = new System.Drawing.Point(0, 50);
+            this.tv.Location = new System.Drawing.Point(0, 76);
             this.tv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tv.Name = "tv";
             this.tv.SelectedImageIndex = 0;
