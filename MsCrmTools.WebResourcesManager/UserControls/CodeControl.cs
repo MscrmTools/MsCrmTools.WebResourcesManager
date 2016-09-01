@@ -435,7 +435,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             // Specific comment behavior for JavaScript (//)
             if (innerType == Enumerations.WebResourceType.Script)
             {
-                for (DocumentLine line = start; line.LineNumber < end.LineNumber + 1; line = line.NextLine)
+                for (DocumentLine line = start; line?.LineNumber < end.LineNumber + 1; line = line.NextLine)
                 {
                     if (comment)
                     {
