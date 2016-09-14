@@ -369,6 +369,11 @@ namespace MsCrmTools.WebResourcesManager
                 // Let the user decides where to find files
                 var fbd = new CustomFolderBrowserDialog(true);
 
+                if (string.IsNullOrWhiteSpace(currentFolderForFiles))
+                {
+                    currentFolderForFiles = Options.Instance.LastFolderUsed;
+                }
+
                 if (!string.IsNullOrEmpty(currentFolderForFiles))
                 {
                     fbd.FolderPath = currentFolderForFiles;
@@ -377,6 +382,8 @@ namespace MsCrmTools.WebResourcesManager
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     currentFolderForFiles = fbd.FolderPath;
+                    var options = Options.Instance;
+                    options.LastFolderUsed = currentFolderForFiles;
                     Options.Instance.Save();
 
                     var invalidFilenames = webresourceTreeView1.LoadWebResourcesFromDisk(fbd.FolderPath, fbd.ExtensionsToLoad);
@@ -432,6 +439,11 @@ namespace MsCrmTools.WebResourcesManager
         {
             var fbd = new CustomFolderBrowserDialog(true, false);
 
+            if (string.IsNullOrWhiteSpace(currentFolderForFiles))
+            {
+                currentFolderForFiles = Options.Instance.LastFolderUsed;
+            }
+
             if (!string.IsNullOrEmpty(currentFolderForFiles))
             {
                 fbd.FolderPath = currentFolderForFiles;
@@ -440,6 +452,8 @@ namespace MsCrmTools.WebResourcesManager
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 currentFolderForFiles = fbd.FolderPath;
+                var options = Options.Instance;
+                options.LastFolderUsed = currentFolderForFiles;
                 Options.Instance.Save();
                 foreach (var resource in resources)
                 {
