@@ -13,6 +13,7 @@ using MsCrmTools.WebResourcesManager.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -321,9 +322,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         private void SendSavedMessage()
         {
+            byte[] bytes = Encoding.UTF8.GetBytes(innerContent);
+
             var wrueArgs = new WebResourceUpdatedEventArgs
             {
-                Base64Content = innerContent,
+                Base64Content = Convert.ToBase64String(bytes),
                 IsDirty = (innerContent != originalContent),
                 Type = innerType
             };

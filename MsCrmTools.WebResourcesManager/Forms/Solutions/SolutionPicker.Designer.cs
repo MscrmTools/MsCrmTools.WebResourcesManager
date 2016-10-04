@@ -39,6 +39,7 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chkLoadAllWebResources = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -53,7 +54,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(750, 92);
-            this.panel1.TabIndex = 2;
+            this.panel1.TabIndex = 10;
             // 
             // label1
             // 
@@ -62,8 +63,8 @@
             this.label1.Location = new System.Drawing.Point(10, 58);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(412, 23);
-            this.label1.TabIndex = 6;
+            this.label1.Size = new System.Drawing.Size(411, 23);
+            this.label1.TabIndex = 12;
             this.label1.Text = "Web resources will be added to the selected solution";
             // 
             // pictureBox1
@@ -84,7 +85,7 @@
             this.lblHeader.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHeader.Name = "lblHeader";
             this.lblHeader.Size = new System.Drawing.Size(203, 36);
-            this.lblHeader.TabIndex = 1;
+            this.lblHeader.TabIndex = 11;
             this.lblHeader.Text = "Select a solution";
             // 
             // btnSolutionPickerCancel
@@ -93,7 +94,7 @@
             this.btnSolutionPickerCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSolutionPickerCancel.Name = "btnSolutionPickerCancel";
             this.btnSolutionPickerCancel.Size = new System.Drawing.Size(112, 35);
-            this.btnSolutionPickerCancel.TabIndex = 5;
+            this.btnSolutionPickerCancel.TabIndex = 4;
             this.btnSolutionPickerCancel.Text = "Cancel";
             this.btnSolutionPickerCancel.UseVisualStyleBackColor = true;
             this.btnSolutionPickerCancel.Click += new System.EventHandler(this.btnSolutionPickerCancel_Click);
@@ -105,7 +106,7 @@
             this.btnSolutionPickerValidate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSolutionPickerValidate.Name = "btnSolutionPickerValidate";
             this.btnSolutionPickerValidate.Size = new System.Drawing.Size(112, 35);
-            this.btnSolutionPickerValidate.TabIndex = 4;
+            this.btnSolutionPickerValidate.TabIndex = 3;
             this.btnSolutionPickerValidate.Text = "OK";
             this.btnSolutionPickerValidate.UseVisualStyleBackColor = true;
             this.btnSolutionPickerValidate.Click += new System.EventHandler(this.btnSolutionPickerValidate_Click);
@@ -125,7 +126,7 @@
             this.lstSolutions.Name = "lstSolutions";
             this.lstSolutions.Size = new System.Drawing.Size(720, 273);
             this.lstSolutions.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.lstSolutions.TabIndex = 6;
+            this.lstSolutions.TabIndex = 1;
             this.lstSolutions.UseCompatibleStateImageBehavior = false;
             this.lstSolutions.View = System.Windows.Forms.View.Details;
             this.lstSolutions.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstSolutions_ColumnClick);
@@ -134,7 +135,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Display Name";
-            this.columnHeader1.Width = 125;
+            this.columnHeader1.Width = 250;
             // 
             // columnHeader2
             // 
@@ -146,11 +147,22 @@
             this.columnHeader3.Text = "Publisher";
             this.columnHeader3.Width = 200;
             // 
+            // chkLoadAllWebResources
+            // 
+            this.chkLoadAllWebResources.AutoSize = true;
+            this.chkLoadAllWebResources.Location = new System.Drawing.Point(14, 392);
+            this.chkLoadAllWebResources.Name = "chkLoadAllWebResources";
+            this.chkLoadAllWebResources.Size = new System.Drawing.Size(356, 24);
+            this.chkLoadAllWebResources.TabIndex = 2;
+            this.chkLoadAllWebResources.Text = "Load all web resources from selected solution";
+            this.chkLoadAllWebResources.UseVisualStyleBackColor = true;
+            // 
             // SolutionPicker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(750, 435);
+            this.Controls.Add(this.chkLoadAllWebResources);
             this.Controls.Add(this.lstSolutions);
             this.Controls.Add(this.btnSolutionPickerCancel);
             this.Controls.Add(this.btnSolutionPickerValidate);
@@ -168,6 +180,7 @@
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -183,6 +196,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
-
+        private System.Windows.Forms.CheckBox chkLoadAllWebResources;
     }
 }

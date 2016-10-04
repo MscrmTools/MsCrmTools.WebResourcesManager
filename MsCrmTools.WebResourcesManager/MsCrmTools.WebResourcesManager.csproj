@@ -139,6 +139,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\CustomTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AppCode\Enumerations.cs" />
     <Compile Include="AppCode\EventManager.cs" />
     <Compile Include="AppCode\Globals.cs" />
@@ -414,6 +417,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -119,7 +119,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         };
                         node.SelectedImageIndex = node.ImageIndex;
                         wr.Node = node;
-                        wr.State = WebresourceState.None;
+                        wr.ReinitStatus();
+                        //wr.State = WebresourceState.None;
                         wr.WebresourceStateChanged += Wr_WebresourceStateChanged;
 
                         WebResources.Add(wr);
@@ -147,13 +148,13 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         private void Wr_WebresourceStateChanged(object sender, WebresourceStateChangedArgs e)
         {
             var resource = (WebResource)sender;
-            if (resource.Node.ImageIndex > 11 && (e.NewState == WebresourceState.Saved || e.NewState == WebresourceState.Published))
+            if (resource.Node.ImageIndex > 11 && (e.NewState == WebresourceState.Published || e.NewState == WebresourceState.Updated))
             {
                 resource.Node.ImageIndex = resource.Node.ImageIndex - 12;
                 resource.Node.SelectedImageIndex = resource.Node.SelectedImageIndex - 12;
             }
 
-            var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Draft).ToList();
+            var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Saved).ToList();
 
             if (waitingUpdateResources.Count > 0)
             {
@@ -230,7 +231,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         node.SelectedImageIndex = node.ImageIndex;
                         node.Tag = wr;
                         wr.Node = node;
-                        wr.State = WebresourceState.None;
+                        wr.ReinitStatus();
+                        //wr.State = WebresourceState.None;
                         wr.WebresourceStateChanged += Wr_WebresourceStateChanged;
 
                         callerNode.Nodes.Add(node);
@@ -463,6 +465,11 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             tv.Nodes.Remove(node);
         }
 
+        public void SelectNode(TreeNode node)
+        {
+            tv.SelectedNode = node;
+        }
+
         /// <summary>
         /// Add a node in the current parent node in the treeview
         /// </summary>
@@ -488,7 +495,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     {
                         node.Tag = webResource;
                         webResource.Node = node;
-                        webResource.State = WebresourceState.None;
+                        webResource.ReinitStatus();
+                        //webResource.State = WebresourceState.None;
                         webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
                         webResource.WebresourceStateChanged += Wr_WebresourceStateChanged;
                        
@@ -531,7 +539,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         node.Tag = webResource;
 
                         webResource.Node = node;
-                        webResource.State = WebresourceState.None;
+                        webResource.ReinitStatus();
+                        //webResource.State = WebresourceState.None;
                         webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
                         webResource.WebresourceStateChanged += Wr_WebresourceStateChanged;
                     }
@@ -666,7 +675,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             };
 
             resource.Node = node;
-            resource.State = WebresourceState.None;
+            resource.ReinitStatus();
+            //resource.State = WebresourceState.None;
             resource.WebresourceStateChanged += Wr_WebresourceStateChanged;
 
             var parentTreeNode = parent as TreeNode;
@@ -817,7 +827,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     node.SelectedImageIndex = node.ImageIndex;
                     node.Tag = newWebResource;
                     newWebResource.Node = node;
-                    newWebResource.State = WebresourceState.None;
+                    newWebResource.ReinitStatus();
+                    //newWebResource.State = WebresourceState.None;
                     newWebResource.WebresourceStateChanged += Wr_WebresourceStateChanged;
 
                     newWebResource.Node = node;
@@ -940,7 +951,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
         private void llUpdateResources_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var webresources = WebResources.Where(x => x.State == WebresourceState.Draft).ToList();
+            var webresources = WebResources.Where(x => x.State == WebresourceState.Saved).ToList();
             if(webresources.Count == 0)
             {
                 MessageBox.Show("No webresource need to be updated!");

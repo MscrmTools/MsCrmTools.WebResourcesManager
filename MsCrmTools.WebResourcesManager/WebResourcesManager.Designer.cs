@@ -1,4 +1,7 @@
-﻿namespace MsCrmTools.WebResourcesManager
+﻿using System.Windows.Forms;
+using MsCrmTools.WebResourcesManager.AppCode;
+
+namespace MsCrmTools.WebResourcesManager
 {
     partial class WebResourcesManager
     {
@@ -33,11 +36,12 @@
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.webresourceTreeView1 = new MsCrmTools.WebResourcesManager.New.UserControls.WebresourceTreeView();
-            this.panelControl = new System.Windows.Forms.Panel();
+            this.tabOpenedResources = new MsCrmTools.WebResourcesManager.AppCode.CustomTabControl();
             this.lblWebresourceName = new System.Windows.Forms.Label();
             this.toolStripScriptContent = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.fileMenuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileMenuReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.fileMenuUpdateAndPublish = new System.Windows.Forms.ToolStripMenuItem();
             this.tsSeparatorEdit = new System.Windows.Forms.ToolStripSeparator();
@@ -141,7 +145,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.panelControl);
+            this.splitContainer1.Panel2.Controls.Add(this.tabOpenedResources);
             this.splitContainer1.Panel2.Controls.Add(this.lblWebresourceName);
             this.splitContainer1.Panel2.Controls.Add(this.toolStripScriptContent);
             this.splitContainer1.Size = new System.Drawing.Size(1341, 875);
@@ -162,14 +166,18 @@
             this.webresourceTreeView1.WebResourceUpdateRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.AppCode.EventHandlers.WebResourceUpdateRequestedEventArgs>(this.WebresourceTreeView1_WebResourceUpdateRequested);
             this.webresourceTreeView1.WebResourceSelected += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceSelectedEventArgs>(this.webresourceTreeView1_WebResourceSelected);
             // 
-            // panelControl
+            // tabOpenedResources
             // 
-            this.panelControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelControl.Location = new System.Drawing.Point(0, 38);
-            this.panelControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panelControl.Name = "panelControl";
-            this.panelControl.Size = new System.Drawing.Size(991, 812);
-            this.panelControl.TabIndex = 7;
+            this.tabOpenedResources.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabOpenedResources.Margin = new Padding(5);
+            this.tabOpenedResources.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabOpenedResources.Location = new System.Drawing.Point(0, 38);
+            this.tabOpenedResources.Name = "tabOpenedResources";
+            this.tabOpenedResources.Padding = new System.Drawing.Point(21, 3);
+            this.tabOpenedResources.SelectedIndex = 0;
+            this.tabOpenedResources.Size = new System.Drawing.Size(991, 812);
+            this.tabOpenedResources.TabIndex = 7;
+            this.tabOpenedResources.SelectedIndexChanged += new System.EventHandler(this.tabOpenedResources_SelectedIndexChanged);
             // 
             // lblWebresourceName
             // 
@@ -210,6 +218,7 @@
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenuSave,
+            this.saveAllToolStripMenuItem,
             this.fileMenuReplace,
             this.fileMenuUpdateAndPublish});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
@@ -229,6 +238,14 @@
             this.fileMenuSave.ToolTipText = "Save this content in memory. This does not update the web resource content of the" +
     " connected organization";
             this.fileMenuSave.Click += new System.EventHandler(this.FileMenuSaveClick);
+            // 
+            // saveAllToolStripMenuItem
+            // 
+            this.saveAllToolStripMenuItem.Enabled = false;
+            this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(322, 30);
+            this.saveAllToolStripMenuItem.Text = "Save All";
+            this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
             // fileMenuReplace
             // 
@@ -329,7 +346,7 @@
             this.tsbMinifyJS.Image = ((System.Drawing.Image)(resources.GetObject("tsbMinifyJS.Image")));
             this.tsbMinifyJS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMinifyJS.Name = "tsbMinifyJS";
-            this.tsbMinifyJS.Size = new System.Drawing.Size(120, 35);
+            this.tsbMinifyJS.Size = new System.Drawing.Size(112, 35);
             this.tsbMinifyJS.Text = "Compress";
             this.tsbMinifyJS.ToolTipText = "This feature compress/minify a script web resource. It does not obfuscate the cod" +
     "e, just remove useless formatting.\r\nBe careful when using this feature! There is" +
@@ -342,7 +359,7 @@
             this.tsbPreviewHtml.Image = ((System.Drawing.Image)(resources.GetObject("tsbPreviewHtml.Image")));
             this.tsbPreviewHtml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPreviewHtml.Name = "tsbPreviewHtml";
-            this.tsbPreviewHtml.Size = new System.Drawing.Size(100, 35);
+            this.tsbPreviewHtml.Size = new System.Drawing.Size(92, 35);
             this.tsbPreviewHtml.Text = "Preview";
             this.tsbPreviewHtml.ToolTipText = "This feature allows you to preview HTML pages. It does not warn about script erro" +
     "r, so the HTML page could not render or behave as expected";
@@ -354,7 +371,7 @@
             this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
             this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBeautify.Name = "tsbBeautify";
-            this.tsbBeautify.Size = new System.Drawing.Size(103, 35);
+            this.tsbBeautify.Size = new System.Drawing.Size(95, 35);
             this.tsbBeautify.Text = "Beautify";
             this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
     "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
@@ -376,7 +393,7 @@
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(118, 35);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(110, 35);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.TsmiGetLatestVersionClick);
             // 
@@ -397,7 +414,7 @@
             this.tsbComment.Image = ((System.Drawing.Image)(resources.GetObject("tsbComment.Image")));
             this.tsbComment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbComment.Name = "tsbComment";
-            this.tsbComment.Size = new System.Drawing.Size(28, 35);
+            this.tsbComment.Size = new System.Drawing.Size(23, 35);
             this.tsbComment.Text = "Comment";
             this.tsbComment.Click += new System.EventHandler(this.tsbComment_Click);
             // 
@@ -407,7 +424,7 @@
             this.tsbnUncomment.Image = ((System.Drawing.Image)(resources.GetObject("tsbnUncomment.Image")));
             this.tsbnUncomment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbnUncomment.Name = "tsbnUncomment";
-            this.tsbnUncomment.Size = new System.Drawing.Size(28, 35);
+            this.tsbnUncomment.Size = new System.Drawing.Size(23, 35);
             this.tsbnUncomment.Text = "Uncomment";
             this.tsbnUncomment.Click += new System.EventHandler(this.tsbnUncomment_Click);
             // 
@@ -500,7 +517,7 @@
             this.tsddCrmMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddCrmMenu.Image")));
             this.tsddCrmMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddCrmMenu.Name = "tsddCrmMenu";
-            this.tsddCrmMenu.Size = new System.Drawing.Size(92, 35);
+            this.tsddCrmMenu.Size = new System.Drawing.Size(84, 35);
             this.tsddCrmMenu.Text = "CRM";
             // 
             // TsmiLoadWebResources
@@ -556,7 +573,7 @@
             this.tsddFileMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddFileMenu.Image")));
             this.tsddFileMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddFileMenu.Name = "tsddFileMenu";
-            this.tsddFileMenu.Size = new System.Drawing.Size(80, 35);
+            this.tsddFileMenu.Size = new System.Drawing.Size(72, 35);
             this.tsddFileMenu.Text = "File";
             // 
             // loadWebResourcesToolStripMenuItem1
@@ -593,7 +610,7 @@
             this.tsbNewRoot.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewRoot.Image")));
             this.tsbNewRoot.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNewRoot.Name = "tsbNewRoot";
-            this.tsbNewRoot.Size = new System.Drawing.Size(114, 35);
+            this.tsbNewRoot.Size = new System.Drawing.Size(106, 35);
             this.tsbNewRoot.Text = "New root";
             this.tsbNewRoot.Click += new System.EventHandler(this.TsbNewRootClick);
             // 
@@ -607,7 +624,7 @@
             this.tsbSettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbSettings.Image")));
             this.tsbSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSettings.Name = "tsbSettings";
-            this.tsbSettings.Size = new System.Drawing.Size(104, 35);
+            this.tsbSettings.Size = new System.Drawing.Size(96, 35);
             this.tsbSettings.Text = "Settings";
             this.tsbSettings.Click += new System.EventHandler(this.tsbSettings_Click);
             // 
@@ -669,7 +686,7 @@
             this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.cmsWebResourceTreeView.Name = "contextMenuStripTreeView";
-            this.cmsWebResourceTreeView.Size = new System.Drawing.Size(493, 526);
+            this.cmsWebResourceTreeView.Size = new System.Drawing.Size(493, 559);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
@@ -970,9 +987,10 @@
         private New.UserControls.WebresourceTreeView webresourceTreeView1;
         private System.Windows.Forms.ToolStripButton tsbComment;
         private System.Windows.Forms.ToolStripButton tsbnUncomment;
-        private System.Windows.Forms.Panel panelControl;
         private System.Windows.Forms.Label lblWebresourceName;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem renameWebResourceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
+        private CustomTabControl tabOpenedResources;
     }
 }

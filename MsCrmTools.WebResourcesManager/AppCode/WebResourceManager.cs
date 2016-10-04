@@ -134,7 +134,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
                 foreach(var resource in resources)
                 {
-                    resource.State = WebresourceState.Published;
+                    resource.ReinitStatus();
                     resource.SyncedWithCrm = true;
                 }
             }
@@ -213,7 +213,6 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                                     Conditions =
                                     {
                                         new ConditionExpression("ishidden", ConditionOperator.Equal, false),
-                                        new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
                                     }
                                 },
                                 new FilterExpression
@@ -236,6 +235,11 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                             new ConditionExpression("name", ConditionOperator.DoesNotBeginWith, "cc_MscrmControls"),
                             new ConditionExpression("name", ConditionOperator.DoesNotBeginWith, "msdyn_")
                             );
+                    }
+
+                    if (types.Count != 0)
+                    {
+                        qe.Criteria.Filters.First().Conditions.Add(new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()));
                     }
 
                     return innerService.RetrieveMultiple(qe);
@@ -333,8 +337,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                     innerService.Update(script);
                 }
 
-                wr.State = WebresourceState.Saved;
-                wr.SyncedWithCrm = true;
+                wr.SetAsUpdated();
             }
             catch (Exception error)
             {

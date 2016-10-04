@@ -14,6 +14,7 @@ using MsCrmTools.WebResourcesManager.New.EventHandlers;
 using MsCrmTools.WebResourcesManager.Properties;
 using MsCrmTools.WebResourcesManager.UserControls;
 using System;
+using System.Activities.Presentation.Metadata;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -91,8 +92,9 @@ namespace MsCrmTools.WebResourcesManager
         public void LoadWebResourcesGeneral(bool fromSolution)
         {
             Guid solutionId = Guid.Empty;
-            List<int> typesToload;
-            bool hideMicrosoftWebresources;
+            List<int> typesToload = new List<int>();
+            bool loadAllWebresources = false;
+            bool hideMicrosoftWebresources = false;
 
             // If from solution, display the solution picker so that user can
             // select the solution containing the web resources he wants to
@@ -103,6 +105,7 @@ namespace MsCrmTools.WebResourcesManager
                 if (sPicker.ShowDialog(ParentForm) == DialogResult.OK)
                 {
                     solutionId = sPicker.SelectedSolution.Id;
+                    loadAllWebresources = sPicker.LoadAllWebresources;
                 }
                 else
                 {
@@ -110,20 +113,24 @@ namespace MsCrmTools.WebResourcesManager
                 }
             }
 
-            // Display web resource types selection dialog
-            var dialog = new WebResourceTypeSelectorDialog(fromSolution, ConnectionDetail.OrganizationMajorVersion);
-            if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
+            if (!loadAllWebresources)
             {
-                typesToload = dialog.TypesToLoad;
-                hideMicrosoftWebresources = dialog.HideMicrosoftWebresources;
-            }
-            else
-            {
-                return;
+                // Display web resource types selection dialog
+                var dialog = new WebResourceTypeSelectorDialog(fromSolution, ConnectionDetail.OrganizationMajorVersion);
+                if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
+                {
+                    typesToload = dialog.TypesToLoad;
+                    hideMicrosoftWebresources = dialog.HideMicrosoftWebresources;
+                }
+                else
+                {
+                    return;
+                }
             }
 
             webresourceTreeView1.Enabled = false;
             webresourceTreeView1.Service = Service;
+            tabOpenedResources.TabPages.Clear();
 
             WorkAsync(new WorkAsyncInfo("Loading web resources...", e =>
             {
@@ -270,7 +277,7 @@ namespace MsCrmTools.WebResourcesManager
                              serverVersion = webResourceManager.RetrieveWebResource(wr.Entity.Id);
                          }
 
-                         if (serverVersion != null && serverVersion.GetAttributeValue<string>("content") != wr.InitialBase64)
+                         if (serverVersion != null && serverVersion.GetAttributeValue<string>("content") != wr.OriginalBase64)
                          {
                              wrDifferentFromServer.Add(wr);
                          }
@@ -280,7 +287,6 @@ namespace MsCrmTools.WebResourcesManager
 
                              webResourceManager.UpdateWebResource(wr);
                              resourceToPublish.Add(wr);
-                             wr.InitialBase64 = wr.Entity.GetAttributeValue<string>("content");
                          }
                      }
 
@@ -299,7 +305,6 @@ namespace MsCrmTools.WebResourcesManager
 
                                  webResourceManager.UpdateWebResource(resource);
                                  resourceToPublish.Add(resource);
-                                 resource.InitialBase64 = resource.Entity.GetAttributeValue<string>("content");
                              }
                          }
                      }
@@ -336,6 +341,8 @@ namespace MsCrmTools.WebResourcesManager
 
                          webResourceManager.AddToSolution(resourceToPublish, ((object[])e.Argument)[2].ToString());
                      }
+
+                     e.Result = resourceToPublish;
                  })
             {
                 AsyncArgument = parameters,
@@ -346,12 +353,25 @@ namespace MsCrmTools.WebResourcesManager
                         MessageBox.Show(this, e.Error.Message, Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (lblWebresourceName.Text.Contains(" (not published)"))
-                    {
-                        lblWebresourceName.Text = lblWebresourceName.Text.Replace(" (not published)", "");
-                        lblWebresourceName.ForeColor = Color.Black;
-                    }
+                    var wrList = (List<WebResource>) e.Result;
 
+                    foreach (TabPage tab in tabOpenedResources.TabPages)
+                    {
+                        var wr = (WebResource) tab.Tag;
+
+                        if (wrList.Contains(wr))
+                        {
+                            tab.ForeColor = Color.Black;
+                            tab.Text = wr.Entity.GetAttributeValue<string>("name");
+                        }
+
+                        if (tab == tabOpenedResources.SelectedTab)
+                        {
+                            lblWebresourceName.Text = tab.Text;
+                            lblWebresourceName.ForeColor = Color.Black;
+                        }
+                    }
+                    
                     SetWorkingState(false);
                 },
                 ProgressChanged = e => SetWorkingMessage(e.UserState.ToString())
@@ -378,6 +398,8 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     currentFolderForFiles = fbd.FolderPath;
                     Options.Instance.Save();
+
+                    tabOpenedResources.TabPages.Clear();
 
                     var invalidFilenames = webresourceTreeView1.LoadWebResourcesFromDisk(fbd.FolderPath, fbd.ExtensionsToLoad);
 
@@ -618,7 +640,7 @@ namespace MsCrmTools.WebResourcesManager
         private void TbsClearTreeClick(object sender, EventArgs e)
         {
             webresourceTreeView1.ClearNodes();
-            panelControl.Controls.Clear();
+            tabOpenedResources.TabPages.Clear();
             lblWebresourceName.Text = "";
             tslCurrentlyLoadedSolution.Text = "";
             toolStripScriptContent.Visible = false;
@@ -795,7 +817,7 @@ namespace MsCrmTools.WebResourcesManager
 
             try
             {
-                var ctrl = ((IWebResourceControl)panelControl.Controls[0]);
+                var ctrl = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
 
                 using (var ofd = new OpenFileDialog())
                 {
@@ -817,6 +839,20 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
+        private void saveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)((TabControl)Parent.Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0]).Items[0]).DropDownItems[0].PerformClick();
+                return;
+            }
+
+            foreach (TabPage tab in tabOpenedResources.TabPages)
+            {
+                InnerSave((IWebResourceControl)tab.Controls[0]);
+            }
+        }
+
         private void FileMenuSaveClick(object sender, EventArgs e)
         {
             if (((TabControl)(Parent).Parent).SelectedTab != Parent)
@@ -825,21 +861,33 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
-            var control = (IWebResourceControl)panelControl.Controls[0];
+            var control = (IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0];
+            InnerSave(control);
+        }
+
+        private void InnerSave(IWebResourceControl control)
+        {
+            TabPage tab = (TabPage)((Control) control).Parent;
             string content = control.GetBase64WebResourceContent();
 
             var webResource = (WebResource)webresourceTreeView1.SelectedNode.Tag;
             webResource.Entity["content"] = content;
-            webResource.State = WebresourceState.Draft;
+            webResource.Save();
+            //webResource.State = WebresourceState.Saved;
 
             fileMenuSave.Enabled = false;
             fileMenuUpdateAndPublish.Enabled = true;
 
-            if (lblWebresourceName.Text.Contains(" (not saved)"))
+            if (tab == tabOpenedResources.SelectedTab)
             {
-                lblWebresourceName.Text = lblWebresourceName.Text.Replace(" (not saved)", " (not published)");
-                lblWebresourceName.ForeColor = Color.Blue;
+                if (lblWebresourceName.Text.Contains(" (not saved)"))
+                {
+                    lblWebresourceName.Text = lblWebresourceName.Text.Replace(" (not saved)", " (not published)");
+                    lblWebresourceName.ForeColor = Color.Blue;
+                }
             }
+
+            tab.Text = tab.Text.Replace(" *", " !");
 
             // Save on disk in options tells so and a filepath is provided
             if (Options.Instance.SaveOnDisk && !string.IsNullOrEmpty(webResource.FilePath))
@@ -885,10 +933,10 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
-            if (panelControl.Controls.Count == 0)
+            if (tabOpenedResources.SelectedTab.Controls.Count == 0)
                 return;
 
-            var control = ((IWebResourceControl)panelControl.Controls[0]);
+            var control = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
             if (!(control is CodeControl)) return;
 
             ((CodeControl)control).Find(false, this);
@@ -1029,10 +1077,10 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
-            if (panelControl.Controls.Count == 0)
+            if (tabOpenedResources.SelectedTab.Controls.Count == 0)
                 return;
 
-            var control = ((IWebResourceControl)panelControl.Controls[0]);
+            var control = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
             if (!(control is CodeControl)) return;
 
             ((CodeControl)control).Find(true, this);
@@ -1051,12 +1099,12 @@ namespace MsCrmTools.WebResourcesManager
 
         private void tsbBeautify_Click(object sender, EventArgs e)
         {
-            ((CodeControl)panelControl.Controls[0]).Beautify();
+            ((CodeControl)tabOpenedResources.SelectedTab.Controls[0]).Beautify();
         }
 
         private void tsbComment_Click(object sender, EventArgs e)
         {
-            ((CodeControl)panelControl.Controls[0]).CommentSelectedLines();
+            ((CodeControl)tabOpenedResources.SelectedTab.Controls[0]).CommentSelectedLines();
         }
 
         private void TsbCompareClick(object sender, EventArgs e)
@@ -1069,8 +1117,8 @@ namespace MsCrmTools.WebResourcesManager
 
             try
             {
-                var ctrl = ((IWebResourceControl)panelControl.Controls[0]);
-                var content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
+                var ctrl = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
+                var content = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]).GetBase64WebResourceContent();
 
                 RemoveOldFiles();
                 var crmFileToComapre = SaveContentFileToDisk(webresourceTreeView1.SelectedNode.Text, content);
@@ -1095,7 +1143,7 @@ namespace MsCrmTools.WebResourcesManager
         private void tsbDoFolding_Click(object sender, EventArgs e)
         {
             tsbDoFolding.Checked = !tsbDoFolding.Checked;
-            ((CodeControl)panelControl.Controls[0]).EnableFolding(tsbDoFolding.Checked);
+            ((CodeControl)tabOpenedResources.SelectedTab.Controls[0]).EnableFolding(tsbDoFolding.Checked);
         }
 
         private void TsbMinifyJsClick(object sender, EventArgs e)
@@ -1104,17 +1152,17 @@ namespace MsCrmTools.WebResourcesManager
                 MessageBox.Show(this,
                                 "Are you sure you want to compress this script? After saving the compressed script, you won't be able to retrieve original content",
                                 Resources.MessageBox_QuestionTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                ((CodeControl)panelControl.Controls[0]).MinifyJs();
+                ((CodeControl)tabOpenedResources.SelectedTab.Controls[0]).MinifyJs();
         }
 
         private void tsbnUncomment_Click(object sender, EventArgs e)
         {
-            ((CodeControl)panelControl.Controls[0]).UncommentSelectedLines();
+            ((CodeControl)tabOpenedResources.SelectedTab.Controls[0]).UncommentSelectedLines();
         }
 
         private void TsbPreviewHtmlClick(object sender, EventArgs e)
         {
-            string content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
+            string content = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]).GetBase64WebResourceContent();
 
             var wpDialog = new WebPreviewDialog(content);
             wpDialog.ShowDialog();
@@ -1133,16 +1181,21 @@ namespace MsCrmTools.WebResourcesManager
             fileMenuUpdateAndPublish.Enabled = !e.IsDirty;
             if (e.IsDirty)
             {
+                ((WebResource) tabOpenedResources.SelectedTab.Tag).UpdatedBase64Content = e.Base64Content;
+                //((WebResource)tabOpenedResources.SelectedTab.Tag).State = WebresourceState.Draft;
+
                 if (!lblWebresourceName.Text.Contains(" (not saved)"))
                 {
                     lblWebresourceName.ForeColor = Color.Red;
                     lblWebresourceName.Text = lblWebresourceName.Text.Split(' ')[0] + " (not saved)";
+                    tabOpenedResources.SelectedTab.Text = lblWebresourceName.Text.Split(' ')[0] + " *";
                 }
             }
             else
             {
                 lblWebresourceName.ForeColor = Color.Black;
                 lblWebresourceName.Text = lblWebresourceName.Text.Split(' ')[0];
+                tabOpenedResources.SelectedTab.Text = lblWebresourceName.Text.Split(' ')[0];
             }
         }
 
@@ -1332,7 +1385,6 @@ namespace MsCrmTools.WebResourcesManager
 
         private void webresourceTreeView1_WebResourceSelected(object sender, WebResourceSelectedEventArgs e)
         {
-            panelControl.Controls.Clear();
             tsbDoFolding.Checked = false;
 
             if (e.WebResource != null)
@@ -1342,6 +1394,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 // Displays script content
                 Entity script = e.WebResource.Entity;
+                string resourceName = script.GetAttributeValue<string>("name");
                 UserControl ctrl = null;
 
                 switch (((OptionSetValue)script["webresourcetype"]).Value)
@@ -1506,18 +1559,90 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     ctrl.Name = "webresourceContentControl";
                     ctrl.Dock = DockStyle.Fill;
-                    panelControl.Controls.Add(ctrl);
 
-                    fileMenuSave.Enabled = false;
-                    fileMenuReplace.Enabled = true;
-                    fileMenuUpdateAndPublish.Enabled = true;
-
-                    lblWebresourceName.Text = script["name"].ToString();
-
-                    if (e.WebResource.State == WebresourceState.Draft)
+                    if (tabOpenedResources.TabPages.ContainsKey(resourceName))
                     {
-                        lblWebresourceName.Text += " (not published)";
-                        lblWebresourceName.ForeColor = Color.Blue;
+                        tabOpenedResources.SelectedIndex = tabOpenedResources.TabPages.IndexOfKey(resourceName);
+                        switch (e.WebResource.State)
+                        {
+                            case WebresourceState.Saved:
+                            {
+                                tabOpenedResources.SelectedTab.Text = string.Format("{0} !",
+                                    e.WebResource.Entity.GetAttributeValue<string>("name"));
+                                tabOpenedResources.SelectedTab.ForeColor = Color.Blue;
+                                break;
+                            }
+                            case WebresourceState.Draft:
+                            {
+                                tabOpenedResources.SelectedTab.Text = string.Format("{0} *",
+                                    e.WebResource.Entity.GetAttributeValue<string>("name"));
+                                tabOpenedResources.SelectedTab.ForeColor = Color.Red;
+                                break;
+                            }
+                            default:
+                            {
+                                tabOpenedResources.SelectedTab.Text =
+                                    e.WebResource.Entity.GetAttributeValue<string>("name");
+                                tabOpenedResources.SelectedTab.ForeColor = Color.Black;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var newTab = new TabPage
+                        {
+                            Text = resourceName,
+                            Name = resourceName,
+                            Tag = e.WebResource
+                        };
+                        newTab.MouseClick += (s, evt) =>
+                        {
+                            if (evt.Button == MouseButtons.Middle)
+                            {
+                                var codeCtrl = tabOpenedResources.SelectedTab.Controls[0] as CodeControl;
+
+                                if (codeCtrl != null && codeCtrl.IsDirty)
+                                {
+                                    if (Options.Instance.AutoSaveWhenLeaving)
+                                    {
+                                        fileMenuSave.PerformClick();
+                                    }
+                                    else
+                                    {
+                                        if(MessageBox.Show(this, "The webresource has pending changes!\r\n\r\nWould you like to save the content before closing this tab?","Warning",MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                                        {
+                                            fileMenuSave.PerformClick();
+                                        }
+                                    }
+                                }
+
+                                tabOpenedResources.TabPages.Remove(tabOpenedResources.SelectedTab);
+                            }
+                        };
+                        newTab.Controls.Add(ctrl);
+                        tabOpenedResources.TabPages.Add(newTab);
+                        tabOpenedResources.SelectedTab = newTab;
+
+                        fileMenuSave.Enabled = false;
+                        fileMenuReplace.Enabled = true;
+                        fileMenuUpdateAndPublish.Enabled = true;
+
+                        lblWebresourceName.Text = resourceName;
+                        tabOpenedResources.SelectedTab.Text = resourceName;
+
+                        if (e.WebResource.State == WebresourceState.Draft)
+                        {
+                            lblWebresourceName.ForeColor = Color.Red;
+                            lblWebresourceName.Text = string.Format("{0} (not saved)", resourceName);
+                            tabOpenedResources.SelectedTab.Text = lblWebresourceName.Text;
+                        }
+                        else if (e.WebResource.State == WebresourceState.Saved)
+                        {
+                            lblWebresourceName.ForeColor = Color.Blue;
+                            lblWebresourceName.Text = string.Format("{0} (not published)", resourceName);
+                            tabOpenedResources.SelectedTab.Text = lblWebresourceName.Text;
+                        }
                     }
 
                     if (ctrl is CodeControl && ((CodeControl)ctrl).FoldingEnabled)
@@ -1558,6 +1683,54 @@ namespace MsCrmTools.WebResourcesManager
             UpdateWebResources(e.Action == WebResourceUpdateOption.UpdateAndPublish || e.Action == WebResourceUpdateOption.UpdateAndPublishAndAdd,
                 e.WebResources,
                 e.Action == WebResourceUpdateOption.UpdateAndPublishAndAdd);
+        }
+
+        private void tabOpenedResources_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabOpenedResources.SelectedTab == null)
+            {
+                lblWebresourceName.Text = string.Empty;
+                fileMenuSave.Enabled = false;
+                return;
+            }
+
+            var wr = (WebResource) tabOpenedResources.SelectedTab.Tag;
+
+            switch (wr.State)
+            {
+                case WebresourceState.Draft:
+                {
+                    tabOpenedResources.SelectedTab.ForeColor = Color.Red;
+                    lblWebresourceName.ForeColor = Color.Red;
+                    lblWebresourceName.Text = string.Format("{0} (not saved)",wr.Entity.GetAttributeValue<string>("name"));
+
+                    fileMenuSave.Enabled = true;
+
+                    break;
+                }
+                case WebresourceState.Saved:
+                {
+                    tabOpenedResources.SelectedTab.ForeColor = Color.Blue;
+                    lblWebresourceName.ForeColor = Color.Blue;
+                    lblWebresourceName.Text = string.Format("{0} (not published)", wr.Entity.GetAttributeValue<string>("name"));
+
+                    fileMenuSave.Enabled = false;
+
+                    break;
+                }
+                default:
+                {
+                    tabOpenedResources.SelectedTab.ForeColor = Color.Black;
+                    lblWebresourceName.ForeColor = Color.Black;
+                    lblWebresourceName.Text = wr.Entity.GetAttributeValue<string>("name");
+
+                    fileMenuSave.Enabled = false;
+
+                    break;
+                }
+            }
+
+            webresourceTreeView1.SelectNode(((WebResource)tabOpenedResources.SelectedTab.Tag).Node);
         }
     }
 }

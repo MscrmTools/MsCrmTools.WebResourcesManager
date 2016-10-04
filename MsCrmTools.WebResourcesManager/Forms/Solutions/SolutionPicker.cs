@@ -26,6 +26,8 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
 
         public Entity SelectedSolution { get; set; }
 
+        public bool LoadAllWebresources { get ; private set; }
+
         private void btnSolutionPickerCancel_Click(object sender, EventArgs e)
         {
             SelectedSolution = null;
@@ -37,6 +39,7 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
         {
             if (lstSolutions.SelectedItems.Count > 0)
             {
+                LoadAllWebresources = chkLoadAllWebResources.Checked;
                 SelectedSolution = (Entity)lstSolutions.SelectedItems[0].Tag;
                 DialogResult = DialogResult.OK;
                 Close();

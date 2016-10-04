@@ -21,6 +21,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         None,
         Draft,
         Saved,
+        Updated,
         Published,
     }
 
@@ -32,13 +33,18 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         private WebresourceState state;
 
+        private string updatedContent;
+
+        private string initialContent;
+
         public WebResource(Entity webResource, string filePath)
         {
             AssociatedResources = new List<WebResource>();
             FilePath = filePath;
             Entity = webResource;
             InitialBase64 = webResource.GetAttributeValue<string>("content");
-
+            OriginalBase64 = webResource.GetAttributeValue<string>("content");
+            initialContent = GetPlainText();
             LoadAssociatedResources();
         }
 
@@ -79,6 +85,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public Entity Entity { get; set; }
         public string FilePath { get; set; }
         public string InitialBase64 { get; set; }
+        public string OriginalBase64 { get; private set; }
 
         public bool SyncedWithCrm { get; set; }
 
@@ -90,7 +97,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             {
                 return state;
             }
-            set
+            private set
             {
                 state = value;
 
@@ -103,16 +110,17 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 switch (value)
                 {
                     case WebresourceState.None:
-                    case WebresourceState.Saved:
                     case WebresourceState.Published:
                         Node.ForeColor = Color.Black;
                         WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
                         break;
                     case WebresourceState.Draft:
-                        {
-                            Node.ForeColor = Color.Blue;
-                            WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
-                        }
+                        Node.ForeColor = Color.Red;
+                        WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
+                        break;
+                    case WebresourceState.Saved:
+                        Node.ForeColor = Color.Blue;
+                        WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
                         break;
                 }
 
@@ -136,7 +144,53 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
+        public string UpdatedContent
+        {
+            get { return updatedContent; }
+            set
+            {
+                updatedContent = value;
 
+                State = updatedContent != initialContent ? WebresourceState.Draft : WebresourceState.None;
+            }
+        }
+
+        public string UpdatedBase64Content
+        {
+            set
+            {
+                UpdatedContent = Encoding.UTF8.GetString(Convert.FromBase64String(value));
+            }
+        }
+
+        public bool IsDirty
+        {
+            get { return updatedContent != initialContent; }
+        }
+
+        public void CancelChange()
+        {
+            UpdatedContent = initialContent;
+        }
+
+        public void Save()
+        {
+            initialContent = updatedContent;
+
+            byte[] bytes = Encoding.UTF8.GetBytes(initialContent);
+
+            InitialBase64 = Convert.ToBase64String(bytes);
+
+            Entity["content"] = InitialBase64;
+
+            State = WebresourceState.Saved;
+        }
+
+        public void ReinitStatus()
+        {
+            State = WebresourceState.None;
+        }
+        
         public static int GetImageIndexFromExtension(string ext)
         {
             return GetTypeFromExtension(ext) + 1;
@@ -259,6 +313,14 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             {
                 AssociatedResources.Add(LoadWebResourceFromDisk(tsPath, Path.ChangeExtension(name, "ts"), Path.ChangeExtension(displayName, "ts")));
             }
+        }
+
+        internal void SetAsUpdated()
+        {
+            InitialBase64 = Entity.GetAttributeValue<string>("content");
+            OriginalBase64 = Entity.GetAttributeValue<string>("content");
+            State = WebresourceState.Updated;
+            SyncedWithCrm = true;
         }
     }
 }
