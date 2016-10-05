@@ -1227,8 +1227,9 @@ namespace MsCrmTools.WebResourcesManager
             var selectedNode = webresourceTreeView1.SelectedNode;
             if (selectedNode != null)
             {
-                fileMenuReplace.Enabled = selectedNode.Tag != null;
-                fileMenuUpdateAndPublish.Enabled = selectedNode.Tag != null;
+                fileMenuReplace.Enabled = selectedNode.Tag != null && tabOpenedResources.SelectedTab != null;
+                fileMenuUpdateAndPublish.Enabled = selectedNode.Tag != null && tabOpenedResources.SelectedTab != null;
+                getLatestVersionToolStripMenuItem.Enabled = selectedNode.Tag != null && tabOpenedResources.SelectedTab != null;
             }
 
             Cursor = working ? Cursors.WaitCursor : Cursors.Default;
@@ -1705,6 +1706,10 @@ namespace MsCrmTools.WebResourcesManager
             {
                 lblWebresourceName.Text = string.Empty;
                 fileMenuSave.Enabled = false;
+                fileMenuReplace.Enabled = false;
+                fileMenuUpdateAndPublish.Enabled = false;
+                getLatestVersionToolStripMenuItem.Enabled = false;
+                toolStripScriptContent.Visible = false;
                 return;
             }
 

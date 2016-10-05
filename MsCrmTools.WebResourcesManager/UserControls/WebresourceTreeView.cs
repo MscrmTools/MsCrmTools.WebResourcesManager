@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.New.UserControls
@@ -780,6 +781,16 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             }
         }
 
+
+        private void Tv_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (WebResourceSelected != null)
+            {
+                WebResourceSelected(this, new WebResourceSelectedEventArgs(SelectedResource));
+            }
+        }
+
+
         private void tv_DragDrop(object sender, DragEventArgs e)
         {
             var errorList = new List<string>();
@@ -791,8 +802,20 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            foreach (var file in files)
+            foreach (var file in files.OrderBy(f => !File.GetAttributes(f).HasFlag(FileAttributes.Directory)).ThenBy(f => Path.GetFileName(f)))
             {
+                if (File.GetAttributes(file).HasFlag(FileAttributes.Directory))
+                {
+                    var di = new DirectoryInfo(file);
+
+                    var folderNode = new TreeNode(di.Name) { ImageIndex = 13, SelectedImageIndex = 13, Tag = di.FullName, Name = di.Name };
+
+                    currentNode.Nodes.Add(folderNode);
+
+                    CreateFolderStructure(folderNode, new DirectoryInfo(file), errorList, null);
+                    continue;
+                }
+
                 var fi = new FileInfo(file);
                 string nodeObjectName = GetName(currentNode);
 
@@ -864,8 +887,9 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 // File must be an expected file format
-                bool isExtensionValid = files.All(f => WebResource.IsValidExtension(Path.GetExtension(f)));
-
+                // or a folder
+                bool isExtensionValid = files.All(f => WebResource.IsValidExtension(Path.GetExtension(f)) || File.GetAttributes(f).HasFlag(FileAttributes.Directory));
+                
                 // Destination node must be a Root or Folder node
                 bool isNodeValid = currentNode != null && (currentNode.ImageIndex <= 1 || currentNode.ImageIndex >= 12 && currentNode.ImageIndex <= 13);
 
