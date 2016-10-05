@@ -430,7 +430,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem "$(SolutionDir)packages\LibZ.Tool.1.2.0.0\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.WebResourcesManager.dll --include ICSharpCode.AvalonEdit.dll --include Yahoo.Yui.Compressor.dll --include EcmaScript.NET.modified.dll</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)packages\LibZ.Tool.1.2.0.0\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.WebResourcesManager.dll --include ICSharpCode.AvalonEdit.dll --include Yahoo.Yui.Compressor.dll --include EcmaScript.NET.modified.dll</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
