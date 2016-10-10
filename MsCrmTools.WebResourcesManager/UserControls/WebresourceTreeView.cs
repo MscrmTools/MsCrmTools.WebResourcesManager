@@ -72,7 +72,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         public event EventHandler<WebResourceSelectedEventArgs> WebResourceSelected;
 
         public TreeNode SelectedNode => tv.SelectedNode;
-        public WebResource SelectedResource => tv.SelectedNode.Tag == null || tv.SelectedNode.Tag is string ? null : tv.SelectedNode.GetCastedTag<WebResource>();
+        public WebResource SelectedResource => tv.SelectedNode == null || tv.SelectedNode.Tag == null || tv.SelectedNode.Tag is string ? null : tv.SelectedNode.GetCastedTag<WebResource>();
 
         /// <summary>
         /// Get or set the Organization service
