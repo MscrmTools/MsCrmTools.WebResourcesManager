@@ -164,11 +164,17 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     waitingUpdateResources.Count > 1 ? "s" : "",
                     waitingUpdateResources.Count > 1 ? "" : "s");
 
-                pnlWaitingPublish.Visible = true;
+                Invoke(new Action(() =>
+                {
+                    pnlWaitingPublish.Visible = true;
+                }));
             }
             else
             {
-                pnlWaitingPublish.Visible = false;
+                Invoke(new Action(() =>
+                {
+                    pnlWaitingPublish.Visible = false;
+                }));
             }
         }
 
@@ -294,7 +300,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         public void DisplayWebResources()
         {
             tv.Nodes.Clear();
-            pnlWaitingPublish.Visible = false;
+            Invoke(new Action(() =>
+            {
+                pnlWaitingPublish.Visible = false;
+            }));
 
             foreach (var webResource in WebResources)
             {
@@ -343,7 +352,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         {
             tv.Nodes.Clear();
             WebResources.Clear();
-            pnlWaitingPublish.Visible = false;
+            Invoke(new Action(() =>
+            {
+                pnlWaitingPublish.Visible = false;
+            }));
 
             var invalidFilenames = new List<string>();
 

@@ -271,7 +271,6 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                                     Conditions =
                                     {
                                         new ConditionExpression("ishidden", ConditionOperator.Equal, false),
-                                        new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
                                         new ConditionExpression("webresourceid", ConditionOperator.In, list.ToArray()),
                                     }
                                 },
@@ -288,6 +287,11 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                             },
                             Orders = { new OrderExpression("name", OrderType.Ascending) }
                         };
+
+                        if (types.Count != 0)
+                        {
+                            qe.Criteria.Filters.First().Conditions.Add(new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()));
+                        }
 
                         return innerService.RetrieveMultiple(qe);
                     }
