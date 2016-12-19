@@ -787,19 +787,25 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
         private void tv_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (WebResourceSelected != null)
+            if (MouseButtons == MouseButtons.Right)
             {
-                WebResourceSelected(this, new WebResourceSelectedEventArgs(SelectedResource));
+                return;
             }
+
+            WebResourceSelected?.Invoke(this, new WebResourceSelectedEventArgs(SelectedResource));
         }
 
 
         private void Tv_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (WebResourceSelected != null)
+            tv.SelectedNode = e.Node;
+
+            if (e.Button == MouseButtons.Right)
             {
-                WebResourceSelected(this, new WebResourceSelectedEventArgs(SelectedResource));
+                return;
             }
+
+            WebResourceSelected?.Invoke(this, new WebResourceSelectedEventArgs(SelectedResource));
         }
 
 

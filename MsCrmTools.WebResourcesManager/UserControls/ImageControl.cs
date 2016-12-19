@@ -6,8 +6,10 @@
 using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -78,23 +80,49 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
                 using (MemoryStream ms = new MemoryStream(imageBytes))
                 {
-                    pictureBox1.Image = Image.FromStream(ms, true, true);
+                    var image = Image.FromStream(ms, true, true);
+
+                    FrameDimension FrameDimensions = new FrameDimension(image.FrameDimensionsList[0]);
+                    int frames = image.GetFrameCount(FrameDimensions);
+
+                    if (frames > 1)
+                    {
+                        pictureBox1.Visible = false;
+                        lblInfo.Text = "This image is an animated GIF and cannot be rendered";
+                        pnlInfo.Visible = true;
+                    }
+                    else
+                    {
+                        pictureBox1.Image = image;
+
+                        pictureBox1.Height = pictureBox1.Image.Size.Height;
+                        pictureBox1.Width = pictureBox1.Image.Size.Width;
+
+                        if (pictureBox1.Width > panel1.Width)
+                            pictureBox1.Width = panel1.Width;
+
+                        pictureBox1.Location = new Point(
+                            panel1.Width / 2 - pictureBox1.Width / 2,
+                            panel1.Height / 2 - pictureBox1.Height / 2);
+                    }
                 }
-
-                pictureBox1.Height = pictureBox1.Image.Size.Height;
-                pictureBox1.Width = pictureBox1.Image.Size.Width;
-
-                if (pictureBox1.Width > panel1.Width)
-                    pictureBox1.Width = panel1.Width;
-
-                pictureBox1.Location = new Point(
-                    panel1.Width / 2 - pictureBox1.Width / 2,
-                    panel1.Height / 2 - pictureBox1.Height / 2);
             }
             catch (Exception error)
             {
                 MessageBox.Show("An error occured while loading this web resource: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            try
+            {
+                base.OnPaint(e);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show("Custom : " + error.ToString());
             }
         }
 
