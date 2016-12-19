@@ -412,7 +412,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 }
             }
 
-            tv.ExpandAll();
+            if (Options.Instance.ExpandAllOnLoadingResources)
+            {
+                tv.ExpandAll();
+            }
             tv.TreeViewNodeSorter = new NodeSorter();
             tv.Sort();
 
