@@ -17,11 +17,12 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
     {
         private readonly IOrganizationService innerService;
 
-        public SolutionPicker(IOrganizationService service)
+        public SolutionPicker(IOrganizationService service, bool isSelectionToAddWebResources = false)
         {
             InitializeComponent();
 
             innerService = service;
+            chkLoadAllWebResources.Visible = !isSelectionToAddWebResources;
         }
 
         public Entity SelectedSolution { get; set; }

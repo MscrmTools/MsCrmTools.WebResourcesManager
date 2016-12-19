@@ -297,7 +297,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         /// <summary>
         /// Display stored web resources in the treeview
         /// </summary>
-        public void DisplayWebResources()
+        public void DisplayWebResources(bool expandAll)
         {
             tv.Nodes.Clear();
             Invoke(new Action(() =>
@@ -312,7 +312,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 AddNode(nameParts, 0, tv, webResource);
             }
 
-            tv.ExpandAll();
+            if(expandAll)tv.ExpandAll();
             tv.TreeViewNodeSorter = new NodeSorter();
             tv.Sort();
         }

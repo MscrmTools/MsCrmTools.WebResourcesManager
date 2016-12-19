@@ -142,7 +142,7 @@ namespace MsCrmTools.WebResourcesManager
                 AsyncArgument = new Tuple<Guid, List<int>, bool>(solutionId, typesToload, hideMicrosoftWebresources),
                 PostWorkCallBack = e =>
                 {
-                    webresourceTreeView1.DisplayWebResources();
+                    webresourceTreeView1.DisplayWebResources(Options.Instance.ExpandAllOnLoadingResources);
 
                     webresourceTreeView1.Enabled = true;
                 }
@@ -238,7 +238,7 @@ namespace MsCrmTools.WebResourcesManager
             var solutionUniqueName = string.Empty;
             if (addToSolution)
             {
-                var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent };
+                var sPicker = new SolutionPicker(Service, true) { StartPosition = FormStartPosition.CenterParent };
 
                 if (sPicker.ShowDialog(this) == DialogResult.OK)
                 {
@@ -781,7 +781,7 @@ namespace MsCrmTools.WebResourcesManager
                     {
                         PostWorkCallBack = (a) =>
                         {
-                            webresourceTreeView1.DisplayWebResources();
+                            webresourceTreeView1.DisplayWebResources(Options.Instance.ExpandAllOnLoadingResources);
                             webresourceTreeView1.Enabled = true;
                         }
                     };

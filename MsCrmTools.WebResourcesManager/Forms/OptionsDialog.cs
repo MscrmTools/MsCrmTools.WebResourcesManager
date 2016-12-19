@@ -24,6 +24,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             Options.Instance.AutoSaveWhenLeaving = chkAutoSaveEnabled.Checked;
             Options.Instance.AfterUpdateCommand = txtUpdateEvent.Text;
             Options.Instance.AfterPublishCommand = txtPublishEvent.Text;
+            Options.Instance.ExpandAllOnLoadingResources = chkExandAllNodes.Checked;
 
             DialogResult = DialogResult.OK;
             Close();
@@ -36,6 +37,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             chkAutoSaveEnabled.Checked = Options.Instance.AutoSaveWhenLeaving;
             txtPublishEvent.Text = Options.Instance.AfterPublishCommand;
             txtPublishEvent.Text = Options.Instance.AfterPublishCommand;
+            chkExandAllNodes.Checked = Options.Instance.ExpandAllOnLoadingResources;
         }
     }
 }

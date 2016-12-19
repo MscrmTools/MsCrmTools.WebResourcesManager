@@ -42,12 +42,23 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtUpdateEvent = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tpFiles = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkAutoSaveEnabled = new System.Windows.Forms.CheckBox();
+            this.tpEvents = new System.Windows.Forms.TabPage();
+            this.tDisplay = new System.Windows.Forms.TabPage();
+            this.chkExandAllNodes = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tpFiles.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tpEvents.SuspendLayout();
+            this.tDisplay.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -76,7 +87,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(1004, 572);
+            this.btnCancel.Location = new System.Drawing.Point(1018, 9);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(112, 35);
@@ -88,7 +99,7 @@
             // btnValidate
             // 
             this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnValidate.Location = new System.Drawing.Point(882, 572);
+            this.btnValidate.Location = new System.Drawing.Point(896, 9);
             this.btnValidate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnValidate.Name = "btnValidate";
             this.btnValidate.Size = new System.Drawing.Size(112, 35);
@@ -99,16 +110,15 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.chkPushMapAndTsFiles);
             this.groupBox1.Controls.Add(this.chkSaveOnDisk);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Location = new System.Drawing.Point(0, 92);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Size = new System.Drawing.Size(1134, 142);
+            this.groupBox1.Size = new System.Drawing.Size(1120, 142);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options when loaded from / saved to disk";
@@ -144,25 +154,24 @@
             this.label5.Location = new System.Drawing.Point(4, 24);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(1126, 32);
+            this.label5.Size = new System.Drawing.Size(1112, 32);
             this.label5.TabIndex = 11;
             this.label5.Text = "These option applies only for web resources that have been loaded from disk or lo" +
     "aded from CRM organization and saved to disk";
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.txtPublishEvent);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.txtUpdateEvent);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(0, 363);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox2.Size = new System.Drawing.Size(1134, 192);
+            this.groupBox2.Size = new System.Drawing.Size(1120, 192);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Update and Publish events";
@@ -175,7 +184,7 @@
             this.label4.Location = new System.Drawing.Point(26, 123);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(1090, 65);
+            this.label4.Size = new System.Drawing.Size(1076, 65);
             this.label4.TabIndex = 4;
             this.label4.Text = "Events are executed after having saved of published a web resource on the Dynamic" +
     "s CRM organization. You can use the keywork {FilePath} that reflects the locatio" +
@@ -217,15 +226,48 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Update event";
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btnCancel);
+            this.panel2.Controls.Add(this.btnValidate);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 560);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1134, 61);
+            this.panel2.TabIndex = 15;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tDisplay);
+            this.tabControl1.Controls.Add(this.tpFiles);
+            this.tabControl1.Controls.Add(this.tpEvents);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 92);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1134, 468);
+            this.tabControl1.TabIndex = 16;
+            // 
+            // tpFiles
+            // 
+            this.tpFiles.Controls.Add(this.groupBox3);
+            this.tpFiles.Controls.Add(this.groupBox1);
+            this.tpFiles.Location = new System.Drawing.Point(4, 29);
+            this.tpFiles.Name = "tpFiles";
+            this.tpFiles.Padding = new System.Windows.Forms.Padding(3);
+            this.tpFiles.Size = new System.Drawing.Size(1126, 435);
+            this.tpFiles.TabIndex = 0;
+            this.tpFiles.Text = "Files";
+            this.tpFiles.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.chkAutoSaveEnabled);
-            this.groupBox3.Location = new System.Drawing.Point(0, 242);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox3.Location = new System.Drawing.Point(3, 145);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1134, 100);
-            this.groupBox3.TabIndex = 14;
+            this.groupBox3.Size = new System.Drawing.Size(1120, 100);
+            this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Auto-save ";
             // 
@@ -237,11 +279,43 @@
             this.chkAutoSaveEnabled.Location = new System.Drawing.Point(13, 27);
             this.chkAutoSaveEnabled.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkAutoSaveEnabled.Name = "chkAutoSaveEnabled";
-            this.chkAutoSaveEnabled.Size = new System.Drawing.Size(1108, 49);
+            this.chkAutoSaveEnabled.Size = new System.Drawing.Size(1094, 49);
             this.chkAutoSaveEnabled.TabIndex = 14;
             this.chkAutoSaveEnabled.Text = "Save automatically local content when selecting a webresource and the displayed o" +
     "ne has not been saved (this does not update webresource to CRM organization)";
             this.chkAutoSaveEnabled.UseVisualStyleBackColor = true;
+            // 
+            // tpEvents
+            // 
+            this.tpEvents.Controls.Add(this.groupBox2);
+            this.tpEvents.Location = new System.Drawing.Point(4, 29);
+            this.tpEvents.Name = "tpEvents";
+            this.tpEvents.Padding = new System.Windows.Forms.Padding(3);
+            this.tpEvents.Size = new System.Drawing.Size(1126, 435);
+            this.tpEvents.TabIndex = 1;
+            this.tpEvents.Text = "Events";
+            this.tpEvents.UseVisualStyleBackColor = true;
+            // 
+            // tDisplay
+            // 
+            this.tDisplay.Controls.Add(this.chkExandAllNodes);
+            this.tDisplay.Location = new System.Drawing.Point(4, 29);
+            this.tDisplay.Name = "tDisplay";
+            this.tDisplay.Padding = new System.Windows.Forms.Padding(3);
+            this.tDisplay.Size = new System.Drawing.Size(1126, 435);
+            this.tDisplay.TabIndex = 2;
+            this.tDisplay.Text = "Display";
+            this.tDisplay.UseVisualStyleBackColor = true;
+            // 
+            // chkExandAllNodes
+            // 
+            this.chkExandAllNodes.AutoSize = true;
+            this.chkExandAllNodes.Location = new System.Drawing.Point(7, 7);
+            this.chkExandAllNodes.Name = "chkExandAllNodes";
+            this.chkExandAllNodes.Size = new System.Drawing.Size(360, 24);
+            this.chkExandAllNodes.TabIndex = 0;
+            this.chkExandAllNodes.Text = "Expand all nodes when loading web resources";
+            this.chkExandAllNodes.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
@@ -249,11 +323,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(1134, 621);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnValidate);
-            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -266,7 +337,13 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tpFiles.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.tpEvents.ResumeLayout(false);
+            this.tDisplay.ResumeLayout(false);
+            this.tDisplay.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -287,7 +364,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox chkPushMapAndTsFiles;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tpFiles;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox chkAutoSaveEnabled;
+        private System.Windows.Forms.TabPage tpEvents;
+        private System.Windows.Forms.TabPage tDisplay;
+        private System.Windows.Forms.CheckBox chkExandAllNodes;
     }
 }
