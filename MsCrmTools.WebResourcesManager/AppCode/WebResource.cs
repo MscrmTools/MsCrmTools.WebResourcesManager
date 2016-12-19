@@ -266,6 +266,11 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         public string GetPlainText()
         {
+            if (!Entity.Contains("content"))
+            {
+                return string.Empty;
+            }
+
             byte[] b = Convert.FromBase64String(Entity.GetAttributeValue<string>("content"));
             return Encoding.UTF8.GetString(b);
         }
