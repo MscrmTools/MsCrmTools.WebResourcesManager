@@ -448,11 +448,11 @@
   move /Y MsCrmTools.WebResourcesManager.*.pdb Plugins
 )
 
-rem "$(SolutionDir)packages\LibZ.Tool.1.2.0.0\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.WebResourcesManager.dll --include ICSharpCode.AvalonEdit.dll --include Yahoo.Yui.Compressor.dll --include EcmaScript.NET.modified.dll</PostBuildEvent>
+"$(SolutionDir)packages\LibZ.Tool.1.2.0.0\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.WebResourcesManager.dll --include ICSharpCode.AvalonEdit.dll --include Yahoo.Yui.Compressor.dll --include EcmaScript.NET.modified.dll</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
