@@ -537,5 +537,12 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 }
             }
         }
+
+        public void GoToLine()
+        {
+            GoToLineDialog gotoLineForm = new GoToLineDialog(textEditor);
+            gotoLineForm.ShowDialog();
+            gotoLineForm.Activate();
+        }
     }
 }

@@ -1781,5 +1781,27 @@ namespace MsCrmTools.WebResourcesManager
 
             webresourceTreeView1.SelectNode(((WebResource)tabOpenedResources.SelectedTab.Tag).Node);
         }
+
+        private void goToLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[2]).DropDownItems[0].PerformClick();
+                return;
+            }
+
+            if (tabOpenedResources.SelectedTab.Controls.Count == 0)
+            {
+                return;
+            }
+
+            var control = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
+            if (!(control is CodeControl))
+            {
+                return;
+            }            
+
+            ((CodeControl)control).GoToLine();
+        }
     }
 }
