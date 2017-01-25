@@ -84,6 +84,7 @@
             this.Name = "GoToLineDialog";
             this.ShowInTaskbar = false;
             this.Text = "Go To Line";
+            this.Activated += new System.EventHandler(this.GoToLineDialog_Activated);
             this.ResumeLayout(false);
             this.PerformLayout();
 
