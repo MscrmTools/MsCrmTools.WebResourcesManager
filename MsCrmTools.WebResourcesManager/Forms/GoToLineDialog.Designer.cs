@@ -72,8 +72,10 @@
             // 
             // GoToLineDialog
             // 
+            this.AcceptButton = this.btnGotoLine;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(282, 119);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnGotoLine);
