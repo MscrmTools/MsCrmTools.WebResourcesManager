@@ -79,10 +79,12 @@
             this.Controls.Add(this.btnGotoLine);
             this.Controls.Add(this.txtLineNumber);
             this.Controls.Add(this.lblLineNumber);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GoToLineDialog";
             this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Go To Line";
             this.Activated += new System.EventHandler(this.GoToLineDialog_Activated);
             this.ResumeLayout(false);
