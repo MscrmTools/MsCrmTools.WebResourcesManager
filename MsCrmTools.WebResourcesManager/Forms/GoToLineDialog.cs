@@ -23,6 +23,10 @@ namespace MsCrmTools.WebResourcesManager.Forms
                 txtLineNumber.SelectAll();
                 return;
             }
+            if (lineNumber > textEditor.LineCount)
+            {
+                lineNumber = textEditor.LineCount;
+            }
             textEditor.ScrollTo(lineNumber, 0);
         }
 
