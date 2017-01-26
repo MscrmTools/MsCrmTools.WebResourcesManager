@@ -1790,7 +1790,7 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
-            if (tabOpenedResources.SelectedTab.Controls.Count == 0)
+            if (tabOpenedResources.SelectedTab?.Controls.Count == 0)
             {
                 return;
             }
