@@ -26,6 +26,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (lineNumber > textEditor.LineCount)
             {
                 lineNumber = textEditor.LineCount;
+                txtLineNumber.Text = lineNumber.ToString();
             }
             textEditor.ScrollTo(lineNumber, 0);
         }
