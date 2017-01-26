@@ -87,6 +87,7 @@
             this.Name = "GoToLineDialog";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Go To Line";
             this.Activated += new System.EventHandler(this.GoToLineDialog_Activated);
             this.ResumeLayout(false);
