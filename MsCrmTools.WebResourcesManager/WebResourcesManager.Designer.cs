@@ -114,6 +114,10 @@ namespace MsCrmTools.WebResourcesManager
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsTab = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.closeThisTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colseAllButThisTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -121,6 +125,7 @@ namespace MsCrmTools.WebResourcesManager
             this.toolStripScriptContent.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.cmsWebResourceTreeView.SuspendLayout();
+            this.cmsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList2
@@ -178,6 +183,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tabOpenedResources.Size = new System.Drawing.Size(991, 812);
             this.tabOpenedResources.TabIndex = 7;
             this.tabOpenedResources.SelectedIndexChanged += new System.EventHandler(this.tabOpenedResources_SelectedIndexChanged);
+            this.tabOpenedResources.MouseClick += tabOpenedResources_MouseClick;
             // 
             // lblWebresourceName
             // 
@@ -887,6 +893,36 @@ namespace MsCrmTools.WebResourcesManager
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.TsmiPropertieClick);
             // 
+            // cmsTab
+            // 
+            this.cmsTab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeThisTabToolStripMenuItem,
+            this.closeAllTabsToolStripMenuItem,
+            this.colseAllButThisTabToolStripMenuItem});
+            this.cmsTab.Name = "cmsTab";
+            this.cmsTab.Size = new System.Drawing.Size(259, 94);
+            // 
+            // closeThisTabToolStripMenuItem
+            // 
+            this.closeThisTabToolStripMenuItem.Name = "closeThisTabToolStripMenuItem";
+            this.closeThisTabToolStripMenuItem.Size = new System.Drawing.Size(258, 30);
+            this.closeThisTabToolStripMenuItem.Text = "Close this tab";
+            this.closeThisTabToolStripMenuItem.Click += new System.EventHandler(this.closeThisTabToolStripMenuItem_Click);
+            // 
+            // closeAllTabsToolStripMenuItem
+            // 
+            this.closeAllTabsToolStripMenuItem.Name = "closeAllTabsToolStripMenuItem";
+            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(258, 30);
+            this.closeAllTabsToolStripMenuItem.Text = "Close all tabs";
+            this.closeAllTabsToolStripMenuItem.Click += new System.EventHandler(this.closeAllTabsToolStripMenuItem_Click);
+            // 
+            // colseAllButThisTabToolStripMenuItem
+            // 
+            this.colseAllButThisTabToolStripMenuItem.Name = "colseAllButThisTabToolStripMenuItem";
+            this.colseAllButThisTabToolStripMenuItem.Size = new System.Drawing.Size(258, 30);
+            this.colseAllButThisTabToolStripMenuItem.Text = "Colse all but this tab";
+            this.colseAllButThisTabToolStripMenuItem.Click += new System.EventHandler(this.colseAllButThisTabToolStripMenuItem_Click);
+            // 
             // WebResourcesManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -905,6 +941,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.cmsWebResourceTreeView.ResumeLayout(false);
+            this.cmsTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -992,5 +1029,9 @@ namespace MsCrmTools.WebResourcesManager
         private System.Windows.Forms.ToolStripMenuItem renameWebResourceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
         private CustomTabControl tabOpenedResources;
+        private ContextMenuStrip cmsTab;
+        private ToolStripMenuItem closeThisTabToolStripMenuItem;
+        private ToolStripMenuItem closeAllTabsToolStripMenuItem;
+        private ToolStripMenuItem colseAllButThisTabToolStripMenuItem;
     }
 }

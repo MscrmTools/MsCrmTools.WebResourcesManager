@@ -1730,6 +1730,8 @@ namespace MsCrmTools.WebResourcesManager
                 e.Action == WebResourceUpdateOption.UpdateAndPublishAndAdd);
         }
 
+        #region Tabs management
+
         private void tabOpenedResources_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabOpenedResources.SelectedTab == null)
@@ -1781,5 +1783,48 @@ namespace MsCrmTools.WebResourcesManager
 
             webresourceTreeView1.SelectNode(((WebResource)tabOpenedResources.SelectedTab.Tag).Node);
         }
+
+        private void closeThisTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CloseTabs(new List<TabPage> { rightClickedTabPage });
+        }
+
+        private void closeAllTabsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CloseTabs(tabOpenedResources.TabPages.Cast<TabPage>());
+        }
+
+        private void colseAllButThisTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var list = tabOpenedResources.TabPages.Cast<TabPage>().ToList();
+            list.Remove(rightClickedTabPage);
+            CloseTabs(list);
+        }
+
+        private void CloseTabs(IEnumerable<TabPage> tabs)
+        {
+            foreach (var tab in tabs)
+            {
+                tabOpenedResources.TabPages.Remove(tab);
+            }
+        }
+
+        private TabPage rightClickedTabPage;
+        private void tabOpenedResources_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                for (int i = 0; i < tabOpenedResources.TabCount; ++i)
+                {
+                    if (tabOpenedResources.GetTabRect(i).Contains(e.Location))
+                    {
+                        rightClickedTabPage = (TabPage)tabOpenedResources.Controls[i];
+                    }
+                }
+                cmsTab.Show(tabOpenedResources, e.Location);
+            }
+        }
+
+        #endregion
     }
 }
