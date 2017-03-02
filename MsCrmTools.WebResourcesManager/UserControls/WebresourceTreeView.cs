@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Documents;
 using System.Windows.Forms;
 
@@ -305,7 +306,21 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 pnlWaitingPublish.Visible = false;
             }));
 
-            foreach (var webResource in WebResources)
+            var resourcesToDisplay = WebResources.Where(w => txtSearch.Text.Length == 0 ||
+                                                             w.Entity.GetAttributeValue<string>("name")
+                                                                 .ToLower()
+                                                                 .Contains(txtSearch.Text.ToLower())
+                                                                 || w.UpdatedContent.ToLower().Contains(txtSearch.Text.ToLower())
+                                                                 
+                                                                 ).ToList();
+
+            if (!resourcesToDisplay.Any() && txtSearch.Text.Length > 0)
+            {
+                txtSearch.BackColor = Color.LightCoral;
+                return;
+            }
+
+            foreach (var webResource in resourcesToDisplay)
             {
                 string[] nameParts = webResource.Entity.GetAttributeValue<string>("name").Split('/');
 
@@ -798,7 +813,6 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             WebResourceSelected?.Invoke(this, new WebResourceSelectedEventArgs(SelectedResource));
         }
 
-
         private void Tv_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             tv.SelectedNode = e.Node;
@@ -810,7 +824,6 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             WebResourceSelected?.Invoke(this, new WebResourceSelectedEventArgs(SelectedResource));
         }
-
 
         private void tv_DragDrop(object sender, DragEventArgs e)
         {
@@ -1047,6 +1060,25 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     }
                 }
             }
+        }
+
+        private Thread searchThread;
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            txtSearch.BackColor = SystemColors.Window;
+            searchThread?.Abort();
+            searchThread = new Thread(DisplayWrs);
+            searchThread.Start();
+        }
+
+        private void DisplayWrs()
+        {
+            tv.Invoke(new Action(() =>
+            {
+                tv.Nodes.Clear();
+                DisplayWebResources(Options.Instance.ExpandAllOnLoadingResources);
+            }));
         }
     }
 }
