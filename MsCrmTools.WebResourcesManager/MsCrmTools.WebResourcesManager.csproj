@@ -210,6 +210,12 @@
     <Compile Include="Forms\CustomFolderBrowserDialog.Designer.cs">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GoToLineDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GoToLineDialog.Designer.cs">
+      <DependentUpon>GoToLineDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UpdateOptionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -359,6 +365,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GoToLineDialog.resx">
+      <DependentUpon>GoToLineDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UpdateOptionsDialog.resx">
       <DependentUpon>UpdateOptionsDialog.cs</DependentUpon>

@@ -1730,6 +1730,28 @@ namespace MsCrmTools.WebResourcesManager
                 e.Action == WebResourceUpdateOption.UpdateAndPublishAndAdd);
         }
 
+        private void goToLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[2]).DropDownItems[0].PerformClick();
+                return;
+            }
+
+            if (tabOpenedResources.SelectedTab == null || tabOpenedResources.SelectedTab.Controls.Count == 0)
+            {
+                return;
+            }
+
+            var control = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
+            if (!(control is CodeControl))
+            {
+                return;
+            }
+
+           ((CodeControl)control).GoToLine();
+        }
+
         #region Tabs management
 
         private void tabOpenedResources_SelectedIndexChanged(object sender, EventArgs e)

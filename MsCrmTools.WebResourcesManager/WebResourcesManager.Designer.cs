@@ -33,6 +33,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebResourcesManager));
+            this.goToLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.webresourceTreeView1 = new MsCrmTools.WebResourcesManager.New.UserControls.WebresourceTreeView();
@@ -279,13 +280,24 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.tsSeparatorEdit.Name = "tsSeparatorEdit";
             this.tsSeparatorEdit.Size = new System.Drawing.Size(6, 38);
+
+            //
+            // goToLineToolStripMenuItem
+            // 
+            this.goToLineToolStripMenuItem.Name = "goToLineToolStripMenuItem";
+            this.goToLineToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.goToLineToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
+            this.goToLineToolStripMenuItem.Text = "Go To Line";
+            this.goToLineToolStripMenuItem.Click += new System.EventHandler(this.goToLineToolStripMenuItem_Click);
+
             // 
             // tsddbEdit
             // 
             this.tsddbEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsddbEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findToolStripMenuItem,
-            this.replaceToolStripMenuItem});
+            this.replaceToolStripMenuItem,
+            this.goToLineToolStripMenuItem});
             this.tsddbEdit.Image = ((System.Drawing.Image)(resources.GetObject("tsddbEdit.Image")));
             this.tsddbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbEdit.Name = "tsddbEdit";
@@ -948,6 +960,7 @@ namespace MsCrmTools.WebResourcesManager
 
         #endregion
 
+        private ToolStripMenuItem goToLineToolStripMenuItem;
         private System.Windows.Forms.ImageList imageList2;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ToolStrip toolStripScriptContent;
