@@ -433,6 +433,11 @@ namespace MsCrmTools.WebResourcesManager
         {
             try
             {
+                if (string.IsNullOrEmpty(webresourceTreeView1.SelectedResource.FilePath))
+                {
+                    return;
+                }
+
                 var invalidFilesList = webresourceTreeView1.RefreshFromDisk();
 
                 if (invalidFilesList.Any())
@@ -1261,6 +1266,11 @@ namespace MsCrmTools.WebResourcesManager
             OpenCompareSettings();
         }
 
+        private void refreshFromDiskToolStripEditorMenuItem_Click(object sender, EventArgs e)
+        {
+            TsmiRefreshFromDiskClick(null, null);
+        }
+
         #endregion WEBRESOURCE CONTENT - Actions
 
         private void MainFormWebResourceUpdated(object sender, WebResourceUpdatedEventArgs e)
@@ -1490,6 +1500,9 @@ namespace MsCrmTools.WebResourcesManager
                 Entity script = resource.Entity;
                 string resourceName = script.GetAttributeValue<string>("name");
                 UserControl ctrl = null;
+
+                refreshFromDiskToolStripEditorMenuItem.Visible = !string.IsNullOrEmpty(resource.FilePath);
+                refreshFromDiskToolStripEditorMenuItem.Enabled = !string.IsNullOrEmpty(resource.FilePath);
 
                 switch (((OptionSetValue)script["webresourcetype"]).Value)
                 {
@@ -1903,5 +1916,7 @@ namespace MsCrmTools.WebResourcesManager
         }
 
         #endregion
+
+       
     }
 }
