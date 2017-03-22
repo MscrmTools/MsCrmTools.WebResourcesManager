@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Xml;
+using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.WebResourcesManager.AppCode
 {
@@ -32,10 +33,16 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         document.Load(optionFile);
 
                         instance = (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+
+                        SettingsManager.Instance.Save(typeof(Options), instance);
+                        try { File.Delete(optionFile); } catch { }
                     }
                     else
                     {
-                        instance = new Options();
+                        if (!SettingsManager.Instance.TryLoad(typeof(Options), out instance))
+                        {
+                            instance = new Options();
+                        }
                     }
                 }
 
@@ -55,7 +62,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         public void Save()
         {
-            XmlSerializerHelper.SerializeToFile(this, filePath);
+            SettingsManager.Instance.Save(GetType(), instance);
         }
     }
 }
