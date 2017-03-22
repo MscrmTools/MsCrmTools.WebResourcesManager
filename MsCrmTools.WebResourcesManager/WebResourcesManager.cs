@@ -21,6 +21,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Crm.Sdk.Messages;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -754,7 +755,7 @@ namespace MsCrmTools.WebResourcesManager
                 return;
 
             var webResource = webresourceTreeView1.GetCheckedResources().FirstOrDefault();
-            var name1 = (string)webResource.Entity["name"];
+            var name1 = webResource?.Entity.GetAttributeValue<string>("name");
 
             var renameWebResource = new RenameWebResourceDialog(name1);
             renameWebResource.StartPosition = FormStartPosition.CenterParent;
@@ -765,47 +766,101 @@ namespace MsCrmTools.WebResourcesManager
 
                 if (name1 != name2)
                 {
-                    var command = new WorkAsyncInfo(string.Format("Trying to rename '{0}' to '{1}'", name1, name2),
-                    (a) =>
+                    WorkAsync(new WorkAsyncInfo
                     {
-                        // Check if resource with the same name already exists
-                        var query = new QueryExpression("webresource");
-                        query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
-
-                        var result = Service.RetrieveMultiple(query).Entities.Count;
-
-                        if (result == 0)
+                        Message = $"Trying to rename '{name1}' to '{name2}'",
+                        Work = (bw, evt) =>
                         {
-                            try
+                            bw.ReportProgress(0, "Searching for a webresource with the same name...");
+
+                            // Check if resource with the same name already exists
+                            var query = new QueryExpression("webresource");
+                            query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
+
+                            var result = Service.RetrieveMultiple(query).Entities.Count;
+
+                            if (result == 0)
                             {
+                                bw.ReportProgress(0, "Identifying solutions that contain this web resource...");
+
+                                // Find if the web resource is attached to solutions
+                                var solutions = Service.RetrieveMultiple(new QueryExpression("solution")
+                                {
+                                    ColumnSet = new ColumnSet(true),
+                                    Criteria = new FilterExpression
+                                    {
+                                        Conditions =
+                                        {
+                                            new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Active"),
+                                            new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default")
+                                        }
+                                    },
+                                    LinkEntities =
+                                    {
+                                        new LinkEntity
+                                        {
+                                            LinkFromEntityName = "solution",
+                                            LinkFromAttributeName = "solutionid",
+                                            LinkToAttributeName = "solutionid",
+                                            LinkToEntityName = "solutioncomponent",
+                                            LinkCriteria = new FilterExpression
+                                            {
+                                                Conditions =
+                                                {
+                                                    new ConditionExpression("objectid", ConditionOperator.Equal,
+                                                        webResource.Entity.Id)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }).Entities;
+
                                 // It's safe to update web resource. Direct rename is not possible,
                                 // but deletion with different name, but same ID will have same result
+                                bw.ReportProgress(0, "Deleting web resource...");
                                 Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
+                                bw.ReportProgress(0, "Creating web resource...");
                                 webResource.Entity.Attributes["name"] = name2;
                                 Service.Create(webResource.Entity);
-                            }
-                            catch
-                            {
-                                Invoke(new Action(() =>
+
+                                // Add new web resource to solutions as before
+                                foreach (var solution in solutions)
                                 {
-                                    MessageBox.Show("It was impossible to rename web resource!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }));
+                                    bw.ReportProgress(0, $"Adding back the web resource to solution '{solution.GetAttributeValue<string>("friendlyname")}'...");
+
+                                    var request = new AddSolutionComponentRequest
+                                    {
+                                        AddRequiredComponents = false,
+                                        ComponentId = webResource.Entity.Id,
+                                        ComponentType = SolutionComponentType.WebResource,
+                                        SolutionUniqueName = solution.GetAttributeValue<string>("uniquename")
+                                    };
+
+                                    Service.Execute(request);
+                                }
                             }
-                        }
-                        else
+                            else
+                            {
+                                MessageBox.Show("Resource with the same name already exist, rename impossible!",
+                                    Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        },
+                        PostWorkCallBack = evt =>
                         {
-                            MessageBox.Show("Resource with the same name already exist, rename impossible!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    })
-                    {
-                        PostWorkCallBack = (a) =>
-                        {
+                            if (evt.Error != null)
+                            {
+                                MessageBox.Show($"Web resource renaming failed for the following reason: {evt.Error.Message}",
+                                      Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+
                             webresourceTreeView1.DisplayWebResources(Options.Instance.ExpandAllOnLoadingResources);
                             webresourceTreeView1.Enabled = true;
+                        },
+                        ProgressChanged = evt =>
+                        {
+                            SetWorkingMessage(evt.UserState.ToString());
                         }
-                    };
-
-                    WorkAsync(command);
+                    });
                 }
             }
         }
