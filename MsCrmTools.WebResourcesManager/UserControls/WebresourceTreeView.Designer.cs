@@ -37,12 +37,14 @@
             this.llExpandAll = new System.Windows.Forms.LinkLabel();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.pnlSearch = new System.Windows.Forms.Panel();
-            this.txtSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.pnlWaitingPublish = new System.Windows.Forms.Panel();
             this.llUpdateResources = new System.Windows.Forms.LinkLabel();
             this.lblWaitingPublish = new System.Windows.Forms.Label();
             this.tv = new System.Windows.Forms.TreeView();
+            this.chkSearchInContent = new System.Windows.Forms.CheckBox();
+            this.chkDisplayExpanded = new System.Windows.Forms.CheckBox();
+            this.txtSearch = new System.Windows.Forms.TextBox();
             this.pnlBottom.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             this.pnlWaitingPublish.SuspendLayout();
@@ -85,19 +87,17 @@
             this.pnlBottom.Controls.Add(this.chkSelectAll);
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlBottom.Location = new System.Drawing.Point(0, 0);
-            this.pnlBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlBottom.Name = "pnlBottom";
-            this.pnlBottom.Size = new System.Drawing.Size(614, 26);
+            this.pnlBottom.Size = new System.Drawing.Size(409, 17);
             this.pnlBottom.TabIndex = 85;
             // 
             // llCollapseAll
             // 
             this.llCollapseAll.AutoSize = true;
             this.llCollapseAll.Dock = System.Windows.Forms.DockStyle.Right;
-            this.llCollapseAll.Location = new System.Drawing.Point(429, 0);
-            this.llCollapseAll.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.llCollapseAll.Location = new System.Drawing.Point(284, 0);
             this.llCollapseAll.Name = "llCollapseAll";
-            this.llCollapseAll.Size = new System.Drawing.Size(89, 20);
+            this.llCollapseAll.Size = new System.Drawing.Size(60, 13);
             this.llCollapseAll.TabIndex = 87;
             this.llCollapseAll.TabStop = true;
             this.llCollapseAll.Text = "Collapse all";
@@ -107,10 +107,9 @@
             // 
             this.lblSeparator.AutoSize = true;
             this.lblSeparator.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblSeparator.Location = new System.Drawing.Point(518, 0);
-            this.lblSeparator.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSeparator.Location = new System.Drawing.Point(344, 0);
             this.lblSeparator.Name = "lblSeparator";
-            this.lblSeparator.Size = new System.Drawing.Size(14, 20);
+            this.lblSeparator.Size = new System.Drawing.Size(9, 13);
             this.lblSeparator.TabIndex = 86;
             this.lblSeparator.Text = "|";
             // 
@@ -118,10 +117,9 @@
             // 
             this.llExpandAll.AutoSize = true;
             this.llExpandAll.Dock = System.Windows.Forms.DockStyle.Right;
-            this.llExpandAll.Location = new System.Drawing.Point(532, 0);
-            this.llExpandAll.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.llExpandAll.Location = new System.Drawing.Point(353, 0);
             this.llExpandAll.Name = "llExpandAll";
-            this.llExpandAll.Size = new System.Drawing.Size(82, 20);
+            this.llExpandAll.Size = new System.Drawing.Size(56, 13);
             this.llExpandAll.TabIndex = 85;
             this.llExpandAll.TabStop = true;
             this.llExpandAll.Text = "Expand all";
@@ -132,9 +130,8 @@
             this.chkSelectAll.AutoSize = true;
             this.chkSelectAll.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkSelectAll.Location = new System.Drawing.Point(0, 0);
-            this.chkSelectAll.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(166, 26);
+            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
             this.chkSelectAll.TabIndex = 84;
             this.chkSelectAll.Text = "Select/Unselect all";
             this.chkSelectAll.UseVisualStyleBackColor = true;
@@ -143,32 +140,24 @@
             // pnlSearch
             // 
             this.pnlSearch.Controls.Add(this.txtSearch);
+            this.pnlSearch.Controls.Add(this.chkDisplayExpanded);
+            this.pnlSearch.Controls.Add(this.chkSearchInContent);
             this.pnlSearch.Controls.Add(this.lblSearch);
             this.pnlSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSearch.Location = new System.Drawing.Point(0, 1001);
-            this.pnlSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlSearch.Location = new System.Drawing.Point(0, 648);
             this.pnlSearch.Name = "pnlSearch";
-            this.pnlSearch.Size = new System.Drawing.Size(614, 30);
+            this.pnlSearch.Size = new System.Drawing.Size(409, 22);
             this.pnlSearch.TabIndex = 85;
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSearch.Location = new System.Drawing.Point(60, 0);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(554, 26);
-            this.txtSearch.TabIndex = 1;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // lblSearch
             // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblSearch.Location = new System.Drawing.Point(0, 0);
-            this.lblSearch.Margin = new System.Windows.Forms.Padding(3, 0, 6, 0);
+            this.lblSearch.Margin = new System.Windows.Forms.Padding(2, 0, 4, 0);
             this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
-            this.lblSearch.Size = new System.Drawing.Size(60, 26);
+            this.lblSearch.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.lblSearch.Size = new System.Drawing.Size(41, 17);
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Search";
             // 
@@ -179,9 +168,10 @@
             this.pnlWaitingPublish.Controls.Add(this.llUpdateResources);
             this.pnlWaitingPublish.Controls.Add(this.lblWaitingPublish);
             this.pnlWaitingPublish.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlWaitingPublish.Location = new System.Drawing.Point(0, 26);
+            this.pnlWaitingPublish.Location = new System.Drawing.Point(0, 17);
+            this.pnlWaitingPublish.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlWaitingPublish.Name = "pnlWaitingPublish";
-            this.pnlWaitingPublish.Size = new System.Drawing.Size(614, 50);
+            this.pnlWaitingPublish.Size = new System.Drawing.Size(409, 33);
             this.pnlWaitingPublish.TabIndex = 87;
             this.pnlWaitingPublish.Visible = false;
             // 
@@ -189,9 +179,10 @@
             // 
             this.llUpdateResources.AutoSize = true;
             this.llUpdateResources.Dock = System.Windows.Forms.DockStyle.Right;
-            this.llUpdateResources.Location = new System.Drawing.Point(550, 23);
+            this.llUpdateResources.Location = new System.Drawing.Point(365, 15);
+            this.llUpdateResources.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.llUpdateResources.Name = "llUpdateResources";
-            this.llUpdateResources.Size = new System.Drawing.Size(62, 20);
+            this.llUpdateResources.Size = new System.Drawing.Size(42, 13);
             this.llUpdateResources.TabIndex = 1;
             this.llUpdateResources.TabStop = true;
             this.llUpdateResources.Text = "Update";
@@ -202,8 +193,9 @@
             this.lblWaitingPublish.AutoEllipsis = true;
             this.lblWaitingPublish.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblWaitingPublish.Location = new System.Drawing.Point(0, 0);
+            this.lblWaitingPublish.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblWaitingPublish.Name = "lblWaitingPublish";
-            this.lblWaitingPublish.Size = new System.Drawing.Size(612, 23);
+            this.lblWaitingPublish.Size = new System.Drawing.Size(407, 15);
             this.lblWaitingPublish.TabIndex = 0;
             this.lblWaitingPublish.Text = "label";
             // 
@@ -215,11 +207,10 @@
             this.tv.HideSelection = false;
             this.tv.ImageIndex = 0;
             this.tv.ImageList = this.ilWebResourceTypes;
-            this.tv.Location = new System.Drawing.Point(0, 76);
-            this.tv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tv.Location = new System.Drawing.Point(0, 50);
             this.tv.Name = "tv";
             this.tv.SelectedImageIndex = 0;
-            this.tv.Size = new System.Drawing.Size(614, 925);
+            this.tv.Size = new System.Drawing.Size(409, 598);
             this.tv.TabIndex = 88;
             this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
             this.tv.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tv_BeforeSelect);
@@ -228,17 +219,56 @@
             this.tv.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_DragOver);
             this.tv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_MouseDown);
             // 
+            // chkSearchInContent
+            // 
+            this.chkSearchInContent.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSearchInContent.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkSearchInContent.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkSearchInContent.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.chkSearchInContent.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
+            this.chkSearchInContent.Image = ((System.Drawing.Image)(resources.GetObject("chkSearchInContent.Image")));
+            this.chkSearchInContent.Location = new System.Drawing.Point(387, 0);
+            this.chkSearchInContent.Name = "chkSearchInContent";
+            this.chkSearchInContent.Size = new System.Drawing.Size(22, 22);
+            this.chkSearchInContent.TabIndex = 89;
+            this.chkSearchInContent.UseVisualStyleBackColor = true;
+            this.chkSearchInContent.CheckedChanged += new System.EventHandler(this.chkSearchInContent_CheckedChanged);
+            // 
+            // chkDisplayExpanded
+            // 
+            this.chkDisplayExpanded.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkDisplayExpanded.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkDisplayExpanded.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkDisplayExpanded.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.chkDisplayExpanded.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
+            this.chkDisplayExpanded.Image = ((System.Drawing.Image)(resources.GetObject("chkDisplayExpanded.Image")));
+            this.chkDisplayExpanded.Location = new System.Drawing.Point(365, 0);
+            this.chkDisplayExpanded.Name = "chkDisplayExpanded";
+            this.chkDisplayExpanded.Size = new System.Drawing.Size(22, 22);
+            this.chkDisplayExpanded.TabIndex = 91;
+            this.chkDisplayExpanded.UseVisualStyleBackColor = true;
+            this.chkDisplayExpanded.CheckedChanged += new System.EventHandler(this.chkDisplayExpanded_CheckedChanged);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearch.Location = new System.Drawing.Point(41, 0);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(324, 20);
+            this.txtSearch.TabIndex = 92;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
             // WebresourceTreeView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tv);
             this.Controls.Add(this.pnlWaitingPublish);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSearch);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "WebresourceTreeView";
-            this.Size = new System.Drawing.Size(614, 1031);
+            this.Size = new System.Drawing.Size(409, 670);
             this.pnlBottom.ResumeLayout(false);
             this.pnlBottom.PerformLayout();
             this.pnlSearch.ResumeLayout(false);
@@ -261,7 +291,9 @@
         private System.Windows.Forms.TreeView tv;
         private System.Windows.Forms.LinkLabel llUpdateResources;
         private System.Windows.Forms.Label lblWaitingPublish;
-        private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label lblSearch;
+        private System.Windows.Forms.CheckBox chkSearchInContent;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.CheckBox chkDisplayExpanded;
     }
 }

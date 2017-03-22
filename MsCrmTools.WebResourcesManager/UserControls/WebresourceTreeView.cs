@@ -27,6 +27,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         {
             InitializeComponent();
 
+            ToolTip tip = new ToolTip();
+            tip.SetToolTip(chkSearchInContent, "Search also in files content");
+            tip.SetToolTip(chkDisplayExpanded, "Display results as expanded");
+
             WebResources = new List<WebResource>();
 
             for(var i = 0; i < 12; i++)
@@ -310,7 +314,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                                                              w.Entity.GetAttributeValue<string>("name")
                                                                  .ToLower()
                                                                  .Contains(txtSearch.Text.ToLower())
-                                                                 || w.UpdatedContent.ToLower().Contains(txtSearch.Text.ToLower())
+                                                                 || chkSearchInContent.Checked && w.UpdatedContent.ToLower().Contains(txtSearch.Text.ToLower())
                                                                  
                                                                  ).ToList();
 
@@ -1077,8 +1081,28 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             tv.Invoke(new Action(() =>
             {
                 tv.Nodes.Clear();
-                DisplayWebResources(Options.Instance.ExpandAllOnLoadingResources);
+                DisplayWebResources(chkDisplayExpanded.Checked);
             }));
+        }
+
+        private void chkSearchInContent_CheckedChanged(object sender, EventArgs e)
+        {
+            txtSearch.BackColor = SystemColors.Window;
+            searchThread?.Abort();
+            searchThread = new Thread(DisplayWrs);
+            searchThread.Start();
+        }
+
+        private void chkDisplayExpanded_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDisplayExpanded.Checked)
+            {
+                llExpandAll_LinkClicked(llExpandAll, new LinkLabelLinkClickedEventArgs(llExpandAll.Links[0]));
+            }
+            else
+            {
+                llCollapseAll_LinkClicked(llCollapseAll, new LinkLabelLinkClickedEventArgs(llCollapseAll.Links[0]));
+            }
         }
     }
 }
