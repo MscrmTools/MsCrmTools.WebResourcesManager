@@ -1027,7 +1027,9 @@ namespace MsCrmTools.WebResourcesManager
             }
 
             if (tabOpenedResources.SelectedTab == null || tabOpenedResources.SelectedTab.Controls.Count == 0)
+            {
                 return;
+            }
 
             var control = ((IWebResourceControl)tabOpenedResources.SelectedTab.Controls[0]);
             if (!(control is CodeControl)) return;
