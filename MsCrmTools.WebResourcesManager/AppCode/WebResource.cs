@@ -45,6 +45,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             InitialBase64 = webResource.GetAttributeValue<string>("content");
             OriginalBase64 = webResource.GetAttributeValue<string>("content");
             initialContent = GetPlainText();
+            updatedContent = initialContent;
             LoadAssociatedResources();
         }
 

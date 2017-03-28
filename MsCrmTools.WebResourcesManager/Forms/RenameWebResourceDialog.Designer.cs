@@ -34,6 +34,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,16 +49,19 @@
             // 
             // txtWebResourceName
             // 
+            this.txtWebResourceName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWebResourceName.Location = new System.Drawing.Point(13, 69);
             this.txtWebResourceName.Name = "txtWebResourceName";
-            this.txtWebResourceName.Size = new System.Drawing.Size(360, 20);
+            this.txtWebResourceName.Size = new System.Drawing.Size(451, 20);
             this.txtWebResourceName.TabIndex = 12;
             this.txtWebResourceName.TextChanged += new System.EventHandler(this.TxtWebResourceNameTextChanged);
             this.txtWebResourceName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtWebResourceNameKeyUp);
             // 
             // btnValidate
             // 
-            this.btnValidate.Location = new System.Drawing.Point(217, 95);
+            this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnValidate.Location = new System.Drawing.Point(307, 114);
             this.btnValidate.Name = "btnValidate";
             this.btnValidate.Size = new System.Drawing.Size(75, 23);
             this.btnValidate.TabIndex = 13;
@@ -67,8 +71,9 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(298, 95);
+            this.btnCancel.Location = new System.Drawing.Point(388, 114);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 14;
@@ -88,19 +93,31 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(390, 60);
+            this.panel1.Size = new System.Drawing.Size(481, 60);
             this.panel1.TabIndex = 15;
+            // 
+            // label3
+            // 
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(15, 39);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(449, 21);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "This will delete the web resource and create a new one with the specified name";
             // 
             // RenameWebResourceDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(384, 124);
+            this.ClientSize = new System.Drawing.Size(475, 149);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtWebResourceName);
             this.Controls.Add(this.btnValidate);
@@ -123,5 +140,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -18,14 +18,11 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 return;
             }
 
-            if (this.SelectedIndex == e.Index)
+            if (e.Index == SelectedIndex)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(255, 255, 49)), e.Bounds);
+                e.Graphics.FillRectangle(new SolidBrush(Color.DarkGray), e.Bounds);
             }
-            else
-            {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(240, 240, 240)), e.Bounds);
-            }
+            
 
             var color = wr.State == WebresourceState.Draft ? Color.Red : wr.State == WebresourceState.Saved ? Color.Blue : Color.Black;
 

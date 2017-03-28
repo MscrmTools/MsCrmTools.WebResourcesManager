@@ -36,11 +36,17 @@
             this.lblSeparator = new System.Windows.Forms.Label();
             this.llExpandAll = new System.Windows.Forms.LinkLabel();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
+            this.pnlSearch = new System.Windows.Forms.Panel();
+            this.lblSearch = new System.Windows.Forms.Label();
             this.pnlWaitingPublish = new System.Windows.Forms.Panel();
             this.llUpdateResources = new System.Windows.Forms.LinkLabel();
             this.lblWaitingPublish = new System.Windows.Forms.Label();
             this.tv = new System.Windows.Forms.TreeView();
+            this.chkSearchInContent = new System.Windows.Forms.CheckBox();
+            this.chkDisplayExpanded = new System.Windows.Forms.CheckBox();
+            this.txtSearch = new System.Windows.Forms.TextBox();
             this.pnlBottom.SuspendLayout();
+            this.pnlSearch.SuspendLayout();
             this.pnlWaitingPublish.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -131,6 +137,30 @@
             this.chkSelectAll.UseVisualStyleBackColor = true;
             this.chkSelectAll.Click += new System.EventHandler(this.chkSelectAll_Click);
             // 
+            // pnlSearch
+            // 
+            this.pnlSearch.Controls.Add(this.txtSearch);
+            this.pnlSearch.Controls.Add(this.chkDisplayExpanded);
+            this.pnlSearch.Controls.Add(this.chkSearchInContent);
+            this.pnlSearch.Controls.Add(this.lblSearch);
+            this.pnlSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlSearch.Location = new System.Drawing.Point(0, 648);
+            this.pnlSearch.Name = "pnlSearch";
+            this.pnlSearch.Size = new System.Drawing.Size(409, 22);
+            this.pnlSearch.TabIndex = 85;
+            // 
+            // lblSearch
+            // 
+            this.lblSearch.AutoSize = true;
+            this.lblSearch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblSearch.Location = new System.Drawing.Point(0, 0);
+            this.lblSearch.Margin = new System.Windows.Forms.Padding(2, 0, 4, 0);
+            this.lblSearch.Name = "lblSearch";
+            this.lblSearch.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.lblSearch.Size = new System.Drawing.Size(41, 17);
+            this.lblSearch.TabIndex = 0;
+            this.lblSearch.Text = "Search";
+            // 
             // pnlWaitingPublish
             // 
             this.pnlWaitingPublish.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -180,7 +210,7 @@
             this.tv.Location = new System.Drawing.Point(0, 50);
             this.tv.Name = "tv";
             this.tv.SelectedImageIndex = 0;
-            this.tv.Size = new System.Drawing.Size(409, 620);
+            this.tv.Size = new System.Drawing.Size(409, 598);
             this.tv.TabIndex = 88;
             this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
             this.tv.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tv_BeforeSelect);
@@ -188,7 +218,46 @@
             this.tv.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_DragDrop);
             this.tv.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_DragOver);
             this.tv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_MouseDown);
-            this.tv.NodeMouseClick += Tv_NodeMouseClick;
+            // 
+            // chkSearchInContent
+            // 
+            this.chkSearchInContent.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSearchInContent.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkSearchInContent.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkSearchInContent.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.chkSearchInContent.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
+            this.chkSearchInContent.Image = ((System.Drawing.Image)(resources.GetObject("chkSearchInContent.Image")));
+            this.chkSearchInContent.Location = new System.Drawing.Point(387, 0);
+            this.chkSearchInContent.Name = "chkSearchInContent";
+            this.chkSearchInContent.Size = new System.Drawing.Size(22, 22);
+            this.chkSearchInContent.TabIndex = 89;
+            this.chkSearchInContent.UseVisualStyleBackColor = true;
+            this.chkSearchInContent.CheckedChanged += new System.EventHandler(this.chkSearchInContent_CheckedChanged);
+            // 
+            // chkDisplayExpanded
+            // 
+            this.chkDisplayExpanded.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkDisplayExpanded.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkDisplayExpanded.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkDisplayExpanded.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.chkDisplayExpanded.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
+            this.chkDisplayExpanded.Image = ((System.Drawing.Image)(resources.GetObject("chkDisplayExpanded.Image")));
+            this.chkDisplayExpanded.Location = new System.Drawing.Point(365, 0);
+            this.chkDisplayExpanded.Name = "chkDisplayExpanded";
+            this.chkDisplayExpanded.Size = new System.Drawing.Size(22, 22);
+            this.chkDisplayExpanded.TabIndex = 91;
+            this.chkDisplayExpanded.UseVisualStyleBackColor = true;
+            this.chkDisplayExpanded.CheckedChanged += new System.EventHandler(this.chkDisplayExpanded_CheckedChanged);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearch.Location = new System.Drawing.Point(41, 0);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(324, 20);
+            this.txtSearch.TabIndex = 92;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // WebresourceTreeView
             // 
@@ -197,10 +266,13 @@
             this.Controls.Add(this.tv);
             this.Controls.Add(this.pnlWaitingPublish);
             this.Controls.Add(this.pnlBottom);
+            this.Controls.Add(this.pnlSearch);
             this.Name = "WebresourceTreeView";
             this.Size = new System.Drawing.Size(409, 670);
             this.pnlBottom.ResumeLayout(false);
             this.pnlBottom.PerformLayout();
+            this.pnlSearch.ResumeLayout(false);
+            this.pnlSearch.PerformLayout();
             this.pnlWaitingPublish.ResumeLayout(false);
             this.pnlWaitingPublish.PerformLayout();
             this.ResumeLayout(false);
@@ -210,6 +282,7 @@
         #endregion
         private System.Windows.Forms.ImageList ilWebResourceTypes;
         private System.Windows.Forms.Panel pnlBottom;
+        private System.Windows.Forms.Panel pnlSearch;
         private System.Windows.Forms.LinkLabel llCollapseAll;
         private System.Windows.Forms.Label lblSeparator;
         private System.Windows.Forms.LinkLabel llExpandAll;
@@ -218,5 +291,9 @@
         private System.Windows.Forms.TreeView tv;
         private System.Windows.Forms.LinkLabel llUpdateResources;
         private System.Windows.Forms.Label lblWaitingPublish;
+        private System.Windows.Forms.Label lblSearch;
+        private System.Windows.Forms.CheckBox chkSearchInContent;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.CheckBox chkDisplayExpanded;
     }
 }
