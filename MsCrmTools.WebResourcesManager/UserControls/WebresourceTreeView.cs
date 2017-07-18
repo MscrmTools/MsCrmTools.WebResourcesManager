@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using MscrmTools.WebResourcesManager.UserControls;
 
 namespace MsCrmTools.WebResourcesManager.New.UserControls
 {
@@ -33,27 +34,26 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             WebResources = new List<WebResource>();
 
-            for(var i = 0; i < 12; i++)
+            for (var i = 0; i < 12; i++)
             {
                 var image = (Image)ilWebResourceTypes.Images[i].Clone();
                 Bitmap bmp = new Bitmap(image.Width, image.Height);
 
                 using (Graphics gfx = Graphics.FromImage(bmp))
                 {
-
-                    //create a color matrix object  
+                    //create a color matrix object
                     ColorMatrix matrix = new ColorMatrix();
 
-                    //set the opacity  
+                    //set the opacity
                     matrix.Matrix33 = 0.5f;
 
-                    //create image attributes  
+                    //create image attributes
                     ImageAttributes attributes = new ImageAttributes();
 
-                    //set the color(opacity) of the image  
+                    //set the color(opacity) of the image
                     attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-                    //now draw the image  
+                    //now draw the image
                     gfx.DrawImage(image, new Rectangle(0, 0, 16, 16), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
                 }
 
@@ -315,7 +315,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                                                                  .ToLower()
                                                                  .Contains(txtSearch.Text.ToLower())
                                                                  || chkSearchInContent.Checked && w.UpdatedContent.ToLower().Contains(txtSearch.Text.ToLower())
-                                                                 
+
                                                                  ).ToList();
 
             if (!resourcesToDisplay.Any() && txtSearch.Text.Length > 0)
@@ -331,7 +331,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 AddNode(nameParts, 0, tv, webResource);
             }
 
-            if(expandAll)tv.ExpandAll();
+            if (expandAll) tv.ExpandAll();
             tv.TreeViewNodeSorter = new NodeSorter();
             tv.Sort();
         }
@@ -427,7 +427,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 }
                 else if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
-                    invalidFilenames.Add(fiChild.FullName);    
+                    invalidFilenames.Add(fiChild.FullName);
                 }
             }
 
@@ -534,7 +534,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         //webResource.State = WebresourceState.None;
                         webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
                         webResource.WebresourceStateChanged += Wr_WebresourceStateChanged;
-                       
+
                         int imageIndex = webResource.Entity.GetAttributeValue<OptionSetValue>("webresourcetype").Value + 1;
                         node.ImageIndex = imageIndex;
                         node.SelectedImageIndex = imageIndex;
@@ -655,7 +655,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         // Create a TreeNode for each javascript file
                         CreateWebResourceNode(fiChild, parentFolderNode);
                     }
-                } else if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
+                }
+                else if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
                     invalidFilenames.Add(fiChild.FullName);
                 }
@@ -927,7 +928,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 // File must be an expected file format
                 // or a folder
                 bool isExtensionValid = files.All(f => WebResource.IsValidExtension(Path.GetExtension(f)) || File.GetAttributes(f).HasFlag(FileAttributes.Directory));
-                
+
                 // Destination node must be a Root or Folder node
                 bool isNodeValid = currentNode != null && (currentNode.ImageIndex <= 1 || currentNode.ImageIndex >= 12 && currentNode.ImageIndex <= 13);
 
@@ -1004,7 +1005,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         }
                     }
                 }
-                else  if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
+                else if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
                     invalidFilenames.Add(fiChild.FullName);
                 }
@@ -1014,7 +1015,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         private void llUpdateResources_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var webresources = WebResources.Where(x => x.State == WebresourceState.Saved).ToList();
-            if(webresources.Count == 0)
+            if (webresources.Count == 0)
             {
                 MessageBox.Show("No webresource need to be updated!");
                 pnlWaitingPublish.Visible = false;
@@ -1022,11 +1023,11 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             }
 
             var dialog = new UpdateOptionsDialog(webresources);
-            if(dialog.ShowDialog(ParentForm) == DialogResult.OK)
+            if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 WebResourceUpdateRequested(this, new WebResourceUpdateRequestedEventArgs
                 {
-                    WebResources = webresources.Where(w=> dialog.WebResourcesToUpdate.Contains(w.Entity.GetAttributeValue<string>("name"))).ToList(),
+                    WebResources = webresources.Where(w => dialog.WebResourcesToUpdate.Contains(w.Entity.GetAttributeValue<string>("name"))).ToList(),
                     Action = dialog.SelectedOption
                 });
 
@@ -1050,13 +1051,12 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     while (!(c is WebResourcesManager));
                     var ctrl = (WebResourcesManager)c;
 
-
                     var saveCtrls = ctrl.Controls.Find("toolStripScriptContent", true);
                     var codeCtrls = ctrl.Controls.Find("webresourceContentControl", true);
 
                     if (saveCtrls.Length == 1 && codeCtrls.Length == 1)
                     {
-                        if (((CodeControl)codeCtrls[0]).IsDirty)
+                        if (((CodeEditorScintilla)codeCtrls[0]).IsDirty)
                         {
                             var fileMenu = (ToolStripDropDownButton)((ToolStrip)saveCtrls[0]).Items.Cast<ToolStripItem>().First(t => t.Name == "toolStripDropDownButton1");
                             fileMenu.DropDownItems.Cast<ToolStripItem>().First(t => t.Name == "fileMenuSave").PerformClick();

@@ -29,7 +29,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
     {
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> validExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt" };
-        private static readonly HashSet<string> extensionsToSkipLoadingErrorMessage = new HashSet<string> {"map", "ts"};
+        private static readonly HashSet<string> extensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
 
         private WebresourceState state;
 
@@ -115,10 +115,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         Node.ForeColor = Color.Black;
                         WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
                         break;
+
                     case WebresourceState.Draft:
                         Node.ForeColor = Color.Red;
                         WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
                         break;
+
                     case WebresourceState.Saved:
                         Node.ForeColor = Color.Blue;
                         WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
@@ -134,7 +136,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                     }
                     else
                     {
-                        if(tempNode.Nodes.Cast<TreeNode>().All(t => t.ForeColor != Color.Blue))
+                        if (tempNode.Nodes.Cast<TreeNode>().All(t => t.ForeColor != Color.Blue))
                         {
                             tempNode.ForeColor = Node.ForeColor;
                         }
@@ -160,7 +162,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         {
             set
             {
-                UpdatedContent = Encoding.UTF8.GetString(Convert.FromBase64String(value));
+                UpdatedContent = Encoding.Default.GetString(Convert.FromBase64String(value));
             }
         }
 
@@ -178,7 +180,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         {
             initialContent = updatedContent;
 
-            byte[] bytes = Encoding.UTF8.GetBytes(initialContent);
+            byte[] bytes = Encoding.Default.GetBytes(initialContent);
 
             InitialBase64 = Convert.ToBase64String(bytes);
 
@@ -191,7 +193,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         {
             State = WebresourceState.None;
         }
-        
+
         public static int GetImageIndexFromExtension(string ext)
         {
             return GetTypeFromExtension(ext) + 1;
@@ -273,7 +275,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
 
             byte[] b = Convert.FromBase64String(Entity.GetAttributeValue<string>("content"));
-            return Encoding.UTF8.GetString(b);
+            return Encoding.Default.GetString(b);
         }
 
         public WebResource ShowProperties(IOrganizationService service, Control mainControl)
@@ -303,7 +305,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         {
             if (!Options.Instance.PushTsMapFiles || string.IsNullOrWhiteSpace(FilePath) || !Path.HasExtension(FilePath) || Path.GetExtension(FilePath).ToLower() != ".js")
             {
-                // Not loaded from Disk, not Extension, not Javascript 
+                // Not loaded from Disk, not Extension, not Javascript
                 return;
             }
 
@@ -312,7 +314,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             var displayName = Entity.GetAttributeValue<string>("displayname");
             if (File.Exists(mapPath))
             {
-                AssociatedResources.Add(LoadWebResourceFromDisk(mapPath, name + ".map", displayName +".map"));
+                AssociatedResources.Add(LoadWebResourceFromDisk(mapPath, name + ".map", displayName + ".map"));
             }
             var tsPath = Path.ChangeExtension(FilePath, "ts");
             if (File.Exists(tsPath))

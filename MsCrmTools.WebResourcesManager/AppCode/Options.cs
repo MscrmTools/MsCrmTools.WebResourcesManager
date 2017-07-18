@@ -59,6 +59,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public bool PushTsMapFiles { get; set; }
         public bool AutoSaveWhenLeaving { get; set; }
         public bool ExpandAllOnLoadingResources { get; set; }
+        public bool ObfuscateJavascript { get; set; }
+        public bool RemoveCssComments { get; set; }
 
         public void Save()
         {
