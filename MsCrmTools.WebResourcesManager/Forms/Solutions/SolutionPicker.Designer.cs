@@ -150,6 +150,8 @@
             // chkLoadAllWebResources
             // 
             this.chkLoadAllWebResources.AutoSize = true;
+            this.chkLoadAllWebResources.Checked = true;
+            this.chkLoadAllWebResources.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkLoadAllWebResources.Location = new System.Drawing.Point(14, 392);
             this.chkLoadAllWebResources.Name = "chkLoadAllWebResources";
             this.chkLoadAllWebResources.Size = new System.Drawing.Size(356, 24);
