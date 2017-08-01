@@ -1852,27 +1852,82 @@ namespace MsCrmTools.WebResourcesManager
 
         #region IShortcutReceiver
 
+        private bool isCtrlM, isCtrlK = false;
+
         public void ReceiveKeyDownShortcut(KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.S)
             {
                 FileMenuSaveClick(null, null);
+                isCtrlM = false;
+                isCtrlK = false;
             }
             else if (e.Control && e.KeyCode == Keys.U)
             {
-                FileMenuUpdateAndPublishClick(null, null);
+                if (!isCtrlK)
+                {
+                    FileMenuUpdateAndPublishClick(null, null);
+                }
+                else
+                {
+                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).UncommentSelectedLines();
+                }
+
+                isCtrlM = false;
+                isCtrlK = false;
             }
             else if (e.Control && e.KeyCode == Keys.G)
             {
                 goToLineToolStripMenuItem_Click(null, null);
+                isCtrlM = false;
+                isCtrlK = false;
             }
             else if (e.Control && e.KeyCode == Keys.F)
             {
                 FindToolStripMenuItemClick(null, null);
+                isCtrlM = false;
+                isCtrlK = false;
             }
             else if (e.Control && e.KeyCode == Keys.H)
             {
                 ReplaceToolStripMenuItemClick(null, null);
+                isCtrlM = false;
+                isCtrlK = false;
+            }
+            else if (e.Control && e.KeyCode == Keys.M)
+            {
+                isCtrlM = true;
+                isCtrlK = false;
+            }
+            else if (e.Control && e.KeyCode == Keys.K)
+            {
+                isCtrlM = false;
+                isCtrlK = true;
+            }
+            else if (e.Control && e.KeyCode == Keys.O)
+            {
+                if (isCtrlM)
+                {
+                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).ContractFolds();
+                }
+
+                isCtrlM = false;
+                isCtrlK = false;
+            }
+            else if (e.Control && e.KeyCode == Keys.C)
+            {
+                if (isCtrlK)
+                {
+                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).CommentSelectedLines();
+                }
+
+                isCtrlM = false;
+                isCtrlK = false;
+            }
+            else
+            {
+                isCtrlM = false;
+                isCtrlK = false;
             }
         }
 

@@ -55,6 +55,11 @@ namespace MscrmTools.WebResourcesManager.UserControls
             scintilla.ClearCmdKey(Keys.Control | Keys.F);
             scintilla.ClearCmdKey(Keys.Control | Keys.G);
             scintilla.ClearCmdKey(Keys.Control | Keys.H);
+            scintilla.ClearCmdKey(Keys.Control | Keys.K);
+            scintilla.ClearCmdKey(Keys.Control | Keys.C);
+            scintilla.ClearCmdKey(Keys.Control | Keys.U);
+            scintilla.ClearCmdKey(Keys.Control | Keys.M);
+            scintilla.ClearCmdKey(Keys.Control | Keys.O);
             scintilla.AssignCmdKey(Keys.Shift | Keys.Delete, Command.LineDelete);
             scintilla.Margins[0].Width = 24;
 
@@ -372,12 +377,13 @@ namespace MscrmTools.WebResourcesManager.UserControls
             if (innerType == Enumerations.WebResourceType.Script)
             {
                 foreach (var line in scintilla.Lines.Where(l => l.Position <= start && l.EndPosition > start
-                || l.Position >= start && l.EndPosition < end
+                || l.Position >= start && l.EndPosition <= end
                 || l.Position <= end && l.EndPosition > end))
                 {
                     if (comment)
                     {
                         scintilla.InsertText(line.Position, "//");
+                        end += 2;
                     }
                     else
                     {
@@ -385,6 +391,7 @@ namespace MscrmTools.WebResourcesManager.UserControls
                         if (i >= 0)
                         {
                             scintilla.DeleteRange(line.Position + i, 2);
+                            end -= 2;
                         }
                     }
                 }
@@ -552,6 +559,22 @@ namespace MscrmTools.WebResourcesManager.UserControls
                 MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void ContractFolds()
+        {
+            foreach (Line ln in scintilla.Lines)
+            {
+                if (LineIsFoldPoint(ln.Index))
+                {
+                    ln.FoldLine(FoldAction.Contract);
+                }
+            }
+        }
+
+        private bool LineIsFoldPoint(int linenum)
+        {
+            return ((scintilla.Lines[linenum].FoldLevelFlags & FoldLevelFlags.Header) > 0);
         }
 
         public Enumerations.WebResourceType GetWebResourceType()
