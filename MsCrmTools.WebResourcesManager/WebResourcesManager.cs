@@ -490,6 +490,7 @@ namespace MsCrmTools.WebResourcesManager
                 currentFolderForFiles = Options.Instance.LastFolderUsed;
             }
 
+
             if (!string.IsNullOrEmpty(currentFolderForFiles))
             {
                 fbd.FolderPath = currentFolderForFiles;
@@ -500,6 +501,7 @@ namespace MsCrmTools.WebResourcesManager
                 currentFolderForFiles = fbd.FolderPath;
                 var options = Options.Instance;
                 options.LastFolderUsed = currentFolderForFiles;
+                bool addMissingFileExtensions = options.AddMissingFileExtensions;
                 Options.Instance.Save();
                 foreach (var resource in resources)
                 {
@@ -525,7 +527,28 @@ namespace MsCrmTools.WebResourcesManager
                                 }
                             }
 
-                            path = Path.Combine(path, partPath[partPath.Length - 1]);
+                            //do check for a valid extension here (DAM)
+                            int resourceType = resourceEntity.GetAttributeValue<OptionSetValue>("webresourcetype").Value;
+                            string rawFilename = partPath[partPath.Length - 1];
+
+                            if (addMissingFileExtensions)
+                            {
+                                List<string> validExtensions = WebResource.GetValidFileExtensions(resourceType);
+
+                                if (rawFilename.LastIndexOf(".") > 0)
+                                {
+                                    string currentExtension = rawFilename.Substring(rawFilename.LastIndexOf(".") + 1);
+                                    //if not valid extension, append default extension for type
+                                    if (!validExtensions.Contains(currentExtension))
+                                        rawFilename += "." + validExtensions[0];
+                                }
+                                else
+                                {
+                                    rawFilename += "." + validExtensions[0];
+                                }
+                            }
+
+                            path = Path.Combine(path, rawFilename);
 
                             byte[] bytes = Convert.FromBase64String(resourceEntity["content"].ToString());
                             File.WriteAllBytes(path, bytes);

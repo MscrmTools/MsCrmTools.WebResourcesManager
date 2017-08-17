@@ -247,6 +247,60 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
+        public static List<string> GetValidFileExtensions(int resourceType)
+        {
+            List<string> extensions = new List<string>();
+
+            switch (resourceType)
+            {
+                case 1:
+                    extensions.Add("htm");
+                    extensions.Add("html");
+                    break;
+
+                case 2:
+                    extensions.Add("css");
+                    break;
+                case 3:
+                    extensions.Add("js");
+                    extensions.Add("map");
+                    extensions.Add("ts");
+                    extensions.Add("json");
+                    break;
+                case 4:
+                    extensions.Add("xml");
+                    break;
+                case 5:
+                    extensions.Add("png");
+                    break;
+
+                case 6:
+                    extensions.Add("jpg");
+                    extensions.Add("jpeg");
+                    break;
+                case 7:
+                    extensions.Add("gif");
+                    break;
+
+                case 8:
+                    extensions.Add("xap");
+                    break;
+
+                case 9:
+                    extensions.Add("xsl");
+                    extensions.Add("xslt");
+                    break;
+                case 10:
+                    extensions.Add("ico");
+                    break;
+                default:
+                    extensions.Add("ico");
+                    break;
+            }
+            return extensions;
+        }
+
+
         public static bool IsNameValid(string name)
         {
             if (InValidWrNameRegex.IsMatch(name))

@@ -53,6 +53,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.chkStyleRemoveComments = new System.Windows.Forms.CheckBox();
             this.chkObfuscateJavaScript = new System.Windows.Forms.CheckBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.chkAddMissingFileExtensions = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -63,6 +65,7 @@
             this.groupBox3.SuspendLayout();
             this.tpEvents.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -220,7 +223,7 @@
             this.panel2.Controls.Add(this.btnValidate);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(0, 364);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(756, 40);
             this.panel2.TabIndex = 15;
@@ -233,7 +236,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 60);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(756, 304);
@@ -243,9 +246,9 @@
             // 
             this.tDisplay.Controls.Add(this.chkExandAllNodes);
             this.tDisplay.Location = new System.Drawing.Point(4, 22);
-            this.tDisplay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tDisplay.Margin = new System.Windows.Forms.Padding(2);
             this.tDisplay.Name = "tDisplay";
-            this.tDisplay.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tDisplay.Padding = new System.Windows.Forms.Padding(2);
             this.tDisplay.Size = new System.Drawing.Size(748, 278);
             this.tDisplay.TabIndex = 2;
             this.tDisplay.Text = "Display";
@@ -255,7 +258,7 @@
             // 
             this.chkExandAllNodes.AutoSize = true;
             this.chkExandAllNodes.Location = new System.Drawing.Point(5, 5);
-            this.chkExandAllNodes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chkExandAllNodes.Margin = new System.Windows.Forms.Padding(2);
             this.chkExandAllNodes.Name = "chkExandAllNodes";
             this.chkExandAllNodes.Size = new System.Drawing.Size(245, 17);
             this.chkExandAllNodes.TabIndex = 0;
@@ -264,12 +267,13 @@
             // 
             // tpFiles
             // 
+            this.tpFiles.Controls.Add(this.groupBox4);
             this.tpFiles.Controls.Add(this.groupBox3);
             this.tpFiles.Controls.Add(this.groupBox1);
             this.tpFiles.Location = new System.Drawing.Point(4, 22);
-            this.tpFiles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpFiles.Margin = new System.Windows.Forms.Padding(2);
             this.tpFiles.Name = "tpFiles";
-            this.tpFiles.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpFiles.Padding = new System.Windows.Forms.Padding(2);
             this.tpFiles.Size = new System.Drawing.Size(748, 278);
             this.tpFiles.TabIndex = 0;
             this.tpFiles.Text = "Files";
@@ -280,9 +284,9 @@
             this.groupBox3.Controls.Add(this.chkAutoSaveEnabled);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox3.Location = new System.Drawing.Point(2, 94);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox3.Size = new System.Drawing.Size(744, 65);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
@@ -305,9 +309,9 @@
             // 
             this.tpEvents.Controls.Add(this.groupBox2);
             this.tpEvents.Location = new System.Drawing.Point(4, 22);
-            this.tpEvents.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpEvents.Margin = new System.Windows.Forms.Padding(2);
             this.tpEvents.Name = "tpEvents";
-            this.tpEvents.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpEvents.Padding = new System.Windows.Forms.Padding(2);
             this.tpEvents.Size = new System.Drawing.Size(748, 278);
             this.tpEvents.TabIndex = 1;
             this.tpEvents.Text = "Events";
@@ -347,6 +351,32 @@
             this.chkObfuscateJavaScript.Text = "JavaScript : Obfuscate code";
             this.chkObfuscateJavaScript.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.chkAddMissingFileExtensions);
+            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox4.Location = new System.Drawing.Point(2, 159);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox4.Size = new System.Drawing.Size(744, 65);
+            this.groupBox4.TabIndex = 19;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "File extensions";
+            // 
+            // chkAddMissingFileExtensions
+            // 
+            this.chkAddMissingFileExtensions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAddMissingFileExtensions.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.chkAddMissingFileExtensions.Location = new System.Drawing.Point(9, 18);
+            this.chkAddMissingFileExtensions.Name = "chkAddMissingFileExtensions";
+            this.chkAddMissingFileExtensions.Size = new System.Drawing.Size(726, 32);
+            this.chkAddMissingFileExtensions.TabIndex = 14;
+            this.chkAddMissingFileExtensions.Text = "Add default file extensions when missing";
+            this.chkAddMissingFileExtensions.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.chkAddMissingFileExtensions.UseVisualStyleBackColor = true;
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,6 +405,7 @@
             this.tpEvents.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -406,5 +437,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.CheckBox chkStyleRemoveComments;
         private System.Windows.Forms.CheckBox chkObfuscateJavaScript;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox chkAddMissingFileExtensions;
     }
 }

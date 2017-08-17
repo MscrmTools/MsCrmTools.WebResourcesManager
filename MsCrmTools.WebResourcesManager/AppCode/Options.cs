@@ -62,6 +62,9 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public bool ObfuscateJavascript { get; set; }
         public bool RemoveCssComments { get; set; }
 
+        //DAM new Option
+        public bool AddMissingFileExtensions { get; set; }
+
         public void Save()
         {
             SettingsManager.Instance.Save(GetType(), instance);
