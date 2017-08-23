@@ -254,8 +254,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             switch (resourceType)
             {
                 case 1:
-                    extensions.Add("htm");
                     extensions.Add("html");
+                    extensions.Add("htm");
                     break;
 
                 case 2:
