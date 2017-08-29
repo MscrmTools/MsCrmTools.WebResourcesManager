@@ -1920,6 +1920,10 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).CommentSelectedLines();
                 }
+                else
+                {
+                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).Copy();
+                }
 
                 isCtrlM = false;
                 isCtrlK = false;

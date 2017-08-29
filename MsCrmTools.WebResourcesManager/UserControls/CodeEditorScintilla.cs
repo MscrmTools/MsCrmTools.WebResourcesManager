@@ -561,6 +561,11 @@ namespace MscrmTools.WebResourcesManager.UserControls
             }
         }
 
+        public void Copy()
+        {
+            scintilla.Copy();
+        }
+
         public void ContractFolds()
         {
             foreach (Line ln in scintilla.Lines)
