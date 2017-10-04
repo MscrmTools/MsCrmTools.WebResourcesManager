@@ -1634,11 +1634,11 @@ namespace MsCrmTools.WebResourcesManager
                         tsbMinifyJS.Visible = false;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
-                        tsSeparatorEdit.Visible = true;
-                        tsddbEdit.Visible = true;
-                        tsddbCompare.Visible = true;
-                        tsbComment.Visible = true;
-                        tsbnUncomment.Visible = true;
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
                 }
 
