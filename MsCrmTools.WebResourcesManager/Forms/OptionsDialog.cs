@@ -27,6 +27,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             Options.Instance.ExpandAllOnLoadingResources = chkExandAllNodes.Checked;
             Options.Instance.ObfuscateJavascript = chkObfuscateJavaScript.Checked;
             Options.Instance.RemoveCssComments = chkStyleRemoveComments.Checked;
+            Options.Instance.ExcludedPrefixes = txtWebResourceFilter.Text;
 
             DialogResult = DialogResult.OK;
             Close();
@@ -42,6 +43,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             chkExandAllNodes.Checked = Options.Instance.ExpandAllOnLoadingResources;
             chkObfuscateJavaScript.Checked = Options.Instance.ObfuscateJavascript;
             chkStyleRemoveComments.Checked = Options.Instance.RemoveCssComments;
+            txtWebResourceFilter.Text = Options.Instance.ExcludedPrefixes;
         }
     }
 }

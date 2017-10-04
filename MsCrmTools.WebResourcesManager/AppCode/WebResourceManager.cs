@@ -132,7 +132,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
                 innerService.Execute(pxReq1);
 
-                foreach(var resource in resources)
+                foreach (var resource in resources)
                 {
                     resource.ReinitStatus();
                     resource.SyncedWithCrm = true;
@@ -194,7 +194,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         /// Retrieves all web resources that are customizable
         /// </summary>
         /// <returns>List of web resources</returns>
-        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types, bool hideMicrosoftWebresources = true)
+        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types, bool hideMicrosoftWebresources = true, params int[] lcids)
         {
             try
             {
@@ -235,6 +235,22 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                             new ConditionExpression("name", ConditionOperator.DoesNotBeginWith, "cc_MscrmControls"),
                             new ConditionExpression("name", ConditionOperator.DoesNotBeginWith, "msdyn_")
                             );
+                    }
+
+                    if (!string.IsNullOrEmpty(Options.Instance.ExcludedPrefixes))
+                    {
+                        var prefixes = Options.Instance.ExcludedPrefixes.Split(',');
+                        foreach (var prefix in prefixes)
+                        {
+                            qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.DoesNotBeginWith, prefix);
+                        }
+                    }
+
+                    if (lcids.Length != 0)
+                    {
+                        var lcidFilter = qe.Criteria.Filters.First().AddFilter(LogicalOperator.Or);
+                        lcidFilter.AddCondition("languagecode", ConditionOperator.In, lcids.Select(l => (object)l).ToArray());
+                        lcidFilter.AddCondition("languagecode", ConditionOperator.Null);
                     }
 
                     if (types.Count != 0)
@@ -291,6 +307,13 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         if (types.Count != 0)
                         {
                             qe.Criteria.Filters.First().Conditions.Add(new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()));
+                        }
+
+                        if (lcids.Length != 0)
+                        {
+                            var lcidFilter = qe.Criteria.Filters.First().AddFilter(LogicalOperator.Or);
+                            lcidFilter.AddCondition("languagecode", ConditionOperator.In, lcids.Select(l => (object)l).ToArray());
+                            lcidFilter.AddCondition("languagecode", ConditionOperator.Null);
                         }
 
                         return innerService.RetrieveMultiple(qe);

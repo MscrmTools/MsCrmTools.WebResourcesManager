@@ -147,6 +147,7 @@ namespace MscrmTools.WebResourcesManager.UserControls
                     break;
 
                 case Enumerations.WebResourceType.Data:
+                case Enumerations.WebResourceType.Resx:
                 case Enumerations.WebResourceType.Xsl:
 
                     scintilla.Styles[Style.Xml.Asp].BackColor = Color.Yellow;
@@ -210,7 +211,7 @@ namespace MscrmTools.WebResourcesManager.UserControls
 
         #endregion Constructor
 
-        public bool IsDirty { get { return innerContent != originalContent; } }
+        public bool IsDirty => innerContent != originalContent;
 
         #region Event Handlers
 

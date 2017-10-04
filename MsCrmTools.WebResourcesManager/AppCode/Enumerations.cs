@@ -17,7 +17,9 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             Gif = 7,
             Silverlight = 8,
             Xsl = 9,
-            Ico = 10
+            Ico = 10,
+            Vector = 11,
+            Resx = 12
         }
     }
 }

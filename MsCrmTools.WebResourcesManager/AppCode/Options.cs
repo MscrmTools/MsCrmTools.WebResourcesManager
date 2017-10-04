@@ -8,13 +8,9 @@ namespace MsCrmTools.WebResourcesManager.AppCode
     public class Options
     {
         private static Options instance;
-        private readonly string filePath;
 
         private Options()
         {
-            var currentPath = Assembly.GetExecutingAssembly().Location;
-            var fi = new FileInfo(currentPath);
-            filePath = fi.FullName.Replace(fi.Extension, ".xml");
         }
 
         public static Options Instance
@@ -61,6 +57,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public bool ExpandAllOnLoadingResources { get; set; }
         public bool ObfuscateJavascript { get; set; }
         public bool RemoveCssComments { get; set; }
+        public string ExcludedPrefixes { get; set; }
 
         public void Save()
         {

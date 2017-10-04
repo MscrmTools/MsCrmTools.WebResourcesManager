@@ -21,6 +21,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using MscrmTools.WebResourcesManager.UserControls;
 using XrmToolBox.Extensibility;
@@ -136,9 +137,12 @@ namespace MsCrmTools.WebResourcesManager
 
             WorkAsync(new WorkAsyncInfo("Loading web resources...", e =>
             {
+                var request = new RetrieveProvisionedLanguagesRequest();
+                var response = (RetrieveProvisionedLanguagesResponse)Service.Execute(request);
+
                 var args = (Tuple<Guid, List<int>, bool>)e.Argument;
 
-                webresourceTreeView1.LoadWebResourcesFromServer(args.Item1, args.Item2, args.Item3);
+                webresourceTreeView1.LoadWebResourcesFromServer(args.Item1, args.Item2, args.Item3, response.RetrieveProvisionedLanguages);
             })
             {
                 AsyncArgument = new Tuple<Guid, List<int>, bool>(solutionId, typesToload, hideMicrosoftWebresources),
@@ -638,7 +642,7 @@ namespace MsCrmTools.WebResourcesManager
 
         #region TREEVIEW - Manage content
 
-        private void AddNewEmptyWebRessource(object sender, EventArgs e)
+        private void AddNewEmptyWebResource(object sender, EventArgs e)
         {
             string extension = string.Empty;
 
@@ -662,6 +666,10 @@ namespace MsCrmTools.WebResourcesManager
 
                 case "xSLTToolStripMenuItem":
                     extension = "xslt";
+                    break;
+
+                case "resourcesRESXToolStripMenuItem":
+                    extension = "resx";
                     break;
 
                 default:
@@ -1363,7 +1371,7 @@ namespace MsCrmTools.WebResourcesManager
             {
                 // Top-level: publisher prefix
                 case 0:
-                case 12:
+                case 14:
                     {
                         addNewFolderToolStripMenuItem.Enabled = true;
                         addNewWebResourceToolStripMenuItem.Enabled = true;
@@ -1386,7 +1394,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 // First-level: virtual folder
                 case 1:
-                case 13:
+                case 15:
                     {
                         addNewFolderToolStripMenuItem.Enabled = true;
                         addNewWebResourceToolStripMenuItem.Enabled = true;
@@ -1602,6 +1610,35 @@ namespace MsCrmTools.WebResourcesManager
                         tsddbCompare.Visible = false;
                         tsbComment.Visible = false;
                         tsbnUncomment.Visible = false;
+                        break;
+
+                    case 11:
+                        ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
+                            Enumerations.WebResourceType.Vector);
+                        ((ImageControl)ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
+                        break;
+
+                    case 12:
+                        ctrl = new ResourceControl(script.GetAttributeValue<string>("content"));
+                        ((ResourceControl)ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = true;
+                        tsddbEdit.Visible = true;
+                        tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
                 }
 

@@ -8,8 +8,10 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using Svg;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -77,6 +79,31 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
                 string imageBase64 = innerContent;
                 byte[] imageBytes = Convert.FromBase64String(imageBase64);
+
+                if (innerType == Enumerations.WebResourceType.Vector)
+                {
+                    using (MemoryStream ms = new MemoryStream(imageBytes))
+                    {
+                        using (StreamReader reader = new StreamReader(ms))
+                        {
+                            using (var xmlStream = new MemoryStream(Encoding.Default.GetBytes(reader.ReadToEnd())))
+                            {
+                                xmlStream.Position = 0;
+                                SvgDocument svgDoc = SvgDocument.Open<SvgDocument>(xmlStream);
+
+                                pictureBox1.Height = 32;
+                                pictureBox1.Width = 32;
+                                pictureBox1.Image = svgDoc.Draw(32, 32);
+
+                                pictureBox1.Location = new Point(
+                                    panel1.Width / 2 - pictureBox1.Width / 2,
+                                    panel1.Height / 2 - pictureBox1.Height / 2);
+
+                                return;
+                            }
+                        }
+                    }
+                }
 
                 using (MemoryStream ms = new MemoryStream(imageBytes))
                 {
@@ -159,11 +186,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                                                       {
-                                                           Base64Content = innerContent,
-                                                           IsDirty = (innerContent != originalContent),
-                                                           Type = innerType
-                                                       };
+            {
+                Base64Content = innerContent,
+                IsDirty = (innerContent != originalContent),
+                Type = innerType
+            };
 
             if (WebResourceUpdated != null)
             {

@@ -37,14 +37,14 @@
             this.llExpandAll = new System.Windows.Forms.LinkLabel();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.pnlSearch = new System.Windows.Forms.Panel();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.chkDisplayExpanded = new System.Windows.Forms.CheckBox();
+            this.chkSearchInContent = new System.Windows.Forms.CheckBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.pnlWaitingPublish = new System.Windows.Forms.Panel();
             this.llUpdateResources = new System.Windows.Forms.LinkLabel();
             this.lblWaitingPublish = new System.Windows.Forms.Label();
             this.tv = new System.Windows.Forms.TreeView();
-            this.chkSearchInContent = new System.Windows.Forms.CheckBox();
-            this.chkDisplayExpanded = new System.Windows.Forms.CheckBox();
-            this.txtSearch = new System.Windows.Forms.TextBox();
             this.pnlBottom.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             this.pnlWaitingPublish.SuspendLayout();
@@ -66,18 +66,22 @@
             this.ilWebResourceTypes.Images.SetKeyName(9, "silverlight.jpg");
             this.ilWebResourceTypes.Images.SetKeyName(10, "xsl.png");
             this.ilWebResourceTypes.Images.SetKeyName(11, "updateicons_16.png");
-            this.ilWebResourceTypes.Images.SetKeyName(12, "component_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(13, "folder_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(14, "html_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(15, "css_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(16, "script_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(17, "database_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(18, "picture_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(19, "picture_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(12, "svg.png");
+            this.ilWebResourceTypes.Images.SetKeyName(13, "resx.png");
+            this.ilWebResourceTypes.Images.SetKeyName(14, "component_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(15, "folder_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(16, "html_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(17, "css_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(18, "script_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(19, "database_notsynced.png");
             this.ilWebResourceTypes.Images.SetKeyName(20, "picture_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(21, "silverlight_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(22, "xsl_notsynced.png");
-            this.ilWebResourceTypes.Images.SetKeyName(23, "icon_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(21, "picture_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(22, "picture_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(23, "silverlight_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(24, "xsl_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(25, "icon_notsynced.png");
+            this.ilWebResourceTypes.Images.SetKeyName(26, "resx.png");
+            this.ilWebResourceTypes.Images.SetKeyName(27, "svg.png");
             // 
             // pnlBottom
             // 
@@ -149,6 +153,46 @@
             this.pnlSearch.Size = new System.Drawing.Size(409, 22);
             this.pnlSearch.TabIndex = 85;
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearch.Location = new System.Drawing.Point(41, 0);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(324, 20);
+            this.txtSearch.TabIndex = 92;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // chkDisplayExpanded
+            // 
+            this.chkDisplayExpanded.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkDisplayExpanded.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkDisplayExpanded.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkDisplayExpanded.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.chkDisplayExpanded.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
+            this.chkDisplayExpanded.Image = ((System.Drawing.Image)(resources.GetObject("chkDisplayExpanded.Image")));
+            this.chkDisplayExpanded.Location = new System.Drawing.Point(365, 0);
+            this.chkDisplayExpanded.Name = "chkDisplayExpanded";
+            this.chkDisplayExpanded.Size = new System.Drawing.Size(22, 22);
+            this.chkDisplayExpanded.TabIndex = 91;
+            this.chkDisplayExpanded.UseVisualStyleBackColor = true;
+            this.chkDisplayExpanded.CheckedChanged += new System.EventHandler(this.chkDisplayExpanded_CheckedChanged);
+            // 
+            // chkSearchInContent
+            // 
+            this.chkSearchInContent.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSearchInContent.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkSearchInContent.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chkSearchInContent.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.chkSearchInContent.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
+            this.chkSearchInContent.Image = ((System.Drawing.Image)(resources.GetObject("chkSearchInContent.Image")));
+            this.chkSearchInContent.Location = new System.Drawing.Point(387, 0);
+            this.chkSearchInContent.Name = "chkSearchInContent";
+            this.chkSearchInContent.Size = new System.Drawing.Size(22, 22);
+            this.chkSearchInContent.TabIndex = 89;
+            this.chkSearchInContent.UseVisualStyleBackColor = true;
+            this.chkSearchInContent.CheckedChanged += new System.EventHandler(this.chkSearchInContent_CheckedChanged);
+            // 
             // lblSearch
             // 
             this.lblSearch.AutoSize = true;
@@ -169,7 +213,7 @@
             this.pnlWaitingPublish.Controls.Add(this.lblWaitingPublish);
             this.pnlWaitingPublish.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlWaitingPublish.Location = new System.Drawing.Point(0, 17);
-            this.pnlWaitingPublish.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlWaitingPublish.Margin = new System.Windows.Forms.Padding(2);
             this.pnlWaitingPublish.Name = "pnlWaitingPublish";
             this.pnlWaitingPublish.Size = new System.Drawing.Size(409, 33);
             this.pnlWaitingPublish.TabIndex = 87;
@@ -218,46 +262,6 @@
             this.tv.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_DragDrop);
             this.tv.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_DragOver);
             this.tv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_MouseDown);
-            // 
-            // chkSearchInContent
-            // 
-            this.chkSearchInContent.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkSearchInContent.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkSearchInContent.Dock = System.Windows.Forms.DockStyle.Right;
-            this.chkSearchInContent.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.chkSearchInContent.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
-            this.chkSearchInContent.Image = ((System.Drawing.Image)(resources.GetObject("chkSearchInContent.Image")));
-            this.chkSearchInContent.Location = new System.Drawing.Point(387, 0);
-            this.chkSearchInContent.Name = "chkSearchInContent";
-            this.chkSearchInContent.Size = new System.Drawing.Size(22, 22);
-            this.chkSearchInContent.TabIndex = 89;
-            this.chkSearchInContent.UseVisualStyleBackColor = true;
-            this.chkSearchInContent.CheckedChanged += new System.EventHandler(this.chkSearchInContent_CheckedChanged);
-            // 
-            // chkDisplayExpanded
-            // 
-            this.chkDisplayExpanded.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkDisplayExpanded.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkDisplayExpanded.Dock = System.Windows.Forms.DockStyle.Right;
-            this.chkDisplayExpanded.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.chkDisplayExpanded.FlatAppearance.CheckedBackColor = System.Drawing.Color.PowderBlue;
-            this.chkDisplayExpanded.Image = ((System.Drawing.Image)(resources.GetObject("chkDisplayExpanded.Image")));
-            this.chkDisplayExpanded.Location = new System.Drawing.Point(365, 0);
-            this.chkDisplayExpanded.Name = "chkDisplayExpanded";
-            this.chkDisplayExpanded.Size = new System.Drawing.Size(22, 22);
-            this.chkDisplayExpanded.TabIndex = 91;
-            this.chkDisplayExpanded.UseVisualStyleBackColor = true;
-            this.chkDisplayExpanded.CheckedChanged += new System.EventHandler(this.chkDisplayExpanded_CheckedChanged);
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSearch.Location = new System.Drawing.Point(41, 0);
-            this.txtSearch.Margin = new System.Windows.Forms.Padding(2);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(324, 20);
-            this.txtSearch.TabIndex = 92;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // WebresourceTreeView
             // 

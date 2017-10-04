@@ -34,7 +34,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             WebResources = new List<WebResource>();
 
-            for (var i = 0; i < 12; i++)
+            for (var i = 0; i < 14; i++)
             {
                 var image = (Image)ilWebResourceTypes.Images[i].Clone();
                 Bitmap bmp = new Bitmap(image.Width, image.Height);
@@ -57,7 +57,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     gfx.DrawImage(image, new Rectangle(0, 0, 16, 16), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
                 }
 
-                ilWebResourceTypes.Images[i + 12] = bmp;
+                ilWebResourceTypes.Images[i + 14] = bmp;
             }
         }
 
@@ -120,7 +120,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         var wr = WebResource.LoadWebResourceFromDisk(fileName, string.Format("{0}/{1}", name, fi.Name), string.Format("{0}/{1}", name, fi.Name));
                         var node = new TreeNode(fi.Name)
                         {
-                            ImageIndex = WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0, 1)) + 12,
+                            ImageIndex = WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0, 1)) + 14,
                             Tag = wr
                         };
                         node.SelectedImageIndex = node.ImageIndex;
@@ -154,10 +154,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         private void Wr_WebresourceStateChanged(object sender, WebresourceStateChangedArgs e)
         {
             var resource = (WebResource)sender;
-            if (resource.Node.ImageIndex > 11 && (e.NewState == WebresourceState.Published || e.NewState == WebresourceState.Updated))
+            if (resource.Node.ImageIndex > 13 && (e.NewState == WebresourceState.Published || e.NewState == WebresourceState.Updated))
             {
-                resource.Node.ImageIndex = resource.Node.ImageIndex - 12;
-                resource.Node.SelectedImageIndex = resource.Node.SelectedImageIndex - 12;
+                resource.Node.ImageIndex = resource.Node.ImageIndex - 14;
+                resource.Node.SelectedImageIndex = resource.Node.SelectedImageIndex - 14;
             }
 
             var waitingUpdateResources = WebResources.Where(w => w.State == WebresourceState.Saved).ToList();
@@ -226,7 +226,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 {
                     if (i != parts.Length - 1)
                     {
-                        var folderNode = new TreeNode(parts[i]) { ImageIndex = 13, SelectedImageIndex = 13 };
+                        var folderNode = new TreeNode(parts[i]) { ImageIndex = 15, SelectedImageIndex = 15 };
 
                         callerNode.Nodes.Add(folderNode);
                         callerNode.Expand();
@@ -238,7 +238,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         {
                             ImageIndex =
                                 WebResource.GetImageIndexFromExtension
-                                (extension) + 12
+                                (extension) + 14
                         };
                         node.SelectedImageIndex = node.ImageIndex;
                         node.Tag = wr;
@@ -269,7 +269,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
                 foreach (var part in parts.Where(x => x.Length > 0))
                 {
-                    var node = new TreeNode(part.Trim()) { ImageIndex = 13, SelectedImageIndex = 13 };
+                    var node = new TreeNode(part.Trim()) { ImageIndex = 15, SelectedImageIndex = 15 };
 
                     currentNode.Nodes.Add(node);
                     tv.SelectedNode = node;
@@ -290,7 +290,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             if (nrd.ShowDialog(ParentForm) == DialogResult.OK)
             {
-                var rootNode = new TreeNode(nrd.RootName) { ImageIndex = 12, SelectedImageIndex = 12 };
+                var rootNode = new TreeNode(nrd.RootName) { ImageIndex = 14, SelectedImageIndex = 14 };
 
                 tv.Nodes.Add(rootNode);
 
@@ -389,7 +389,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     // Create a root treenode
                     var rootFolderNode = new TreeNode(diChild.Name)
                     {
-                        ImageIndex = 12,
+                        ImageIndex = 14,
                         Tag = diChild.FullName
                     };
                     tv.Nodes.Add(rootFolderNode);
@@ -446,12 +446,14 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         /// </summary>
         /// <param name="solutionId">Solution unique identifier</param>
         /// <param name="typesToLoad">Web resources types to load</param>
-        public void LoadWebResourcesFromServer(Guid solutionId, List<int> typesToLoad, bool hideMicrosoftWebresources = true)
+        /// <param name="hideMicrosoftWebresources"></param>
+        /// <param name="lcids"></param>
+        public void LoadWebResourcesFromServer(Guid solutionId, List<int> typesToLoad, bool hideMicrosoftWebresources = true, params int[] lcids)
         {
             WebResources.Clear();
 
             var wrManager = new WebResourceManager(Service);
-            var webResourcesCollection = wrManager.RetrieveWebResources(solutionId, typesToLoad, hideMicrosoftWebresources);
+            var webResourcesCollection = wrManager.RetrieveWebResources(solutionId, typesToLoad, hideMicrosoftWebresources, lcids);
             WebResources = webResourcesCollection.Entities.Select(e => new WebResource(e)).ToList();
         }
 
@@ -706,8 +708,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 Text = scriptName,
                 Name = scriptName,
                 Tag = resource,
-                ImageIndex = imageIndex + 12,
-                SelectedImageIndex = imageIndex + 12
+                ImageIndex = imageIndex + 14,
+                SelectedImageIndex = imageIndex + 14
             };
 
             resource.Node = node;
@@ -847,7 +849,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 {
                     var di = new DirectoryInfo(file);
 
-                    var folderNode = new TreeNode(di.Name) { ImageIndex = 13, SelectedImageIndex = 13, Tag = di.FullName, Name = di.Name };
+                    var folderNode = new TreeNode(di.Name) { ImageIndex = 15, SelectedImageIndex = 15, Tag = di.FullName, Name = di.Name };
 
                     currentNode.Nodes.Add(folderNode);
 
@@ -884,7 +886,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
                     var node = new TreeNode(fi.Name)
                     {
-                        ImageIndex = WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0, 1)) + 12
+                        ImageIndex = WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0, 1)) + 14
                     };
                     node.SelectedImageIndex = node.ImageIndex;
                     node.Tag = newWebResource;
@@ -930,7 +932,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 bool isExtensionValid = files.All(f => WebResource.IsValidExtension(Path.GetExtension(f)) || File.GetAttributes(f).HasFlag(FileAttributes.Directory));
 
                 // Destination node must be a Root or Folder node
-                bool isNodeValid = currentNode != null && (currentNode.ImageIndex <= 1 || currentNode.ImageIndex >= 12 && currentNode.ImageIndex <= 13);
+                bool isNodeValid = currentNode != null && (currentNode.ImageIndex <= 1 || currentNode.ImageIndex >= 14 && currentNode.ImageIndex <= 15);
 
                 if (isNodeValid)
                 {
@@ -974,9 +976,9 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             foreach (var subFolder in subFolders)
             {
-                if (!subNodes.ContainsKey(subFolder.Name) || subNodes[subFolder.Name].ImageIndex != 1 && subNodes[subFolder.Name].ImageIndex != 13)
+                if (!subNodes.ContainsKey(subFolder.Name) || subNodes[subFolder.Name].ImageIndex != 1 && subNodes[subFolder.Name].ImageIndex != 15)
                 {
-                    var folderNode = new TreeNode(subFolder.Name) { ImageIndex = 13, SelectedImageIndex = 13, Tag = subFolder.FullName, Name = subFolder.Name };
+                    var folderNode = new TreeNode(subFolder.Name) { ImageIndex = 15, SelectedImageIndex = 15, Tag = subFolder.FullName, Name = subFolder.Name };
                     parentFolderNode.Nodes.Add(folderNode);
 
                     UpdateFolderStructure(folderNode, subFolder, invalidFilenames, extensionsToLoad);
@@ -993,7 +995,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 {
                     if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
                     {
-                        if (!subNodes.ContainsKey(fiChild.Name) || subNodes[fiChild.Name].ImageIndex <= 1 || subNodes[fiChild.Name].ImageIndex >= 12 && subNodes[fiChild.Name].ImageIndex <= 13)
+                        if (!subNodes.ContainsKey(fiChild.Name) || subNodes[fiChild.Name].ImageIndex <= 1 || subNodes[fiChild.Name].ImageIndex >= 14 && subNodes[fiChild.Name].ImageIndex <= 15)
                         {
                             CreateWebResourceNode(fiChild, parentFolderNode);
                         }

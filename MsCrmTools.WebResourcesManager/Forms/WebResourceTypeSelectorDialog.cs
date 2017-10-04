@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using MsCrmTools.WebResourcesManager.AppCode;
 
 namespace MsCrmTools.WebResourcesManager.Forms
 {
@@ -13,6 +14,17 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (majorVersion < 8 || fromSolution)
             {
                 chkLoadResourcesFromMicrosoft.Visible = false;
+            }
+
+            webResourceTypePicker1.ShowV9Types = majorVersion >= 9;
+
+            if (!string.IsNullOrEmpty(Options.Instance.ExcludedPrefixes))
+            {
+                lblFilter.Text = string.Format(lblFilter.Text, string.Join(" or ", Options.Instance.ExcludedPrefixes.Split(',')));
+            }
+            else
+            {
+                pnlFilter.Visible = false;
             }
         }
 
@@ -83,6 +95,16 @@ namespace MsCrmTools.WebResourcesManager.Forms
                     case ".ico":
                         {
                             TypesToLoad.Add(10);
+                            break;
+                        }
+                    case ".svg":
+                        {
+                            TypesToLoad.Add(11);
+                            break;
+                        }
+                    case ".resx":
+                        {
+                            TypesToLoad.Add(12);
                             break;
                         }
                 }

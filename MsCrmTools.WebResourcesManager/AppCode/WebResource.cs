@@ -28,7 +28,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
     public class WebResource
     {
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
-        private static readonly HashSet<string> validExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt" };
+        private static readonly HashSet<string> validExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt", "svg", "resx" };
         private static readonly HashSet<string> extensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
 
         private WebresourceState state;
@@ -242,8 +242,17 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 case "xslt":
                     return 9;
 
-                default:
+                case "ico":
                     return 10;
+
+                case "svg":
+                    return 11;
+
+                case "resx":
+                    return 12;
+
+                default:
+                    return 13;
             }
         }
 

@@ -6,9 +6,17 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 {
     public partial class WebResourceTypePicker : UserControl
     {
+        private bool showV9Types;
+
         public WebResourceTypePicker()
         {
             InitializeComponent();
+        }
+
+        public bool ShowV9Types
+        {
+            get => showV9Types;
+            set { showV9Types = value; WebResourceTypePicker_Load(null, null); }
         }
 
         public List<string> CheckedExtensions
@@ -38,6 +46,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             chkXap.Checked = chkAll.Checked;
             chkXml.Checked = chkAll.Checked;
             chkXsl.Checked = chkAll.Checked;
+            chkSvg.Checked = chkAll.Checked;
+            chkResx.Checked = chkAll.Checked;
 
             chkCss.Enabled = !chkAll.Checked;
             chkGif.Enabled = !chkAll.Checked;
@@ -49,6 +59,14 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             chkXap.Enabled = !chkAll.Checked;
             chkXml.Enabled = !chkAll.Checked;
             chkXsl.Enabled = !chkAll.Checked;
+            chkSvg.Enabled = !chkAll.Checked;
+            chkResx.Enabled = !chkAll.Checked;
+        }
+
+        private void WebResourceTypePicker_Load(object sender, System.EventArgs e)
+        {
+            chkSvg.Visible = showV9Types;
+            chkResx.Visible = showV9Types;
         }
     }
 }
