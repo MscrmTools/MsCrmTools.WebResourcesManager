@@ -21,6 +21,8 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 {
     public partial class WebresourceTreeView : UserControl
     {
+        public int[] Lcids { get; private set; }
+
         /// <summary>
         /// Initialize a new instance of class <see cref="WebresourceTreeView"/>
         /// </summary>
@@ -447,13 +449,16 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         /// <param name="solutionId">Solution unique identifier</param>
         /// <param name="typesToLoad">Web resources types to load</param>
         /// <param name="hideMicrosoftWebresources"></param>
+        /// <param name="filterByLcid"></param>
         /// <param name="lcids"></param>
-        public void LoadWebResourcesFromServer(Guid solutionId, List<int> typesToLoad, bool hideMicrosoftWebresources = true, params int[] lcids)
+        public void LoadWebResourcesFromServer(Guid solutionId, List<int> typesToLoad, bool hideMicrosoftWebresources = true, bool filterByLcid = false, params int[] lcids)
         {
+            Lcids = lcids;
+
             WebResources.Clear();
 
             var wrManager = new WebResourceManager(Service);
-            var webResourcesCollection = wrManager.RetrieveWebResources(solutionId, typesToLoad, hideMicrosoftWebresources, lcids);
+            var webResourcesCollection = wrManager.RetrieveWebResources(solutionId, typesToLoad, hideMicrosoftWebresources, filterByLcid, lcids);
             WebResources = webResourcesCollection.Entities.Select(e => new WebResource(e)).ToList();
         }
 

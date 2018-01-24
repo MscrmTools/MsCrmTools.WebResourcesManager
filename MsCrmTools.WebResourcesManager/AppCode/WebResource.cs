@@ -158,6 +158,16 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
+        public string DependencyXml
+        {
+            get => Entity.GetAttributeValue<string>("dependencyxml");
+            set
+            {
+                Entity["dependencyxml"] = value;
+                State = WebresourceState.Saved;
+            }
+        }
+
         public string UpdatedBase64Content
         {
             set
@@ -287,9 +297,9 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             return Encoding.Default.GetString(b);
         }
 
-        public WebResource ShowProperties(IOrganizationService service, Control mainControl)
+        public WebResource ShowProperties(IOrganizationService service, int[] lcids, Control mainControl)
         {
-            var form = new UpdateForm(this, service)
+            var form = new UpdateForm(this, lcids, service)
             {
                 StartPosition = FormStartPosition.CenterParent
             };
@@ -338,6 +348,16 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             OriginalBase64 = Entity.GetAttributeValue<string>("content");
             State = WebresourceState.Updated;
             SyncedWithCrm = true;
+        }
+
+        internal void SetAsSaved()
+        {
+            State = WebresourceState.Saved;
+        }
+
+        public override string ToString()
+        {
+            return Entity.GetAttributeValue<string>("name");
         }
     }
 }

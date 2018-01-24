@@ -43,6 +43,8 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.chkSynced = new System.Windows.Forms.CheckBox();
+            this.lblLanguage = new System.Windows.Forms.Label();
+            this.cbbLanguage = new System.Windows.Forms.ComboBox();
             this.panelHeader.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -164,7 +166,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 351);
+            this.label2.Location = new System.Drawing.Point(6, 394);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 20);
@@ -173,7 +175,7 @@
             // 
             // txtPath
             // 
-            this.txtPath.Location = new System.Drawing.Point(134, 346);
+            this.txtPath.Location = new System.Drawing.Point(134, 389);
             this.txtPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtPath.Name = "txtPath";
             this.txtPath.ReadOnly = true;
@@ -183,7 +185,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 382);
+            this.label3.Location = new System.Drawing.Point(6, 425);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 20);
@@ -194,11 +196,30 @@
             // 
             this.chkSynced.AutoSize = true;
             this.chkSynced.Enabled = false;
-            this.chkSynced.Location = new System.Drawing.Point(134, 381);
+            this.chkSynced.Location = new System.Drawing.Point(134, 424);
             this.chkSynced.Name = "chkSynced";
             this.chkSynced.Size = new System.Drawing.Size(22, 21);
             this.chkSynced.TabIndex = 17;
             this.chkSynced.UseVisualStyleBackColor = true;
+            // 
+            // lblLanguage
+            // 
+            this.lblLanguage.AutoSize = true;
+            this.lblLanguage.Location = new System.Drawing.Point(10, 354);
+            this.lblLanguage.Name = "lblLanguage";
+            this.lblLanguage.Size = new System.Drawing.Size(81, 20);
+            this.lblLanguage.TabIndex = 18;
+            this.lblLanguage.Text = "Language";
+            // 
+            // cbbLanguage
+            // 
+            this.cbbLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbLanguage.FormattingEnabled = true;
+            this.cbbLanguage.Location = new System.Drawing.Point(134, 351);
+            this.cbbLanguage.Name = "cbbLanguage";
+            this.cbbLanguage.Size = new System.Drawing.Size(475, 28);
+            this.cbbLanguage.Sorted = true;
+            this.cbbLanguage.TabIndex = 19;
             // 
             // UpdateForm
             // 
@@ -206,6 +227,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(628, 523);
+            this.Controls.Add(this.cbbLanguage);
+            this.Controls.Add(this.lblLanguage);
             this.Controls.Add(this.chkSynced);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtPath);
@@ -249,5 +272,7 @@
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkSynced;
+        private System.Windows.Forms.Label lblLanguage;
+        private System.Windows.Forms.ComboBox cbbLanguage;
     }
 }

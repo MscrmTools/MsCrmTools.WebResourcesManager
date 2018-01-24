@@ -114,7 +114,9 @@ namespace MsCrmTools.WebResourcesManager
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiSetDependencies = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssDependencies = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsTab = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.closeThisTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -133,7 +135,7 @@ namespace MsCrmTools.WebResourcesManager
             // goToLineToolStripMenuItem
             // 
             this.goToLineToolStripMenuItem.Name = "goToLineToolStripMenuItem";
-            this.goToLineToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.goToLineToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
             this.goToLineToolStripMenuItem.Text = "Go To Line (Ctrl+G)";
             this.goToLineToolStripMenuItem.Click += new System.EventHandler(this.goToLineToolStripMenuItem_Click);
             // 
@@ -149,7 +151,8 @@ namespace MsCrmTools.WebResourcesManager
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 27);
+            this.splitContainer1.Location = new System.Drawing.Point(4, 42);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -161,18 +164,19 @@ namespace MsCrmTools.WebResourcesManager
             this.splitContainer1.Panel2.Controls.Add(this.tabOpenedResources);
             this.splitContainer1.Panel2.Controls.Add(this.lblWebresourceName);
             this.splitContainer1.Panel2.Controls.Add(this.toolStripScriptContent);
-            this.splitContainer1.Size = new System.Drawing.Size(894, 569);
+            this.splitContainer1.Size = new System.Drawing.Size(1341, 875);
             this.splitContainer1.SplitterDistance = 344;
+            this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 89;
             // 
             // webresourceTreeView1
             // 
             this.webresourceTreeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webresourceTreeView1.Location = new System.Drawing.Point(0, 0);
-            this.webresourceTreeView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.webresourceTreeView1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.webresourceTreeView1.Name = "webresourceTreeView1";
             this.webresourceTreeView1.Service = null;
-            this.webresourceTreeView1.Size = new System.Drawing.Size(344, 569);
+            this.webresourceTreeView1.Size = new System.Drawing.Size(344, 875);
             this.webresourceTreeView1.TabIndex = 0;
             this.webresourceTreeView1.WebResourceContextMenuRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.New.EventHandlers.WebResourceContextMenuRequestedEventArgs>(this.webresourceTreeView1_WebResourceContextMenuRequested);
             this.webresourceTreeView1.WebResourceUpdateRequested += new System.EventHandler<MsCrmTools.WebResourcesManager.AppCode.EventHandlers.WebResourceUpdateRequestedEventArgs>(this.WebresourceTreeView1_WebResourceUpdateRequested);
@@ -182,11 +186,12 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.tabOpenedResources.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabOpenedResources.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tabOpenedResources.Location = new System.Drawing.Point(0, 25);
+            this.tabOpenedResources.Location = new System.Drawing.Point(0, 38);
+            this.tabOpenedResources.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabOpenedResources.Name = "tabOpenedResources";
             this.tabOpenedResources.Padding = new System.Drawing.Point(21, 3);
             this.tabOpenedResources.SelectedIndex = 0;
-            this.tabOpenedResources.Size = new System.Drawing.Size(546, 522);
+            this.tabOpenedResources.Size = new System.Drawing.Size(991, 803);
             this.tabOpenedResources.TabIndex = 7;
             this.tabOpenedResources.SelectedIndexChanged += new System.EventHandler(this.tabOpenedResources_SelectedIndexChanged);
             this.tabOpenedResources.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabOpenedResources_MouseClick);
@@ -194,9 +199,10 @@ namespace MsCrmTools.WebResourcesManager
             // lblWebresourceName
             // 
             this.lblWebresourceName.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblWebresourceName.Location = new System.Drawing.Point(0, 547);
+            this.lblWebresourceName.Location = new System.Drawing.Point(0, 841);
+            this.lblWebresourceName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblWebresourceName.Name = "lblWebresourceName";
-            this.lblWebresourceName.Size = new System.Drawing.Size(546, 22);
+            this.lblWebresourceName.Size = new System.Drawing.Size(991, 34);
             this.lblWebresourceName.TabIndex = 6;
             // 
             // toolStripScriptContent
@@ -218,7 +224,8 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbnUncomment});
             this.toolStripScriptContent.Location = new System.Drawing.Point(0, 0);
             this.toolStripScriptContent.Name = "toolStripScriptContent";
-            this.toolStripScriptContent.Size = new System.Drawing.Size(546, 25);
+            this.toolStripScriptContent.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripScriptContent.Size = new System.Drawing.Size(991, 38);
             this.toolStripScriptContent.TabIndex = 3;
             this.toolStripScriptContent.Text = "toolStripScriptContent";
             // 
@@ -234,7 +241,7 @@ namespace MsCrmTools.WebResourcesManager
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(38, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(56, 35);
             this.toolStripDropDownButton1.Text = "File";
             // 
             // fileMenuSave
@@ -242,7 +249,7 @@ namespace MsCrmTools.WebResourcesManager
             this.fileMenuSave.Enabled = false;
             this.fileMenuSave.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuSave.Image")));
             this.fileMenuSave.Name = "fileMenuSave";
-            this.fileMenuSave.Size = new System.Drawing.Size(223, 22);
+            this.fileMenuSave.Size = new System.Drawing.Size(318, 30);
             this.fileMenuSave.Text = "Save (Ctrl+S)";
             this.fileMenuSave.ToolTipText = "Save this content in memory. This does not update the web resource content of the" +
     " connected organization";
@@ -252,7 +259,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.saveAllToolStripMenuItem.Enabled = false;
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(318, 30);
             this.saveAllToolStripMenuItem.Text = "Save All";
             this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
@@ -260,7 +267,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.refreshFromDiskToolStripEditorMenuItem.Enabled = false;
             this.refreshFromDiskToolStripEditorMenuItem.Name = "refreshFromDiskToolStripEditorMenuItem";
-            this.refreshFromDiskToolStripEditorMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.refreshFromDiskToolStripEditorMenuItem.Size = new System.Drawing.Size(318, 30);
             this.refreshFromDiskToolStripEditorMenuItem.Text = "Refresh from disk (Ctrl+R)";
             this.refreshFromDiskToolStripEditorMenuItem.Visible = false;
             this.refreshFromDiskToolStripEditorMenuItem.Click += new System.EventHandler(this.refreshFromDiskToolStripEditorMenuItem_Click);
@@ -270,7 +277,7 @@ namespace MsCrmTools.WebResourcesManager
             this.fileMenuReplace.Enabled = false;
             this.fileMenuReplace.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuReplace.Image")));
             this.fileMenuReplace.Name = "fileMenuReplace";
-            this.fileMenuReplace.Size = new System.Drawing.Size(223, 22);
+            this.fileMenuReplace.Size = new System.Drawing.Size(318, 30);
             this.fileMenuReplace.Text = "Replace with new file";
             this.fileMenuReplace.ToolTipText = "Replace this web resource content with content of a local file";
             this.fileMenuReplace.Click += new System.EventHandler(this.FileMenuReplaceClick);
@@ -280,7 +287,7 @@ namespace MsCrmTools.WebResourcesManager
             this.fileMenuUpdateAndPublish.Enabled = false;
             this.fileMenuUpdateAndPublish.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuUpdateAndPublish.Image")));
             this.fileMenuUpdateAndPublish.Name = "fileMenuUpdateAndPublish";
-            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(223, 22);
+            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(318, 30);
             this.fileMenuUpdateAndPublish.Text = "Update and publish (Ctrl+U)";
             this.fileMenuUpdateAndPublish.ToolTipText = "Update the web resource content of the connected organization and publish it";
             this.fileMenuUpdateAndPublish.Click += new System.EventHandler(this.FileMenuUpdateAndPublishClick);
@@ -288,7 +295,7 @@ namespace MsCrmTools.WebResourcesManager
             // tsSeparatorEdit
             // 
             this.tsSeparatorEdit.Name = "tsSeparatorEdit";
-            this.tsSeparatorEdit.Size = new System.Drawing.Size(6, 25);
+            this.tsSeparatorEdit.Size = new System.Drawing.Size(6, 38);
             // 
             // tsddbEdit
             // 
@@ -300,14 +307,14 @@ namespace MsCrmTools.WebResourcesManager
             this.tsddbEdit.Image = ((System.Drawing.Image)(resources.GetObject("tsddbEdit.Image")));
             this.tsddbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbEdit.Name = "tsddbEdit";
-            this.tsddbEdit.Size = new System.Drawing.Size(40, 22);
+            this.tsddbEdit.Size = new System.Drawing.Size(60, 35);
             this.tsddbEdit.Text = "Edit";
             // 
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("findToolStripMenuItem.Image")));
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
             this.findToolStripMenuItem.Text = "Find (Ctrl+F)";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.FindToolStripMenuItemClick);
             // 
@@ -315,14 +322,14 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.replaceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("replaceToolStripMenuItem.Image")));
             this.replaceToolStripMenuItem.Name = "replaceToolStripMenuItem";
-            this.replaceToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.replaceToolStripMenuItem.Size = new System.Drawing.Size(244, 30);
             this.replaceToolStripMenuItem.Text = "Replace (Ctrl+H)";
             this.replaceToolStripMenuItem.Click += new System.EventHandler(this.ReplaceToolStripMenuItemClick);
             // 
             // toolStripSeparatorMinifyJS
             // 
             this.toolStripSeparatorMinifyJS.Name = "toolStripSeparatorMinifyJS";
-            this.toolStripSeparatorMinifyJS.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparatorMinifyJS.Size = new System.Drawing.Size(6, 38);
             this.toolStripSeparatorMinifyJS.Visible = false;
             // 
             // tsddbCompare
@@ -333,7 +340,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsddbCompare.Image = ((System.Drawing.Image)(resources.GetObject("tsddbCompare.Image")));
             this.tsddbCompare.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbCompare.Name = "tsddbCompare";
-            this.tsddbCompare.Size = new System.Drawing.Size(85, 22);
+            this.tsddbCompare.Size = new System.Drawing.Size(127, 35);
             this.tsddbCompare.Text = "Compare";
             this.tsddbCompare.ToolTipText = "Compare the web resource in CRM with a local webresource";
             this.tsddbCompare.Visible = false;
@@ -342,7 +349,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.tsmCompare.Image = ((System.Drawing.Image)(resources.GetObject("tsmCompare.Image")));
             this.tsmCompare.Name = "tsmCompare";
-            this.tsmCompare.Size = new System.Drawing.Size(178, 22);
+            this.tsmCompare.Size = new System.Drawing.Size(252, 30);
             this.tsmCompare.Text = "Select web resource";
             this.tsmCompare.ToolTipText = "Compare the web resource in CRM with a local webresource";
             this.tsmCompare.Click += new System.EventHandler(this.TsbCompareClick);
@@ -351,7 +358,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.tsmCompareSettings.Image = ((System.Drawing.Image)(resources.GetObject("tsmCompareSettings.Image")));
             this.tsmCompareSettings.Name = "tsmCompareSettings";
-            this.tsmCompareSettings.Size = new System.Drawing.Size(178, 22);
+            this.tsmCompareSettings.Size = new System.Drawing.Size(252, 30);
             this.tsmCompareSettings.Text = "Settings";
             this.tsmCompareSettings.ToolTipText = "Select the compare tool to use when comparing webresources";
             this.tsmCompareSettings.Click += new System.EventHandler(this.TsmCompareSettingsClick);
@@ -361,7 +368,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbMinifyJS.Image = ((System.Drawing.Image)(resources.GetObject("tsbMinifyJS.Image")));
             this.tsbMinifyJS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMinifyJS.Name = "tsbMinifyJS";
-            this.tsbMinifyJS.Size = new System.Drawing.Size(80, 22);
+            this.tsbMinifyJS.Size = new System.Drawing.Size(112, 35);
             this.tsbMinifyJS.Text = "Compress";
             this.tsbMinifyJS.ToolTipText = "This feature compress/minify a script web resource. It does not obfuscate the cod" +
     "e, just remove useless formatting.\r\nBe careful when using this feature! There is" +
@@ -374,7 +381,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbPreviewHtml.Image = ((System.Drawing.Image)(resources.GetObject("tsbPreviewHtml.Image")));
             this.tsbPreviewHtml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPreviewHtml.Name = "tsbPreviewHtml";
-            this.tsbPreviewHtml.Size = new System.Drawing.Size(68, 22);
+            this.tsbPreviewHtml.Size = new System.Drawing.Size(92, 35);
             this.tsbPreviewHtml.Text = "Preview";
             this.tsbPreviewHtml.ToolTipText = "This feature allows you to preview HTML pages. It does not warn about script erro" +
     "r, so the HTML page could not render or behave as expected";
@@ -386,7 +393,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
             this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBeautify.Name = "tsbBeautify";
-            this.tsbBeautify.Size = new System.Drawing.Size(70, 22);
+            this.tsbBeautify.Size = new System.Drawing.Size(95, 35);
             this.tsbBeautify.Text = "Beautify";
             this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
     "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
@@ -398,19 +405,19 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(79, 22);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(110, 35);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.TsmiGetLatestVersionClick);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 38);
             // 
             // tslResourceName
             // 
             this.tslResourceName.Name = "tslResourceName";
-            this.tslResourceName.Size = new System.Drawing.Size(0, 22);
+            this.tslResourceName.Size = new System.Drawing.Size(0, 35);
             this.tslResourceName.Visible = false;
             // 
             // tsbComment
@@ -419,7 +426,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbComment.Image = ((System.Drawing.Image)(resources.GetObject("tsbComment.Image")));
             this.tsbComment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbComment.Name = "tsbComment";
-            this.tsbComment.Size = new System.Drawing.Size(23, 22);
+            this.tsbComment.Size = new System.Drawing.Size(23, 35);
             this.tsbComment.Text = "Comment";
             this.tsbComment.Click += new System.EventHandler(this.tsbComment_Click);
             // 
@@ -429,7 +436,7 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbnUncomment.Image = ((System.Drawing.Image)(resources.GetObject("tsbnUncomment.Image")));
             this.tsbnUncomment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbnUncomment.Name = "tsbnUncomment";
-            this.tsbnUncomment.Size = new System.Drawing.Size(23, 22);
+            this.tsbnUncomment.Size = new System.Drawing.Size(23, 35);
             this.tsbnUncomment.Text = "Uncomment";
             this.tsbnUncomment.Click += new System.EventHandler(this.tsbnUncomment_Click);
             // 
@@ -484,7 +491,8 @@ namespace MsCrmTools.WebResourcesManager
             this.tslCurrentlyLoadedSolution});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Size = new System.Drawing.Size(900, 25);
+            this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.tsMain.Size = new System.Drawing.Size(1350, 38);
             this.tsMain.TabIndex = 88;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -494,21 +502,21 @@ namespace MsCrmTools.WebResourcesManager
             this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 35);
             this.tsbCloseThisTab.Text = "Close this tab";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbClear
             // 
             this.tsbClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClear.Name = "tsbClear";
-            this.tsbClear.Size = new System.Drawing.Size(38, 22);
+            this.tsbClear.Size = new System.Drawing.Size(55, 35);
             this.tsbClear.Text = "Clear";
             this.tsbClear.Visible = false;
             this.tsbClear.Click += new System.EventHandler(this.TbsClearTreeClick);
@@ -525,34 +533,34 @@ namespace MsCrmTools.WebResourcesManager
             this.tsddCrmMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddCrmMenu.Image")));
             this.tsddCrmMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddCrmMenu.Name = "tsddCrmMenu";
-            this.tsddCrmMenu.Size = new System.Drawing.Size(62, 22);
+            this.tsddCrmMenu.Size = new System.Drawing.Size(84, 35);
             this.tsddCrmMenu.Text = "CRM";
             // 
             // TsmiLoadWebResources
             // 
             this.TsmiLoadWebResources.Image = ((System.Drawing.Image)(resources.GetObject("TsmiLoadWebResources.Image")));
             this.TsmiLoadWebResources.Name = "TsmiLoadWebResources";
-            this.TsmiLoadWebResources.Size = new System.Drawing.Size(388, 22);
+            this.TsmiLoadWebResources.Size = new System.Drawing.Size(570, 30);
             this.TsmiLoadWebResources.Text = "Load Web resources";
             this.TsmiLoadWebResources.Click += new System.EventHandler(this.TsmiLoadWebResourcesClick);
             // 
             // TsmiLoadWebResourcesFromASpecificSolution
             // 
             this.TsmiLoadWebResourcesFromASpecificSolution.Name = "TsmiLoadWebResourcesFromASpecificSolution";
-            this.TsmiLoadWebResourcesFromASpecificSolution.Size = new System.Drawing.Size(388, 22);
+            this.TsmiLoadWebResourcesFromASpecificSolution.Size = new System.Drawing.Size(570, 30);
             this.TsmiLoadWebResourcesFromASpecificSolution.Text = "Load Web resources from a specific solution";
             this.TsmiLoadWebResourcesFromASpecificSolution.Click += new System.EventHandler(this.TsmiLoadWebResourcesFromASpecificSolutionClick);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(385, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(567, 6);
             // 
             // updateCheckedWebResourcesToolStripMenuItem
             // 
             this.updateCheckedWebResourcesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("updateCheckedWebResourcesToolStripMenuItem.Image")));
             this.updateCheckedWebResourcesToolStripMenuItem.Name = "updateCheckedWebResourcesToolStripMenuItem";
-            this.updateCheckedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
+            this.updateCheckedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(570, 30);
             this.updateCheckedWebResourcesToolStripMenuItem.Text = "Update checked Web resources";
             this.updateCheckedWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.TsmiUpdateCheckedWebResourcesClick);
             // 
@@ -560,7 +568,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.updateAndPublishCheckedWebResourcesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("updateAndPublishCheckedWebResourcesToolStripMenuItem.Image")));
             this.updateAndPublishCheckedWebResourcesToolStripMenuItem.Name = "updateAndPublishCheckedWebResourcesToolStripMenuItem";
-            this.updateAndPublishCheckedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
+            this.updateAndPublishCheckedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(570, 30);
             this.updateAndPublishCheckedWebResourcesToolStripMenuItem.Text = "Update and publish checked Web resources";
             this.updateAndPublishCheckedWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.TsmiUpdateAndPublishCheckedWebResourcesClick);
             // 
@@ -568,7 +576,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.updatePublishAndAddToSolutionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("updatePublishAndAddToSolutionToolStripMenuItem.Image")));
             this.updatePublishAndAddToSolutionToolStripMenuItem.Name = "updatePublishAndAddToSolutionToolStripMenuItem";
-            this.updatePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
+            this.updatePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(570, 30);
             this.updatePublishAndAddToSolutionToolStripMenuItem.Text = "Update, publish and add to solution checked web resources";
             this.updatePublishAndAddToSolutionToolStripMenuItem.Click += new System.EventHandler(this.TsmiUpdatePublishAndAddToSolutionClick);
             // 
@@ -581,14 +589,14 @@ namespace MsCrmTools.WebResourcesManager
             this.tsddFileMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddFileMenu.Image")));
             this.tsddFileMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddFileMenu.Name = "tsddFileMenu";
-            this.tsddFileMenu.Size = new System.Drawing.Size(54, 22);
+            this.tsddFileMenu.Size = new System.Drawing.Size(72, 35);
             this.tsddFileMenu.Text = "File";
             // 
             // loadWebResourcesToolStripMenuItem1
             // 
             this.loadWebResourcesToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("loadWebResourcesToolStripMenuItem1.Image")));
             this.loadWebResourcesToolStripMenuItem1.Name = "loadWebResourcesToolStripMenuItem1";
-            this.loadWebResourcesToolStripMenuItem1.Size = new System.Drawing.Size(327, 22);
+            this.loadWebResourcesToolStripMenuItem1.Size = new System.Drawing.Size(477, 30);
             this.loadWebResourcesToolStripMenuItem1.Text = "Load Web resources";
             this.loadWebResourcesToolStripMenuItem1.Click += new System.EventHandler(this.TsmiLoadWebResourcesFromDiskClick);
             // 
@@ -596,7 +604,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveCheckedWebResourcesToDiskToolStripMenuItem.Image")));
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Name = "saveCheckedWebResourcesToDiskToolStripMenuItem";
-            this.saveCheckedWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.saveCheckedWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(477, 30);
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Text = "Save checked Web resources (with roots) to disk";
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Click += new System.EventHandler(this.TsmiSaveCheckedWebResourcesToDiskClick);
             // 
@@ -604,35 +612,35 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.saveAllWebResourcesToDiskToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveAllWebResourcesToDiskToolStripMenuItem.Image")));
             this.saveAllWebResourcesToDiskToolStripMenuItem.Name = "saveAllWebResourcesToDiskToolStripMenuItem";
-            this.saveAllWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(327, 22);
+            this.saveAllWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(477, 30);
             this.saveAllWebResourcesToDiskToolStripMenuItem.Text = "Save checked Web resources to disk";
             this.saveAllWebResourcesToDiskToolStripMenuItem.Click += new System.EventHandler(this.TsmiSaveAllWebResourcesToDiskClick);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbNewRoot
             // 
             this.tsbNewRoot.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewRoot.Image")));
             this.tsbNewRoot.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNewRoot.Name = "tsbNewRoot";
-            this.tsbNewRoot.Size = new System.Drawing.Size(76, 22);
+            this.tsbNewRoot.Size = new System.Drawing.Size(106, 35);
             this.tsbNewRoot.Text = "New root";
             this.tsbNewRoot.Click += new System.EventHandler(this.TsbNewRootClick);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbSettings
             // 
             this.tsbSettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbSettings.Image")));
             this.tsbSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSettings.Name = "tsbSettings";
-            this.tsbSettings.Size = new System.Drawing.Size(69, 22);
+            this.tsbSettings.Size = new System.Drawing.Size(96, 35);
             this.tsbSettings.Text = "Settings";
             this.tsbSettings.Click += new System.EventHandler(this.tsbSettings_Click);
             // 
@@ -644,26 +652,26 @@ namespace MsCrmTools.WebResourcesManager
             this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(48, 22);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(71, 35);
             this.toolStripDropDownButton2.Text = "Tools";
             // 
             // findUnusedWebResourcesToolStripMenuItem
             // 
             this.findUnusedWebResourcesToolStripMenuItem.Name = "findUnusedWebResourcesToolStripMenuItem";
-            this.findUnusedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            this.findUnusedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(415, 30);
             this.findUnusedWebResourcesToolStripMenuItem.Text = "Find web resources without dependency";
             this.findUnusedWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.TsmiFindUnusedWebResourcesClick);
             // 
             // tssCurrentlyLoadedSolution
             // 
             this.tssCurrentlyLoadedSolution.Name = "tssCurrentlyLoadedSolution";
-            this.tssCurrentlyLoadedSolution.Size = new System.Drawing.Size(6, 25);
+            this.tssCurrentlyLoadedSolution.Size = new System.Drawing.Size(6, 38);
             this.tssCurrentlyLoadedSolution.Visible = false;
             // 
             // tslCurrentlyLoadedSolution
             // 
             this.tslCurrentlyLoadedSolution.Name = "tslCurrentlyLoadedSolution";
-            this.tslCurrentlyLoadedSolution.Size = new System.Drawing.Size(42, 22);
+            this.tslCurrentlyLoadedSolution.Size = new System.Drawing.Size(62, 35);
             this.tslCurrentlyLoadedSolution.Text = "[none]";
             this.tslCurrentlyLoadedSolution.Visible = false;
             // 
@@ -691,16 +699,18 @@ namespace MsCrmTools.WebResourcesManager
             this.toolStripSeparator5,
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem,
             this.copyWebResourceNameToClipboardToolStripMenuItem,
-            this.toolStripSeparator7,
+            this.toolStripSeparator12,
+            this.tsmiSetDependencies,
+            this.tssDependencies,
             this.propertiesToolStripMenuItem});
             this.cmsWebResourceTreeView.Name = "contextMenuStripTreeView";
-            this.cmsWebResourceTreeView.Size = new System.Drawing.Size(338, 398);
+            this.cmsWebResourceTreeView.Size = new System.Drawing.Size(480, 595);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
             this.addNewWebResourceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewWebResourceToolStripMenuItem.Image")));
             this.addNewWebResourceToolStripMenuItem.Name = "addNewWebResourceToolStripMenuItem";
-            this.addNewWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.addNewWebResourceToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.addNewWebResourceToolStripMenuItem.Text = "Add existing file(s) as Web resource(s)";
             this.addNewWebResourceToolStripMenuItem.Click += new System.EventHandler(this.TsmiAddNewWebResourceClick);
             // 
@@ -715,48 +725,48 @@ namespace MsCrmTools.WebResourcesManager
             this.resourcesRESXToolStripMenuItem});
             this.addNewEmptyWebResourceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewEmptyWebResourceToolStripMenuItem.Image")));
             this.addNewEmptyWebResourceToolStripMenuItem.Name = "addNewEmptyWebResourceToolStripMenuItem";
-            this.addNewEmptyWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.addNewEmptyWebResourceToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.addNewEmptyWebResourceToolStripMenuItem.Text = "Add new empty web resource";
             // 
             // hTMLToolStripMenuItem
             // 
             this.hTMLToolStripMenuItem.Name = "hTMLToolStripMenuItem";
-            this.hTMLToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.hTMLToolStripMenuItem.Size = new System.Drawing.Size(236, 30);
             this.hTMLToolStripMenuItem.Text = "Web Page (HTML)";
             this.hTMLToolStripMenuItem.Click += new System.EventHandler(this.AddNewEmptyWebResource);
             // 
             // cSSToolStripMenuItem
             // 
             this.cSSToolStripMenuItem.Name = "cSSToolStripMenuItem";
-            this.cSSToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.cSSToolStripMenuItem.Size = new System.Drawing.Size(236, 30);
             this.cSSToolStripMenuItem.Text = "Style Sheet (CSS)";
             this.cSSToolStripMenuItem.Click += new System.EventHandler(this.AddNewEmptyWebResource);
             // 
             // scriptToolStripMenuItem
             // 
             this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
-            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.scriptToolStripMenuItem.Size = new System.Drawing.Size(236, 30);
             this.scriptToolStripMenuItem.Text = "Script (JScript)";
             this.scriptToolStripMenuItem.Click += new System.EventHandler(this.AddNewEmptyWebResource);
             // 
             // dataToolStripMenuItem
             // 
             this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
-            this.dataToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.dataToolStripMenuItem.Size = new System.Drawing.Size(236, 30);
             this.dataToolStripMenuItem.Text = "Data (XML)";
             this.dataToolStripMenuItem.Click += new System.EventHandler(this.AddNewEmptyWebResource);
             // 
             // xSLTToolStripMenuItem
             // 
             this.xSLTToolStripMenuItem.Name = "xSLTToolStripMenuItem";
-            this.xSLTToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.xSLTToolStripMenuItem.Size = new System.Drawing.Size(236, 30);
             this.xSLTToolStripMenuItem.Text = "Style Sheet (XSL)";
             this.xSLTToolStripMenuItem.Click += new System.EventHandler(this.AddNewEmptyWebResource);
             // 
             // resourcesRESXToolStripMenuItem
             // 
             this.resourcesRESXToolStripMenuItem.Name = "resourcesRESXToolStripMenuItem";
-            this.resourcesRESXToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.resourcesRESXToolStripMenuItem.Size = new System.Drawing.Size(236, 30);
             this.resourcesRESXToolStripMenuItem.Text = "Resources (RESX)";
             this.resourcesRESXToolStripMenuItem.Click += new System.EventHandler(this.AddNewEmptyWebResource);
             // 
@@ -764,57 +774,57 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.addNewFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewFolderToolStripMenuItem.Image")));
             this.addNewFolderToolStripMenuItem.Name = "addNewFolderToolStripMenuItem";
-            this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.addNewFolderToolStripMenuItem.Text = "Add new folder";
             this.addNewFolderToolStripMenuItem.Click += new System.EventHandler(this.TsmiAddNewFolderClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(476, 6);
             // 
             // renameWebResourceToolStripMenuItem
             // 
             this.renameWebResourceToolStripMenuItem.Name = "renameWebResourceToolStripMenuItem";
-            this.renameWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.renameWebResourceToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.renameWebResourceToolStripMenuItem.Text = "Rename web resource";
             this.renameWebResourceToolStripMenuItem.Click += new System.EventHandler(this.TsmiRenameWebResourceClick);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(476, 6);
             // 
             // collapseIncludingChildrensToolStripMenuItem
             // 
             this.collapseIncludingChildrensToolStripMenuItem.Name = "collapseIncludingChildrensToolStripMenuItem";
-            this.collapseIncludingChildrensToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.collapseIncludingChildrensToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.collapseIncludingChildrensToolStripMenuItem.Text = "Collapse (including childrens)";
             this.collapseIncludingChildrensToolStripMenuItem.Click += new System.EventHandler(this.TsmiCollapseIncludingChildrensClick);
             // 
             // expandincludingChildrensToolStripMenuItem
             // 
             this.expandincludingChildrensToolStripMenuItem.Name = "expandincludingChildrensToolStripMenuItem";
-            this.expandincludingChildrensToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.expandincludingChildrensToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.expandincludingChildrensToolStripMenuItem.Text = "Expand (including childrens)";
             this.expandincludingChildrensToolStripMenuItem.Click += new System.EventHandler(this.TsmiExpandincludingChildrensClick);
             // 
             // toolStripSeparatorExpandCollapse
             // 
             this.toolStripSeparatorExpandCollapse.Name = "toolStripSeparatorExpandCollapse";
-            this.toolStripSeparatorExpandCollapse.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparatorExpandCollapse.Size = new System.Drawing.Size(476, 6);
             // 
             // updateFromDiskToolStripMenuItem
             // 
             this.updateFromDiskToolStripMenuItem.Name = "updateFromDiskToolStripMenuItem";
-            this.updateFromDiskToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.updateFromDiskToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.updateFromDiskToolStripMenuItem.Text = "Update web resources in this folder with local files";
             this.updateFromDiskToolStripMenuItem.Click += new System.EventHandler(this.UpdateFromDiskToolStripMenuItemClick);
             // 
             // refreshFromDiskToolStripMenuItem
             // 
             this.refreshFromDiskToolStripMenuItem.Name = "refreshFromDiskToolStripMenuItem";
-            this.refreshFromDiskToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.refreshFromDiskToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.refreshFromDiskToolStripMenuItem.Text = "Refresh from disk";
             this.refreshFromDiskToolStripMenuItem.Click += new System.EventHandler(this.TsmiRefreshFromDiskClick);
             // 
@@ -822,7 +832,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.getLatestVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("getLatestVersionToolStripMenuItem.Image")));
             this.getLatestVersionToolStripMenuItem.Name = "getLatestVersionToolStripMenuItem";
-            this.getLatestVersionToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.getLatestVersionToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.getLatestVersionToolStripMenuItem.Text = "Get latest version";
             this.getLatestVersionToolStripMenuItem.ToolTipText = "Get latest version from Microsoft Dynamics CRM connected organization";
             this.getLatestVersionToolStripMenuItem.Click += new System.EventHandler(this.TsmiGetLatestVersionClick);
@@ -830,13 +840,13 @@ namespace MsCrmTools.WebResourcesManager
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(476, 6);
             // 
             // saveToCRMServerToolStripMenuItem
             // 
             this.saveToCRMServerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToCRMServerToolStripMenuItem.Image")));
             this.saveToCRMServerToolStripMenuItem.Name = "saveToCRMServerToolStripMenuItem";
-            this.saveToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.saveToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.saveToCRMServerToolStripMenuItem.Text = "Save to CRM server";
             this.saveToCRMServerToolStripMenuItem.Click += new System.EventHandler(this.TsmiSaveToCrmServerClick);
             // 
@@ -844,7 +854,7 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.saveAndPublishToCRMServerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveAndPublishToCRMServerToolStripMenuItem.Image")));
             this.saveAndPublishToCRMServerToolStripMenuItem.Name = "saveAndPublishToCRMServerToolStripMenuItem";
-            this.saveAndPublishToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.saveAndPublishToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.saveAndPublishToCRMServerToolStripMenuItem.Text = "Save and Publish to CRM server";
             this.saveAndPublishToCRMServerToolStripMenuItem.Click += new System.EventHandler(this.TsmiSaveAndPublishToCrmServerClick);
             // 
@@ -852,33 +862,33 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.savePublishAndAddToSolutionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("savePublishAndAddToSolutionToolStripMenuItem.Image")));
             this.savePublishAndAddToSolutionToolStripMenuItem.Name = "savePublishAndAddToSolutionToolStripMenuItem";
-            this.savePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.savePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.savePublishAndAddToSolutionToolStripMenuItem.Text = "Save, publish and add to solution";
             this.savePublishAndAddToSolutionToolStripMenuItem.Click += new System.EventHandler(this.TsmiSavePublishAndAddToSolutionClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(476, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.TsmiDeleteClick);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(476, 6);
             // 
             // openWebResourceRecordInCRMApplicationToolStripMenuItem
             // 
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openWebResourceRecordInCRMApplicationToolStripMenuItem.Image")));
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Name = "openWebResourceRecordInCRMApplicationToolStripMenuItem";
-            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Text = "Open web resource record in CRM application";
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Click += new System.EventHandler(this.TsmiOpenWebResourceRecordInCrmApplicationClick);
             // 
@@ -886,20 +896,32 @@ namespace MsCrmTools.WebResourcesManager
             // 
             this.copyWebResourceNameToClipboardToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyWebResourceNameToClipboardToolStripMenuItem.Image")));
             this.copyWebResourceNameToClipboardToolStripMenuItem.Name = "copyWebResourceNameToClipboardToolStripMenuItem";
-            this.copyWebResourceNameToClipboardToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.copyWebResourceNameToClipboardToolStripMenuItem.Text = "Copy web resource name to clipboard ";
             this.copyWebResourceNameToClipboardToolStripMenuItem.Click += new System.EventHandler(this.TsmiCopyWebResourceNameToClipboardClick);
             // 
-            // toolStripSeparator7
+            // toolStripSeparator12
             // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(334, 6);
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(476, 6);
+            // 
+            // tsmiSetDependencies
+            // 
+            this.tsmiSetDependencies.Name = "tsmiSetDependencies";
+            this.tsmiSetDependencies.Size = new System.Drawing.Size(479, 30);
+            this.tsmiSetDependencies.Text = "Set dependencies";
+            this.tsmiSetDependencies.Click += new System.EventHandler(this.tsmiSetDependencies_Click);
+            // 
+            // tssDependencies
+            // 
+            this.tssDependencies.Name = "tssDependencies";
+            this.tssDependencies.Size = new System.Drawing.Size(476, 6);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("propertiesToolStripMenuItem.Image")));
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.TsmiPropertieClick);
             // 
@@ -910,37 +932,38 @@ namespace MsCrmTools.WebResourcesManager
             this.closeAllTabsToolStripMenuItem,
             this.colseAllButThisTabToolStripMenuItem});
             this.cmsTab.Name = "cmsTab";
-            this.cmsTab.Size = new System.Drawing.Size(182, 70);
+            this.cmsTab.Size = new System.Drawing.Size(246, 94);
             // 
             // closeThisTabToolStripMenuItem
             // 
             this.closeThisTabToolStripMenuItem.Name = "closeThisTabToolStripMenuItem";
-            this.closeThisTabToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.closeThisTabToolStripMenuItem.Size = new System.Drawing.Size(245, 30);
             this.closeThisTabToolStripMenuItem.Text = "Close this tab";
             this.closeThisTabToolStripMenuItem.Click += new System.EventHandler(this.closeThisTabToolStripMenuItem_Click);
             // 
             // closeAllTabsToolStripMenuItem
             // 
             this.closeAllTabsToolStripMenuItem.Name = "closeAllTabsToolStripMenuItem";
-            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(245, 30);
             this.closeAllTabsToolStripMenuItem.Text = "Close all tabs";
             this.closeAllTabsToolStripMenuItem.Click += new System.EventHandler(this.closeAllTabsToolStripMenuItem_Click);
             // 
             // colseAllButThisTabToolStripMenuItem
             // 
             this.colseAllButThisTabToolStripMenuItem.Name = "colseAllButThisTabToolStripMenuItem";
-            this.colseAllButThisTabToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.colseAllButThisTabToolStripMenuItem.Size = new System.Drawing.Size(245, 30);
             this.colseAllButThisTabToolStripMenuItem.Text = "Colse all but this tab";
             this.colseAllButThisTabToolStripMenuItem.Click += new System.EventHandler(this.colseAllButThisTabToolStripMenuItem_Click);
             // 
             // WebResourcesManager
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tsMain);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "WebResourcesManager";
-            this.Size = new System.Drawing.Size(900, 599);
+            this.Size = new System.Drawing.Size(1350, 922);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -999,7 +1022,7 @@ namespace MsCrmTools.WebResourcesManager
         private System.Windows.Forms.ToolStripMenuItem updateFromDiskToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem copyWebResourceNameToClipboardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripSeparator tssDependencies;
         private System.Windows.Forms.ToolStripSeparator tsSeparatorEdit;
         private System.Windows.Forms.ToolStripDropDownButton tsddbEdit;
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
@@ -1044,5 +1067,7 @@ namespace MsCrmTools.WebResourcesManager
         private ToolStripMenuItem colseAllButThisTabToolStripMenuItem;
         private ToolStripMenuItem refreshFromDiskToolStripEditorMenuItem;
         private ToolStripMenuItem resourcesRESXToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator12;
+        private ToolStripMenuItem tsmiSetDependencies;
     }
 }

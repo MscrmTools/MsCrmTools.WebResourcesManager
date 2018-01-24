@@ -40,6 +40,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chkLoadAllWebResources = new System.Windows.Forms.CheckBox();
+            this.chkFilterByLcid = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -124,7 +125,7 @@
             this.lstSolutions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lstSolutions.MultiSelect = false;
             this.lstSolutions.Name = "lstSolutions";
-            this.lstSolutions.Size = new System.Drawing.Size(720, 273);
+            this.lstSolutions.Size = new System.Drawing.Size(720, 246);
             this.lstSolutions.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstSolutions.TabIndex = 1;
             this.lstSolutions.UseCompatibleStateImageBehavior = false;
@@ -152,18 +153,30 @@
             this.chkLoadAllWebResources.AutoSize = true;
             this.chkLoadAllWebResources.Checked = true;
             this.chkLoadAllWebResources.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkLoadAllWebResources.Location = new System.Drawing.Point(14, 392);
+            this.chkLoadAllWebResources.Location = new System.Drawing.Point(10, 356);
             this.chkLoadAllWebResources.Name = "chkLoadAllWebResources";
             this.chkLoadAllWebResources.Size = new System.Drawing.Size(356, 24);
             this.chkLoadAllWebResources.TabIndex = 2;
             this.chkLoadAllWebResources.Text = "Load all web resources from selected solution";
             this.chkLoadAllWebResources.UseVisualStyleBackColor = true;
+            this.chkLoadAllWebResources.CheckedChanged += new System.EventHandler(this.chkLoadAllWebResources_CheckedChanged);
+            // 
+            // chkFilterByLcid
+            // 
+            this.chkFilterByLcid.AutoSize = true;
+            this.chkFilterByLcid.Location = new System.Drawing.Point(372, 356);
+            this.chkFilterByLcid.Name = "chkFilterByLcid";
+            this.chkFilterByLcid.Size = new System.Drawing.Size(253, 24);
+            this.chkFilterByLcid.TabIndex = 11;
+            this.chkFilterByLcid.Text = "Filter by provisionned language";
+            this.chkFilterByLcid.UseVisualStyleBackColor = true;
             // 
             // SolutionPicker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(750, 435);
+            this.Controls.Add(this.chkFilterByLcid);
             this.Controls.Add(this.chkLoadAllWebResources);
             this.Controls.Add(this.lstSolutions);
             this.Controls.Add(this.btnSolutionPickerCancel);
@@ -199,5 +212,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkLoadAllWebResources;
+        private System.Windows.Forms.CheckBox chkFilterByLcid;
     }
 }

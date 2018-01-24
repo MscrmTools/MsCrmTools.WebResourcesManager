@@ -27,7 +27,9 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
 
         public Entity SelectedSolution { get; set; }
 
-        public bool LoadAllWebresources { get ; private set; }
+        public bool LoadAllWebresources { get; private set; }
+
+        public bool FilterByLcid { get; private set; }
 
         private void btnSolutionPickerCancel_Click(object sender, EventArgs e)
         {
@@ -41,6 +43,7 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
             if (lstSolutions.SelectedItems.Count > 0)
             {
                 LoadAllWebresources = chkLoadAllWebResources.Checked;
+                FilterByLcid = chkFilterByLcid.Checked;
                 SelectedSolution = (Entity)lstSolutions.SelectedItems[0].Tag;
                 DialogResult = DialogResult.OK;
                 Close();
@@ -119,6 +122,15 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
 
             lstSolutions.Enabled = true;
             btnSolutionPickerValidate.Enabled = true;
+        }
+
+        private void chkLoadAllWebResources_CheckedChanged(object sender, EventArgs e)
+        {
+            chkFilterByLcid.Enabled = chkLoadAllWebResources.Checked;
+            if (!chkLoadAllWebResources.Checked)
+            {
+                chkFilterByLcid.Checked = false;
+            }
         }
     }
 }

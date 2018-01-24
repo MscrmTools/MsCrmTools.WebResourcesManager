@@ -98,6 +98,7 @@ namespace MsCrmTools.WebResourcesManager
             List<int> typesToload = new List<int>();
             bool loadAllWebresources = false;
             bool hideMicrosoftWebresources = false;
+            bool filterByLcid = false;
 
             // If from solution, display the solution picker so that user can
             // select the solution containing the web resources he wants to
@@ -109,6 +110,10 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     solutionId = sPicker.SelectedSolution.Id;
                     loadAllWebresources = sPicker.LoadAllWebresources;
+                    if (loadAllWebresources)
+                    {
+                        filterByLcid = sPicker.FilterByLcid;
+                    }
                 }
                 else
                 {
@@ -124,6 +129,7 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     typesToload = dialog.TypesToLoad;
                     hideMicrosoftWebresources = dialog.HideMicrosoftWebresources;
+                    filterByLcid = dialog.FilterByLcid;
                 }
                 else
                 {
@@ -142,7 +148,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 var args = (Tuple<Guid, List<int>, bool>)e.Argument;
 
-                webresourceTreeView1.LoadWebResourcesFromServer(args.Item1, args.Item2, args.Item3, response.RetrieveProvisionedLanguages);
+                webresourceTreeView1.LoadWebResourcesFromServer(args.Item1, args.Item2, args.Item3, filterByLcid, response.RetrieveProvisionedLanguages);
             })
             {
                 AsyncArgument = new Tuple<Guid, List<int>, bool>(solutionId, typesToload, hideMicrosoftWebresources),
@@ -237,6 +243,12 @@ namespace MsCrmTools.WebResourcesManager
         private void TsmiUpdatePublishAndAddToSolutionClick(object sender, EventArgs e)
         {
             DoUpdateWebResources(true, true);
+        }
+
+        private void tsmiSetDependencies_Click(object sender, EventArgs e)
+        {
+            var dialog = new DependencyDialog(webresourceTreeView1.SelectedResource, webresourceTreeView1.GetAllResources());
+            dialog.ShowDialog(this);
         }
 
         private void UpdateWebResources(bool publish, IEnumerable<WebResource> webResources, bool addToSolution = false)
@@ -758,7 +770,7 @@ namespace MsCrmTools.WebResourcesManager
             if (TreeViewHelper.CheckOnlyThisNode(webresourceTreeView1))
                 return;
 
-            webresourceTreeView1.SelectedNode.Tag = ((WebResource)webresourceTreeView1.SelectedNode.Tag).ShowProperties(Service, this);
+            webresourceTreeView1.SelectedNode.Tag = ((WebResource)webresourceTreeView1.SelectedNode.Tag).ShowProperties(Service, webresourceTreeView1.Lcids, this);
         }
 
         private void TsmiRenameWebResourceClick(object sender, EventArgs e)
@@ -1437,6 +1449,9 @@ namespace MsCrmTools.WebResourcesManager
                     }
                     break;
             }
+
+            tsmiSetDependencies.Visible = ConnectionDetail.OrganizationMajorVersion >= 9;
+            tssDependencies.Visible = ConnectionDetail.OrganizationMajorVersion >= 9;
 
             if (webresourceTreeView1.SelectedNode != null)
             {

@@ -6,6 +6,8 @@
 using Microsoft.Xrm.Sdk;
 using MsCrmTools.WebResourcesManager.AppCode;
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.Forms
@@ -37,13 +39,16 @@ namespace MsCrmTools.WebResourcesManager.Forms
         /// Initializes a new instance of class UpdateForm
         /// </summary>
         /// <param name="script">Script to display or to create</param>
+        /// <param name="lcids">List of available languages</param>
         /// <param name="service">Xrm Organization Service</param>
-        public UpdateForm(WebResource script, IOrganizationService service)
+        public UpdateForm(WebResource script, int[] lcids, IOrganizationService service)
         {
             InitializeComponent();
 
             innerService = service;
             currentWebResource = script;
+
+            cbbLanguage.Items.AddRange(lcids.Select(l => new Language(l)).ToArray());
 
             FillControls();
         }
@@ -81,6 +86,12 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (currentWebResource.Entity.Contains("description"))
                 txtDescription.Text = currentWebResource.Entity["description"].ToString();
 
+            if (currentWebResource.Entity.Contains("languagecode"))
+            {
+                cbbLanguage.SelectedItem = cbbLanguage.Items.Cast<Language>()
+                    .FirstOrDefault(l => l.Lcid == currentWebResource.Entity.GetAttributeValue<int>("languagecode"));
+            }
+
             chkSynced.Checked = currentWebResource.SyncedWithCrm;
         }
 
@@ -95,8 +106,27 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             currentWebResource.Entity["displayname"] = txtDisplayName.Text;
             currentWebResource.Entity["description"] = txtDescription.Text;
+            currentWebResource.Entity["languagecode"] = ((Language)cbbLanguage.SelectedItem).Lcid;
 
             DialogResult = DialogResult.OK;
+        }
+    }
+
+    public class Language
+    {
+        private readonly string name;
+
+        public Language(int lcid)
+        {
+            Lcid = lcid;
+            name = CultureInfo.GetCultureInfo(lcid).EnglishName;
+        }
+
+        public int Lcid { get; private set; }
+
+        public override string ToString()
+        {
+            return name;
         }
     }
 }

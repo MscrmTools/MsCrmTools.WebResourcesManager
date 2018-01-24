@@ -179,6 +179,12 @@
     <Compile Include="Forms\CustomFolderBrowserDialog.Designer.cs">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DependencyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DependencyDialog.Designer.cs">
+      <DependentUpon>DependencyDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FindReplace\FindOption.cs" />
     <Compile Include="Forms\FindReplace\FindReplace.cs">
       <SubType>Component</SubType>
@@ -346,6 +352,9 @@
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DependencyDialog.resx">
+      <DependentUpon>DependencyDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindReplace\FindReplaceDialog.resx">
       <DependentUpon>FindReplaceDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -435,7 +444,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

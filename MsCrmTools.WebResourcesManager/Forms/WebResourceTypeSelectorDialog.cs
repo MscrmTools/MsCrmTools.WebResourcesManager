@@ -30,6 +30,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         public bool HideMicrosoftWebresources { get; internal set; }
         public List<int> TypesToLoad { get; private set; }
+        public bool FilterByLcid { get; private set; }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -41,6 +42,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             TypesToLoad = new List<int>();
             HideMicrosoftWebresources = !chkLoadResourcesFromMicrosoft.Checked;
+            FilterByLcid = chkFilterByLcid.Checked;
 
             foreach (string s in webResourceTypePicker1.CheckedExtensions)
             {

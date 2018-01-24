@@ -194,7 +194,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         /// Retrieves all web resources that are customizable
         /// </summary>
         /// <returns>List of web resources</returns>
-        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types, bool hideMicrosoftWebresources = true, params int[] lcids)
+        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types, bool hideMicrosoftWebresources = true, bool filterByLcid = false, params int[] lcids)
         {
             try
             {
@@ -246,7 +246,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         }
                     }
 
-                    if (lcids.Length != 0)
+                    if (filterByLcid && lcids.Length != 0)
                     {
                         var lcidFilter = qe.Criteria.Filters.First().AddFilter(LogicalOperator.Or);
                         lcidFilter.AddCondition("languagecode", ConditionOperator.In, lcids.Select(l => (object)l).ToArray());
