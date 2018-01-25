@@ -1920,9 +1920,9 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     FileMenuUpdateAndPublishClick(null, null);
                 }
-                else
+                else if (tabOpenedResources.SelectedTab.Controls[0] is CodeEditorScintilla ces)
                 {
-                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).UncommentSelectedLines();
+                    ces.UncommentSelectedLines();
                 }
 
                 isCtrlM = false;
@@ -1958,9 +1958,9 @@ namespace MsCrmTools.WebResourcesManager
             }
             else if (e.Control && e.KeyCode == Keys.O)
             {
-                if (isCtrlM)
+                if (isCtrlM && tabOpenedResources.SelectedTab.Controls[0] is CodeEditorScintilla ces)
                 {
-                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).ContractFolds();
+                    ces.ContractFolds();
                 }
 
                 isCtrlM = false;
@@ -1968,14 +1968,15 @@ namespace MsCrmTools.WebResourcesManager
             }
             else if (e.Control && e.KeyCode == Keys.C)
             {
-                if (isCtrlK)
-                {
-                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).CommentSelectedLines();
-                }
-                else
-                {
-                    ((CodeEditorScintilla)tabOpenedResources.SelectedTab.Controls[0]).Copy();
-                }
+                if (tabOpenedResources.SelectedTab.Controls[0] is CodeEditorScintilla ces)
+                    if (isCtrlK)
+                    {
+                        ces.CommentSelectedLines();
+                    }
+                    else
+                    {
+                        ces.Copy();
+                    }
 
                 isCtrlM = false;
                 isCtrlK = false;
