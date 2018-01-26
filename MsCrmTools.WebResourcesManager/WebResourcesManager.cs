@@ -1208,7 +1208,7 @@ namespace MsCrmTools.WebResourcesManager
 
         private void TsbCompareClick(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.CompareToolPath))
+            if (string.IsNullOrWhiteSpace(Options.Instance.CompareToolPath))
             {
                 OpenCompareSettings(false);
                 return;
