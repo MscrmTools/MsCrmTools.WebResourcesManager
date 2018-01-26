@@ -84,10 +84,9 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         var bytes = File.ReadAllBytes(file.FullName);
                         var content = Convert.ToBase64String(bytes);
 
-                        var wr = node.Tag as WebResource;
-                        if (wr != null)
+                        if (node.Tag is WebResource wr)
                         {
-                            wr.Entity["content"] = content;
+                            wr.EntityContent = content;
                             wr.RefreshAssociatedContent();
 
                             string nameToDisplay = name;

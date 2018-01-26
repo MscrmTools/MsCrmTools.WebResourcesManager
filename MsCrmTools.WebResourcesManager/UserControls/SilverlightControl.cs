@@ -27,6 +27,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// </summary>
         private string innerContent;
 
+        private readonly WebResource resource;
+
         #endregion Variables
 
         #region Delegates
@@ -37,7 +39,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         #region Event Handlers
 
-        public event WebResourceUpdatedEventHandler WebResourceUpdated;
+        public event EventHandler<WebResourceUpdatedEventArgs> WebResourceUpdated;
 
         #endregion Event Handlers
 
@@ -46,16 +48,20 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// <summary>
         /// Initializes a new instance of class SilverlightControl
         /// </summary>
-        /// <param name="resource">Base64 content of the web resource</param>
-        public SilverlightControl(string content)
+        /// <param name="resource">Web resource</param>
+        public SilverlightControl(WebResource resource)
         {
             InitializeComponent();
 
-            originalContent = content;
-            innerContent = content;
+            this.resource = resource;
+
+            originalContent = resource.EntityContent;
+            innerContent = resource.EntityContent;
         }
 
         #endregion Constructor
+
+        public WebResource Resource => resource;
 
         #region Methods
 
@@ -75,6 +81,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             {
                 innerContent = Convert.ToBase64String(File.ReadAllBytes(filename));
                 SendSavedMessage();
+                resource.SetAsSaved();
             }
             catch (Exception error)
             {
@@ -86,16 +93,13 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                               {
-                                   Base64Content = innerContent,
-                                   IsDirty = (innerContent != originalContent),
-                                   Type = Enumerations.WebResourceType.Silverlight
-                               };
-
-            if (WebResourceUpdated != null)
             {
-                WebResourceUpdated(this, wrueArgs);
-            }
+                Base64Content = innerContent,
+                IsDirty = (innerContent != originalContent),
+                Type = Enumerations.WebResourceType.Silverlight
+            };
+
+            WebResourceUpdated?.Invoke(this, wrueArgs);
         }
 
         #endregion Methods

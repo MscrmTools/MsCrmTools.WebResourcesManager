@@ -313,12 +313,12 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             }));
 
             var resourcesToDisplay = WebResources.Where(w => txtSearch.Text.Length == 0 ||
-                                                             w.Entity.GetAttributeValue<string>("name")
-                                                                 .ToLower()
+                                                             w.ToString().ToLower()
                                                                  .Contains(txtSearch.Text.ToLower())
-                                                                 || chkSearchInContent.Checked && w.UpdatedContent.ToLower().Contains(txtSearch.Text.ToLower())
+                                                             || chkSearchInContent.Checked && w.UpdatedContent.ToLower()
+                                                                 .Contains(txtSearch.Text.ToLower())
 
-                                                                 ).ToList();
+            ).ToList();
 
             if (!resourcesToDisplay.Any() && txtSearch.Text.Length > 0)
             {
@@ -328,7 +328,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             foreach (var webResource in resourcesToDisplay)
             {
-                string[] nameParts = webResource.Entity.GetAttributeValue<string>("name").Split('/');
+                string[] nameParts = webResource.ToString().Split('/');
 
                 AddNode(nameParts, 0, tv, webResource);
             }
@@ -480,15 +480,14 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 }
                 else
                 {
-                    var resource = tag as WebResource;
-                    if (resource != null)
+                    if (tag is WebResource resource)
                     {
                         if (string.IsNullOrEmpty(resource.FilePath))
                         {
                             throw new Exception("Cannot refresh from disk if FilePath property is not set for the web resource");
                         }
 
-                        resource.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(resource.FilePath));
+                        resource.EntityContent = Convert.ToBase64String(File.ReadAllBytes(resource.FilePath));
                         resource.RefreshAssociatedContent();
                         tv_AfterSelect(tv, new TreeViewEventArgs(selectedItem));
                     }
@@ -538,11 +537,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         node.Tag = webResource;
                         webResource.Node = node;
                         webResource.ReinitStatus();
-                        //webResource.State = WebresourceState.None;
-                        webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
+                        //webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
                         webResource.WebresourceStateChanged += Wr_WebresourceStateChanged;
 
-                        int imageIndex = webResource.Entity.GetAttributeValue<OptionSetValue>("webresourcetype").Value + 1;
+                        int imageIndex = webResource.EntityType + 1;
                         node.ImageIndex = imageIndex;
                         node.SelectedImageIndex = imageIndex;
                     }
@@ -575,15 +573,14 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     // so it is stored in the Tag property for later usage
                     if (index == nameParts.Length - 1)
                     {
-                        int imageIndex = webResource.Entity.GetAttributeValue<OptionSetValue>("webresourcetype").Value + 1;
+                        int imageIndex = webResource.EntityType + 1;
                         node.ImageIndex = imageIndex;
                         node.SelectedImageIndex = imageIndex;
                         node.Tag = webResource;
 
                         webResource.Node = node;
                         webResource.ReinitStatus();
-                        //webResource.State = WebresourceState.None;
-                        webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
+                        //webResource.SyncedWithCrm = webResource.Entity != null && webResource.Entity.Contains("webresourceid");
                         webResource.WebresourceStateChanged += Wr_WebresourceStateChanged;
                     }
                     else
@@ -759,18 +756,17 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         /// <param name="onlyCheckedNodes">Define if only checked item should be returned</param>
         private void GetNodes(ICollection<TreeNode> nodes, object parent, bool onlyCheckedNodes)
         {
-            var tView = parent as TreeView;
-            if (tView != null)
+            if (parent is TreeView tView)
             {
                 foreach (TreeNode node in tView.Nodes)
                 {
                     if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
                     {
-                        var wr = node.Tag as WebResource;
-                        if (wr != null)
+                        if (node.Tag is WebResource wr)
                         {
                             string name = GetName(node);
-                            wr.Entity["name"] = name;
+
+                            wr.EntityName = name;
 
                             nodes.Add(node);
                         }
@@ -787,7 +783,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         if (node.Tag is WebResource)
                         {
                             string name = GetName(node);
-                            ((WebResource)node.Tag).Entity["name"] = name;
+                            ((WebResource)node.Tag).EntityName = name;
 
                             nodes.Add(node);
                         }
@@ -1007,7 +1003,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         else
                         {
                             var wr = (WebResource)subNodes[fiChild.Name].Tag;
-                            wr.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
+                            wr.EntityContent = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
                             wr.RefreshAssociatedContent();
                         }
                     }
@@ -1034,7 +1030,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             {
                 WebResourceUpdateRequested(this, new WebResourceUpdateRequestedEventArgs
                 {
-                    WebResources = webresources.Where(w => dialog.WebResourcesToUpdate.Contains(w.Entity.GetAttributeValue<string>("name"))).ToList(),
+                    WebResources = webresources.Where(w => dialog.WebResourcesToUpdate.Contains(w.EntityName)).ToList(),
                     Action = dialog.SelectedOption
                 });
 

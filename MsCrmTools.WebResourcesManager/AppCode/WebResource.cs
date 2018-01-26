@@ -27,21 +27,20 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
     public class WebResource
     {
+        private static readonly HashSet<string> extensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> validExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt", "svg", "resx" };
-        private static readonly HashSet<string> extensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
-
+        private Entity entity;
+        private string initialContent;
         private WebresourceState state;
 
         private string updatedContent;
-
-        private string initialContent;
 
         public WebResource(Entity webResource, string filePath)
         {
             AssociatedResources = new List<WebResource>();
             FilePath = filePath;
-            Entity = webResource;
+            entity = webResource;
             InitialBase64 = webResource.GetAttributeValue<string>("content");
             OriginalBase64 = webResource.GetAttributeValue<string>("content");
             initialContent = GetPlainText();
@@ -55,42 +54,99 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         public event EventHandler<WebresourceStateChangedArgs> WebresourceStateChanged;
 
-        public static bool IsValidExtension(string ext)
-        {
-            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
-            return validExtensions.Contains(ext);
-        }
-
-        /// <summary>
-        /// Map and TypeScript files are not valid to be loaded, but don't want to display as error either...
-        /// </summary>
-        /// <param name="ext">The ext.</param>
-        /// <returns></returns>
-        public static bool SkipErrorForInvalidExtension(string ext)
-        {
-            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
-            return validExtensions.Contains(ext) || (Options.Instance.PushTsMapFiles && extensionsToSkipLoadingErrorMessage.Contains(ext));
-        }
-
-        public static WebResource LoadWebResourceFromDisk(string fileName, string name, string displayName = null)
-        {
-            var entity = new Entity("webresource");
-            entity["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
-            entity["webresourcetype"] = new OptionSetValue(GetTypeFromExtension(Path.GetExtension(fileName)));
-            entity["name"] = name;
-            entity["displayname"] = displayName ?? name;
-            return new WebResource(entity, fileName);
-        }
-
         public List<WebResource> AssociatedResources { get; set; }
-        public Entity Entity { get; set; }
-        public string FilePath { get; set; }
-        public string InitialBase64 { get; set; }
-        public string OriginalBase64 { get; private set; }
 
-        public bool SyncedWithCrm { get; set; }
+        public string EntityContent
+        {
+            get => entity.GetAttributeValue<string>("content");
+            set
+            {
+                entity["content"] = value;
+                State = WebresourceState.Saved;
+            }
+        }
+
+        public string EntityDependencyXml
+        {
+            get => entity.GetAttributeValue<string>("dependencyxml");
+            set
+            {
+                entity["dependencyxml"] = value;
+                State = WebresourceState.Saved;
+            }
+        }
+
+        public string EntityDescription
+        {
+            get => entity.GetAttributeValue<string>("description");
+            set
+            {
+                entity["description"] = value;
+                State = WebresourceState.Saved;
+            }
+        }
+
+        public string EntityDisplayName
+        {
+            get => entity.GetAttributeValue<string>("displayname");
+            set
+            {
+                entity["displayname"] = value;
+                State = WebresourceState.Saved;
+            }
+        }
+
+        public int EntityLanguageCode
+        {
+            get => entity.GetAttributeValue<int>("languagecode");
+            set
+            {
+                if (value == 0)
+                {
+                    entity["languagecode"] = null;
+                }
+                else
+                {
+                    entity["languagecode"] = value;
+                }
+                State = WebresourceState.Saved;
+            }
+        }
+
+        public string EntityName
+        {
+            get => entity.GetAttributeValue<string>("name");
+            set
+            {
+                if (entity.GetAttributeValue<string>("name") != value)
+                {
+                    if (!string.IsNullOrEmpty(entity.GetAttributeValue<string>("name")))
+                    {
+                        State = WebresourceState.Saved;
+                    }
+
+                    entity["name"] = value;
+                }
+            }
+        }
+
+        public int EntityType => entity.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0;
+
+        public string FilePath { get; set; }
+
+        public Guid Id
+        {
+            get => entity.Id;
+            set => entity.Id = value;
+        }
+
+        public string InitialBase64 { get; set; }
+
+        public bool IsDirty => updatedContent != initialContent;
 
         public TreeNode Node { get; set; }
+
+        public string OriginalBase64 { get; private set; }
 
         public WebresourceState State
         {
@@ -159,26 +215,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
-        public string UpdatedContent
-        {
-            get { return updatedContent; }
-            set
-            {
-                updatedContent = value;
-
-                State = updatedContent != initialContent ? WebresourceState.Draft : WebresourceState.None;
-            }
-        }
-
-        public string DependencyXml
-        {
-            get => Entity.GetAttributeValue<string>("dependencyxml");
-            set
-            {
-                Entity["dependencyxml"] = value;
-                State = WebresourceState.Saved;
-            }
-        }
+        public bool SyncedWithCrm => entity.Id != Guid.Empty;
 
         public string UpdatedBase64Content
         {
@@ -188,32 +225,15 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
-        public bool IsDirty
+        public string UpdatedContent
         {
-            get { return updatedContent != initialContent; }
-        }
+            get { return updatedContent; }
+            set
+            {
+                updatedContent = value;
 
-        public void CancelChange()
-        {
-            UpdatedContent = initialContent;
-        }
-
-        public void Save()
-        {
-            initialContent = updatedContent;
-
-            byte[] bytes = Encoding.Default.GetBytes(initialContent);
-
-            InitialBase64 = Convert.ToBase64String(bytes);
-
-            Entity["content"] = InitialBase64;
-
-            State = WebresourceState.Saved;
-        }
-
-        public void ReinitStatus()
-        {
-            State = WebresourceState.None;
+                State = updatedContent != initialContent ? WebresourceState.Draft : WebresourceState.None;
+            }
         }
 
         public static int GetImageIndexFromExtension(string ext)
@@ -298,15 +318,100 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             return !regex.IsMatch(name);
         }
 
+        public static bool IsValidExtension(string ext)
+        {
+            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
+            return validExtensions.Contains(ext);
+        }
+
+        public static WebResource LoadWebResourceFromDisk(string fileName, string name, string displayName = null)
+        {
+            var entity = new Entity("webresource");
+            entity["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
+            entity["webresourcetype"] = new OptionSetValue(GetTypeFromExtension(Path.GetExtension(fileName)));
+            entity["name"] = name;
+            entity["displayname"] = displayName ?? name;
+            return new WebResource(entity, fileName);
+        }
+
+        /// <summary>
+        /// Map and TypeScript files are not valid to be loaded, but don't want to display as error either...
+        /// </summary>
+        /// <param name="ext">The ext.</param>
+        /// <returns></returns>
+        public static bool SkipErrorForInvalidExtension(string ext)
+        {
+            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
+            return validExtensions.Contains(ext) || (Options.Instance.PushTsMapFiles && extensionsToSkipLoadingErrorMessage.Contains(ext));
+        }
+
+        public void CancelChange()
+        {
+            UpdatedContent = initialContent;
+        }
+
+        public void Create(IOrganizationService service)
+        {
+            entity.Id = service.Create(entity);
+        }
+
+        public void Delete(IOrganizationService service)
+        {
+            if (entity.Id != Guid.Empty)
+            {
+                service.Delete(entity.LogicalName, entity.Id);
+            }
+        }
+
+        public void GetLatestVersion(IOrganizationService service)
+        {
+            var wrm = new WebResourceManager(service);
+            entity = wrm.RetrieveWebResource(entity.Id);
+            InitialBase64 = entity.GetAttributeValue<string>("content");
+
+            State = WebresourceState.None;
+        }
+
         public string GetPlainText()
         {
-            if (!Entity.Contains("content"))
+            if (!entity.Contains("content"))
             {
                 return string.Empty;
             }
 
-            byte[] b = Convert.FromBase64String(Entity.GetAttributeValue<string>("content"));
+            byte[] b = Convert.FromBase64String(entity.GetAttributeValue<string>("content"));
             return Encoding.Default.GetString(b);
+        }
+
+        public void RefreshAssociatedContent()
+        {
+            foreach (var associated in AssociatedResources)
+            {
+                associated.EntityContent = Convert.ToBase64String(File.ReadAllBytes(associated.FilePath));
+            }
+        }
+
+        public void ReinitStatus()
+        {
+            State = WebresourceState.None;
+        }
+
+        public void Save()
+        {
+            initialContent = updatedContent;
+
+            byte[] bytes = Encoding.Default.GetBytes(initialContent);
+
+            InitialBase64 = Convert.ToBase64String(bytes);
+
+            entity["content"] = InitialBase64;
+
+            State = WebresourceState.Saved;
+        }
+
+        public void SetAsSaved()
+        {
+            State = WebresourceState.Saved;
         }
 
         public WebResource ShowProperties(IOrganizationService service, int[] lcids, Control mainControl)
@@ -324,12 +429,14 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             return this;
         }
 
-        public void RefreshAssociatedContent()
+        public override string ToString()
         {
-            foreach (var associated in AssociatedResources)
-            {
-                associated.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(associated.FilePath));
-            }
+            return entity.GetAttributeValue<string>("name");
+        }
+
+        public void Update(IOrganizationService service)
+        {
+            service.Update(entity);
         }
 
         private void LoadAssociatedResources()
@@ -341,8 +448,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
 
             var mapPath = FilePath + ".map";
-            var name = Entity.GetAttributeValue<string>("name");
-            var displayName = Entity.GetAttributeValue<string>("displayname");
+            var name = entity.GetAttributeValue<string>("name");
+            var displayName = entity.GetAttributeValue<string>("displayname");
             if (File.Exists(mapPath))
             {
                 AssociatedResources.Add(LoadWebResourceFromDisk(mapPath, name + ".map", displayName + ".map"));
@@ -352,24 +459,6 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             {
                 AssociatedResources.Add(LoadWebResourceFromDisk(tsPath, Path.ChangeExtension(name, "ts"), Path.ChangeExtension(displayName, "ts")));
             }
-        }
-
-        internal void SetAsUpdated()
-        {
-            InitialBase64 = Entity.GetAttributeValue<string>("content");
-            OriginalBase64 = Entity.GetAttributeValue<string>("content");
-            State = WebresourceState.Updated;
-            SyncedWithCrm = true;
-        }
-
-        internal void SetAsSaved()
-        {
-            State = WebresourceState.Saved;
-        }
-
-        public override string ToString()
-        {
-            return Entity.GetAttributeValue<string>("name");
         }
     }
 }

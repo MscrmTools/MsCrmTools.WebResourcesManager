@@ -30,9 +30,9 @@ namespace MsCrmTools.WebResourcesManager.Forms
             toolStripComboBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             toolStripComboBox1.AutoCompleteSource = AutoCompleteSource.ListItems;
 
-            if (!string.IsNullOrEmpty(resource.DependencyXml))
+            if (!string.IsNullOrEmpty(resource.EntityDependencyXml))
             {
-                var xDoc = XDocument.Parse(resource.DependencyXml);
+                var xDoc = XDocument.Parse(resource.EntityDependencyXml);
 
                 foreach (XElement elt in xDoc.Descendants("Library"))
                 {
@@ -64,18 +64,18 @@ namespace MsCrmTools.WebResourcesManager.Forms
                             new XElement("Library",
                                 new XAttribute("name", ((WebResource)i.Tag).ToString()),
                                 new XAttribute("displayName",
-                                    ((WebResource)i.Tag).Entity.GetAttributeValue<string>("displayname") ?? ""),
+                                    ((WebResource)i.Tag).EntityDisplayName ?? ""),
                                 new XAttribute("languagecode",
-                                    ((WebResource)i.Tag).Entity.GetAttributeValue<int>("languagecode") == 0 ? "" : ((WebResource)i.Tag).Entity.GetAttributeValue<int>("languagecode").ToString()),
+                                    ((WebResource)i.Tag).EntityLanguageCode == 0 ? "" : ((WebResource)i.Tag).EntityLanguageCode.ToString()),
                                 new XAttribute("description",
-                                    ((WebResource)i.Tag).Entity.GetAttributeValue<string>("description") ?? "")
+                                    ((WebResource)i.Tag).EntityDescription ?? "")
                             )
                         )
                     )
                 )
             );
 
-            resource.DependencyXml = doc.ToString();
+            resource.EntityDependencyXml = doc.ToString();
             Close();
         }
 
@@ -97,9 +97,9 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (lvDependencies.Items.Cast<ListViewItem>().All(i => i.Text != text))
             {
                 var item = new ListViewItem(text) { Tag = addedResource };
-                item.SubItems.Add(addedResource.Entity.GetAttributeValue<string>("displayname"));
-                item.SubItems.Add(addedResource.Entity.GetAttributeValue<int>("languagecode") == 0 ? "" : CultureInfo.GetCultureInfo(addedResource.Entity.GetAttributeValue<int>("languagecode")).EnglishName);
-                item.SubItems.Add(addedResource.Entity.GetAttributeValue<string>("description"));
+                item.SubItems.Add(addedResource.EntityDisplayName);
+                item.SubItems.Add(addedResource.EntityLanguageCode == 0 ? "" : CultureInfo.GetCultureInfo(addedResource.EntityLanguageCode).EnglishName);
+                item.SubItems.Add(addedResource.EntityDescription);
                 lvDependencies.Items.Add(item);
             }
 

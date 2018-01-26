@@ -26,12 +26,12 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
             foreach (var webresource in webresources)
             {
-                lvWebresources.Items.Add(webresource.Entity.GetAttributeValue<string>("name"));
+                lvWebresources.Items.Add(webresource.ToString());
                 lvWebresources.Items[lvWebresources.Items.Count - 1].Checked = true;
             }
         }
 
-        public WebResourceUpdateOption SelectedOption {get;set;}
+        public WebResourceUpdateOption SelectedOption { get; set; }
 
         public List<string> WebResourcesToUpdate { get { return lvWebresources.CheckedItems.Cast<ListViewItem>().Select(e => e.Text).ToList(); } }
 
@@ -47,7 +47,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             {
                 SelectedOption = WebResourceUpdateOption.Update;
             }
-            else if(rdbUpdatePublish.Checked)
+            else if (rdbUpdatePublish.Checked)
             {
                 SelectedOption = WebResourceUpdateOption.UpdateAndPublish;
             }

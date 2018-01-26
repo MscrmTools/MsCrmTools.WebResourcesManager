@@ -17,7 +17,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
     {
         private readonly IOrganizationService service;
 
-        public UnusedWebResourcesListDialog(IEnumerable<Entity> unusedWebResources, IOrganizationService service)
+        public UnusedWebResourcesListDialog(IEnumerable<WebResource> unusedWebResources, IOrganizationService service)
         {
             InitializeComponent();
 
@@ -25,7 +25,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
             foreach (var wr in unusedWebResources)
             {
-                var item = new ListViewItem(wr["name"].ToString()) { Tag = wr };
+                var item = new ListViewItem(wr.EntityName) { Tag = wr };
                 lvWebResources.Items.Add(item);
             }
         }

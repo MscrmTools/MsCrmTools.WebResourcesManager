@@ -10,7 +10,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.Windows.Interop;
 using Svg;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
@@ -23,11 +22,6 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         #region Variables
 
         /// <summary>
-        /// Type of web resource
-        /// </summary>
-        private readonly Enumerations.WebResourceType innerType;
-
-        /// <summary>
         /// Base64 content of the web resource when loading this control
         /// </summary>
         private readonly string originalContent;
@@ -36,6 +30,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// Base64 content of the web resource
         /// </summary>
         private string innerContent;
+
+        private readonly WebResource resource;
 
         #endregion Variables
 
@@ -47,7 +43,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         #region Event Handlers
 
-        public event WebResourceUpdatedEventHandler WebResourceUpdated;
+        public event EventHandler<WebResourceUpdatedEventArgs> WebResourceUpdated;
 
         #endregion Event Handlers
 
@@ -56,18 +52,20 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// <summary>
         /// Initializes a new instance of class ImageControl
         /// </summary>
-        /// <param name="content">Base64 content of the web resource</param>
-        /// <param name="type">Web resource type</param>
-        public ImageControl(string content, Enumerations.WebResourceType type)
+        /// <param name="resource">Web resource</param>
+        public ImageControl(WebResource resource)
         {
             InitializeComponent();
 
-            innerType = type;
-            originalContent = content;
-            innerContent = content;
+            this.resource = resource;
+
+            originalContent = resource.EntityContent;
+            innerContent = resource.EntityContent;
         }
 
         #endregion Constructor
+
+        public WebResource Resource => resource;
 
         #region Handlers
 
@@ -80,7 +78,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 string imageBase64 = innerContent;
                 byte[] imageBytes = Convert.FromBase64String(imageBase64);
 
-                if (innerType == Enumerations.WebResourceType.Vector)
+                if (resource.EntityType == (int)Enumerations.WebResourceType.Vector)
                 {
                     using (MemoryStream ms = new MemoryStream(imageBytes))
                     {
@@ -149,7 +147,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
             catch (Exception error)
             {
-                MessageBox.Show("Custom : " + error.ToString());
+                MessageBox.Show("Custom : " + error);
             }
         }
 
@@ -164,7 +162,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public Enumerations.WebResourceType GetWebResourceType()
         {
-            return innerType;
+            return (Enumerations.WebResourceType)resource.EntityType;
         }
 
         public void ReplaceWithNewFile(string filename)
@@ -175,6 +173,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 ImageControl_Load(null, null);
 
                 SendSavedMessage();
+                resource.SetAsSaved();
             }
             catch (Exception error)
             {
@@ -188,14 +187,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             var wrueArgs = new WebResourceUpdatedEventArgs
             {
                 Base64Content = innerContent,
-                IsDirty = (innerContent != originalContent),
-                Type = innerType
+                IsDirty = innerContent != originalContent,
+                Type = (Enumerations.WebResourceType)resource.EntityType
             };
 
-            if (WebResourceUpdated != null)
-            {
-                WebResourceUpdated(this, wrueArgs);
-            }
+            WebResourceUpdated?.Invoke(this, wrueArgs);
         }
 
         #endregion Methods

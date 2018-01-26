@@ -28,6 +28,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// </summary>
         private string innerContent;
 
+        private readonly WebResource resource;
+
         #endregion Variables
 
         #region Delegates
@@ -38,7 +40,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         #region Event Handlers
 
-        public event WebResourceUpdatedEventHandler WebResourceUpdated;
+        public event EventHandler<WebResourceUpdatedEventArgs> WebResourceUpdated;
 
         #endregion Event Handlers
 
@@ -48,15 +50,19 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// Initializes a new instance of class IconControl
         /// </summary>
         /// <param name="resource">Base64 content of the web resource</param>
-        public IconControl(string content)
+        public IconControl(WebResource resource)
         {
             InitializeComponent();
 
-            originalContent = content;
-            innerContent = content;
+            this.resource = resource;
+
+            originalContent = resource.EntityContent;
+            innerContent = resource.EntityContent;
         }
 
         #endregion Constructor
+
+        public WebResource Resource => resource;
 
         #region Handlers
 
@@ -115,6 +121,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 Icon_Load(null, null);
 
                 SendSavedMessage();
+
+                resource.SetAsSaved();
             }
             catch (Exception error)
             {
@@ -126,11 +134,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                                                       {
-                                                           Base64Content = innerContent,
-                                                           IsDirty = (innerContent != originalContent),
-                                                           Type = Enumerations.WebResourceType.Ico
-                                                       };
+            {
+                Base64Content = innerContent,
+                IsDirty = (innerContent != originalContent),
+                Type = Enumerations.WebResourceType.Ico
+            };
 
             if (WebResourceUpdated != null)
             {

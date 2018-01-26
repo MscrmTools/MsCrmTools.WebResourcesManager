@@ -77,20 +77,11 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (!string.IsNullOrEmpty(currentWebResource.FilePath))
                 txtPath.Text = currentWebResource.FilePath;
 
-            if (currentWebResource.Entity.Contains("name"))
-                txtName.Text = currentWebResource.Entity["name"].ToString();
-
-            if (currentWebResource.Entity.Contains("displayname"))
-                txtDisplayName.Text = currentWebResource.Entity["displayname"].ToString();
-
-            if (currentWebResource.Entity.Contains("description"))
-                txtDescription.Text = currentWebResource.Entity["description"].ToString();
-
-            if (currentWebResource.Entity.Contains("languagecode"))
-            {
-                cbbLanguage.SelectedItem = cbbLanguage.Items.Cast<Language>()
-                    .FirstOrDefault(l => l.Lcid == currentWebResource.Entity.GetAttributeValue<int>("languagecode"));
-            }
+            txtName.Text = currentWebResource.ToString();
+            txtDisplayName.Text = currentWebResource.EntityDisplayName;
+            txtDescription.Text = currentWebResource.EntityDescription;
+            cbbLanguage.SelectedItem = cbbLanguage.Items.Cast<Language>()
+                .FirstOrDefault(l => l.Lcid == currentWebResource.EntityLanguageCode);
 
             chkSynced.Checked = currentWebResource.SyncedWithCrm;
         }
@@ -104,9 +95,9 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            currentWebResource.Entity["displayname"] = txtDisplayName.Text;
-            currentWebResource.Entity["description"] = txtDescription.Text;
-            currentWebResource.Entity["languagecode"] = ((Language)cbbLanguage.SelectedItem).Lcid;
+            currentWebResource.EntityDisplayName = txtDisplayName.Text;
+            currentWebResource.EntityDescription = txtDescription.Text;
+            currentWebResource.EntityLanguageCode = ((Language)cbbLanguage.SelectedItem)?.Lcid ?? 0;
 
             DialogResult = DialogResult.OK;
         }

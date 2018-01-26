@@ -37,11 +37,15 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         private ResXResourceReader rsxr;
 
-        public ResourceControl(string content)
+        private readonly WebResource resource;
+
+        public ResourceControl(WebResource resource)
         {
             InitializeComponent();
 
-            byte[] b = Convert.FromBase64String(content);
+            this.resource = resource;
+
+            byte[] b = Convert.FromBase64String(resource.EntityContent);
             innerContent = Encoding.UTF8.GetString(b);
             originalContent = innerContent;
             innerType = Enumerations.WebResourceType.Resx;
@@ -75,6 +79,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         public event EventHandler<WebResourceUpdatedEventArgs> WebResourceUpdated;
 
         #endregion Event Handlers
+
+        public WebResource Resource => resource;
 
         public string GetBase64WebResourceContent()
         {
@@ -113,6 +119,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 }
 
                 SendSavedMessage();
+                resource.SetAsSaved();
             }
             catch (Exception error)
             {

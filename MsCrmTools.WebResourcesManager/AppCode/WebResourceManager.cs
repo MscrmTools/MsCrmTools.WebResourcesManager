@@ -61,7 +61,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 var request = new AddSolutionComponentRequest
                 {
                     AddRequiredComponents = false,
-                    ComponentId = resource.Entity.Id,
+                    ComponentId = resource.Id,
                     ComponentType = SolutionComponentType.WebResource,
                     SolutionUniqueName = solutionUniqueName
                 };
@@ -122,12 +122,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
                 foreach (WebResource resource in resources)
                 {
-                    idsXml += string.Format("<webresource>{0}</webresource>", resource.Entity.Id.ToString("B"));
+                    idsXml += $"<webresource>{resource.Id:B}</webresource>";
                 }
 
                 var pxReq1 = new PublishXmlRequest
                 {
-                    ParameterXml = string.Format("<importexportxml><webresources>{0}</webresources></importexportxml>", idsXml)
+                    ParameterXml = $"<importexportxml><webresources>{idsXml}</webresources></importexportxml>"
                 };
 
                 innerService.Execute(pxReq1);
@@ -135,7 +135,6 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 foreach (var resource in resources)
                 {
                     resource.ReinitStatus();
-                    resource.SyncedWithCrm = true;
                 }
             }
             catch (Exception error)
@@ -179,7 +178,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
                 if (collection.Entities.Count > 1)
                 {
-                    throw new Exception(string.Format("there are more than one web resource with name '{0}'", name));
+                    throw new Exception($"there are more than one web resource with name '{name}'");
                 }
 
                 return collection.Entities.FirstOrDefault();
@@ -263,8 +262,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 else
                 {
                     var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = new ColumnSet(true) };
-                    qba.Attributes.AddRange(new[] { "solutionid", "componenttype" });
-                    qba.Values.AddRange(new object[] { solutionId, 61 });
+                    qba.Attributes.AddRange("solutionid", "componenttype");
+                    qba.Values.AddRange(solutionId, 61);
 
                     var components = innerService.RetrieveMultiple(qba).Entities;
 
@@ -331,40 +330,50 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         /// <summary>
         /// Updates the provided web resource
         /// </summary>
-        /// <param name="script">Web resource to update</param>
+        /// <param name="wr">Web resource to update</param>
         internal void UpdateWebResource(WebResource wr)
         {
             try
             {
-                var script = wr.Entity;
-
-                if (!script.Contains("webresourceid"))
+                if (wr.Id == Guid.Empty)
                 {
-                    Entity existingEntity = RetrieveWebResource(script["name"].ToString());
+                    Entity existingEntity = RetrieveWebResource(wr.ToString());
 
                     if (existingEntity == null)
                     {
-                        script.Id = CreateWebResource(script);
+                        wr.Create(innerService);
                     }
                     else
                     {
-                        script.Id = existingEntity.Id;
+                        wr.Id = existingEntity.Id;
 
-                        if (!script.Contains("displayname") && existingEntity.Contains("displayname"))
-                            script["displayname"] = existingEntity["displayname"];
+                        if (existingEntity.Contains("displayname") && string.IsNullOrEmpty(wr.EntityDisplayName))
+                        {
+                            wr.EntityDisplayName = existingEntity.GetAttributeValue<string>("displayname");
+                        }
 
-                        if (!script.Contains("description") && existingEntity.Contains("description"))
-                            script["description"] = existingEntity["description"];
+                        if (existingEntity.Contains("description") && string.IsNullOrEmpty(wr.EntityDescription))
+                        {
+                            wr.EntityDescription = existingEntity.GetAttributeValue<string>("description");
+                        }
 
-                        innerService.Update(script);
+                        if (existingEntity.Contains("dependencyxml") && string.IsNullOrEmpty(wr.EntityDependencyXml))
+                        {
+                            wr.EntityDependencyXml = existingEntity.GetAttributeValue<string>("dependencyxml");
+                        }
+
+                        if (existingEntity.Contains("languagecode") && wr.EntityLanguageCode == 0)
+                        {
+                            wr.EntityLanguageCode = existingEntity.GetAttributeValue<int>("languagecode");
+                        }
+
+                        wr.Update(innerService);
                     }
                 }
                 else
                 {
-                    innerService.Update(script);
+                    wr.Update(innerService);
                 }
-
-                wr.SetAsUpdated();
             }
             catch (Exception error)
             {
