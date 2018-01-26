@@ -112,6 +112,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 {
                     case WebresourceState.None:
                     case WebresourceState.Published:
+                        if (Node.ImageIndex >= 14)
+                        {
+                            Node.ImageIndex -= 14;
+                            Node.SelectedImageIndex -= 14;
+                        }
+
                         Node.ForeColor = Color.Black;
                         WebresourceStateChanged?.Invoke(this, new WebresourceStateChangedArgs(value));
                         break;
@@ -139,6 +145,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         if (tempNode.Nodes.Cast<TreeNode>().All(t => t.ForeColor != Color.Blue))
                         {
                             tempNode.ForeColor = Node.ForeColor;
+                        }
+
+                        if (tempNode.Nodes.Cast<TreeNode>().All(t => t.ImageIndex < 14) && tempNode.ImageIndex >= 14)
+                        {
+                            tempNode.ImageIndex -= 14;
+                            tempNode.SelectedImageIndex -= 14;
                         }
                     }
 
