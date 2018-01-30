@@ -1472,8 +1472,8 @@ namespace MsCrmTools.WebResourcesManager
                     break;
             }
 
-            tsmiSetDependencies.Visible = ConnectionDetail.OrganizationMajorVersion >= 9;
-            tssDependencies.Visible = ConnectionDetail.OrganizationMajorVersion >= 9;
+            tsmiSetDependencies.Visible = ConnectionDetail?.OrganizationMajorVersion >= 9;
+            tssDependencies.Visible = ConnectionDetail?.OrganizationMajorVersion >= 9;
 
             if (webresourceTreeView1.SelectedNode != null)
             {
