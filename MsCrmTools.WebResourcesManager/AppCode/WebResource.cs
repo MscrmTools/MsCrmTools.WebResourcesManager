@@ -437,6 +437,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public void Update(IOrganizationService service)
         {
             service.Update(entity);
+
+            OriginalBase64 = entity.GetAttributeValue<string>("content");
         }
 
         private void LoadAssociatedResources()
