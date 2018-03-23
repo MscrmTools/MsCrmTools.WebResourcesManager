@@ -50,6 +50,8 @@
 
             this.BlankState();
 
+            s = string.IsNullOrWhiteSpace(s) ? string.Empty : s;
+
             while (s.Length != 0 && (s[0] == ' ' || s[0] == '\t'))
             {
                 this.PreindentString += s[0];
@@ -99,6 +101,8 @@
 
         private void Append(string s)
         {
+            s = string.IsNullOrWhiteSpace(s) ? string.Empty : s;
+
             if (s == " ")
             {
                 // do not add just a single space after the // comment, ever
