@@ -68,7 +68,8 @@ namespace MsCrmTools.WebResourcesManager.Forms
                                 new XAttribute("languagecode",
                                     ((WebResource)i.Tag).EntityLanguageCode == 0 ? "" : ((WebResource)i.Tag).EntityLanguageCode.ToString()),
                                 new XAttribute("description",
-                                    ((WebResource)i.Tag).EntityDescription ?? "")
+                                    ((WebResource)i.Tag).EntityDescription ?? ""),
+                                new XAttribute("libraryUniqueId", Guid.NewGuid().ToString())
                             )
                         )
                     )
