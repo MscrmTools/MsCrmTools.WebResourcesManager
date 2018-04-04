@@ -48,8 +48,12 @@ namespace MscrmTools.WebResourcesManager.UserControls
             this.resource = resource;
             this.options = options;
 
-            byte[] b = Convert.FromBase64String(resource.EntityContent);
-            innerContent = Encoding.UTF8.GetString(b);
+            innerContent = string.Empty;
+            if (!string.IsNullOrWhiteSpace(resource.EntityContent))
+            {
+                byte[] b = Convert.FromBase64String(resource.EntityContent);
+                innerContent = Encoding.UTF8.GetString(b);
+            }
             originalContent = innerContent;
             //innerType = type;
 
