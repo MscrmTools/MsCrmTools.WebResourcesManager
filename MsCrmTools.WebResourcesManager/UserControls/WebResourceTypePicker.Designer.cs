@@ -1,4 +1,4 @@
-﻿namespace MsCrmTools.WebResourcesManager.UserControls
+﻿namespace MscrmTools.WebresourcesManager.UserControls
 {
     partial class WebResourceTypePicker
     {
@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkResx = new System.Windows.Forms.CheckBox();
+            this.chkSvg = new System.Windows.Forms.CheckBox();
             this.chkAll = new System.Windows.Forms.CheckBox();
             this.chkIco = new System.Windows.Forms.CheckBox();
             this.chkXsl = new System.Windows.Forms.CheckBox();
@@ -40,16 +42,11 @@
             this.chkJavaScript = new System.Windows.Forms.CheckBox();
             this.chkCss = new System.Windows.Forms.CheckBox();
             this.chkHtml = new System.Windows.Forms.CheckBox();
-            this.chkSvg = new System.Windows.Forms.CheckBox();
-            this.chkResx = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.chkResx);
             this.groupBox2.Controls.Add(this.chkSvg);
             this.groupBox2.Controls.Add(this.chkAll);
@@ -63,22 +60,55 @@
             this.groupBox2.Controls.Add(this.chkJavaScript);
             this.groupBox2.Controls.Add(this.chkCss);
             this.groupBox2.Controls.Add(this.chkHtml);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(404, 122);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox2.Size = new System.Drawing.Size(606, 188);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Load only these file types";
+            // 
+            // chkResx
+            // 
+            this.chkResx.AutoSize = true;
+            this.chkResx.Checked = true;
+            this.chkResx.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkResx.Enabled = false;
+            this.chkResx.Location = new System.Drawing.Point(507, 145);
+            this.chkResx.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkResx.Name = "chkResx";
+            this.chkResx.Size = new System.Drawing.Size(80, 24);
+            this.chkResx.TabIndex = 12;
+            this.chkResx.Tag = ".resx";
+            this.chkResx.Text = "RESX";
+            this.chkResx.UseVisualStyleBackColor = true;
+            // 
+            // chkSvg
+            // 
+            this.chkSvg.AutoSize = true;
+            this.chkSvg.Checked = true;
+            this.chkSvg.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSvg.Enabled = false;
+            this.chkSvg.Location = new System.Drawing.Point(507, 109);
+            this.chkSvg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkSvg.Name = "chkSvg";
+            this.chkSvg.Size = new System.Drawing.Size(70, 24);
+            this.chkSvg.TabIndex = 11;
+            this.chkSvg.Tag = ".svg";
+            this.chkSvg.Text = "SVG";
+            this.chkSvg.UseVisualStyleBackColor = true;
             // 
             // chkAll
             // 
             this.chkAll.AutoSize = true;
             this.chkAll.Checked = true;
             this.chkAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAll.Location = new System.Drawing.Point(5, 25);
-            this.chkAll.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkAll.Location = new System.Drawing.Point(8, 38);
+            this.chkAll.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.chkAll.Name = "chkAll";
-            this.chkAll.Size = new System.Drawing.Size(37, 17);
+            this.chkAll.Size = new System.Drawing.Size(52, 24);
             this.chkAll.TabIndex = 10;
             this.chkAll.Text = "All";
             this.chkAll.UseVisualStyleBackColor = true;
@@ -90,9 +120,10 @@
             this.chkIco.Checked = true;
             this.chkIco.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkIco.Enabled = false;
-            this.chkIco.Location = new System.Drawing.Point(338, 47);
+            this.chkIco.Location = new System.Drawing.Point(507, 72);
+            this.chkIco.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkIco.Name = "chkIco";
-            this.chkIco.Size = new System.Drawing.Size(44, 17);
+            this.chkIco.Size = new System.Drawing.Size(63, 24);
             this.chkIco.TabIndex = 9;
             this.chkIco.Tag = ".ico";
             this.chkIco.Text = "ICO";
@@ -104,9 +135,10 @@
             this.chkXsl.Checked = true;
             this.chkXsl.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkXsl.Enabled = false;
-            this.chkXsl.Location = new System.Drawing.Point(242, 94);
+            this.chkXsl.Location = new System.Drawing.Point(363, 145);
+            this.chkXsl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkXsl.Name = "chkXsl";
-            this.chkXsl.Size = new System.Drawing.Size(46, 17);
+            this.chkXsl.Size = new System.Drawing.Size(66, 24);
             this.chkXsl.TabIndex = 8;
             this.chkXsl.Tag = ".xsl|.xslt";
             this.chkXsl.Text = "XSL";
@@ -118,9 +150,10 @@
             this.chkXap.Checked = true;
             this.chkXap.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkXap.Enabled = false;
-            this.chkXap.Location = new System.Drawing.Point(242, 71);
+            this.chkXap.Location = new System.Drawing.Point(363, 109);
+            this.chkXap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkXap.Name = "chkXap";
-            this.chkXap.Size = new System.Drawing.Size(47, 17);
+            this.chkXap.Size = new System.Drawing.Size(67, 24);
             this.chkXap.TabIndex = 7;
             this.chkXap.Tag = ".xap";
             this.chkXap.Text = "XAP";
@@ -132,9 +165,10 @@
             this.chkGif.Checked = true;
             this.chkGif.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkGif.Enabled = false;
-            this.chkGif.Location = new System.Drawing.Point(242, 47);
+            this.chkGif.Location = new System.Drawing.Point(363, 72);
+            this.chkGif.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkGif.Name = "chkGif";
-            this.chkGif.Size = new System.Drawing.Size(43, 17);
+            this.chkGif.Size = new System.Drawing.Size(63, 24);
             this.chkGif.TabIndex = 6;
             this.chkGif.Tag = ".gif";
             this.chkGif.Text = "GIF";
@@ -146,9 +180,10 @@
             this.chkJpeg.Checked = true;
             this.chkJpeg.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkJpeg.Enabled = false;
-            this.chkJpeg.Location = new System.Drawing.Point(116, 94);
+            this.chkJpeg.Location = new System.Drawing.Point(174, 145);
+            this.chkJpeg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkJpeg.Name = "chkJpeg";
-            this.chkJpeg.Size = new System.Drawing.Size(78, 17);
+            this.chkJpeg.Size = new System.Drawing.Size(112, 24);
             this.chkJpeg.TabIndex = 5;
             this.chkJpeg.Tag = ".jpg|.jpeg";
             this.chkJpeg.Text = "JPG/JPEG";
@@ -160,9 +195,10 @@
             this.chkPng.Checked = true;
             this.chkPng.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkPng.Enabled = false;
-            this.chkPng.Location = new System.Drawing.Point(116, 71);
+            this.chkPng.Location = new System.Drawing.Point(174, 109);
+            this.chkPng.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkPng.Name = "chkPng";
-            this.chkPng.Size = new System.Drawing.Size(49, 17);
+            this.chkPng.Size = new System.Drawing.Size(69, 24);
             this.chkPng.TabIndex = 4;
             this.chkPng.Tag = ".png";
             this.chkPng.Text = "PNG";
@@ -174,9 +210,10 @@
             this.chkXml.Checked = true;
             this.chkXml.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkXml.Enabled = false;
-            this.chkXml.Location = new System.Drawing.Point(116, 47);
+            this.chkXml.Location = new System.Drawing.Point(174, 72);
+            this.chkXml.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkXml.Name = "chkXml";
-            this.chkXml.Size = new System.Drawing.Size(48, 17);
+            this.chkXml.Size = new System.Drawing.Size(68, 24);
             this.chkXml.TabIndex = 3;
             this.chkXml.Tag = ".xml";
             this.chkXml.Text = "XML";
@@ -188,9 +225,10 @@
             this.chkJavaScript.Checked = true;
             this.chkJavaScript.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkJavaScript.Enabled = false;
-            this.chkJavaScript.Location = new System.Drawing.Point(6, 94);
+            this.chkJavaScript.Location = new System.Drawing.Point(9, 145);
+            this.chkJavaScript.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkJavaScript.Name = "chkJavaScript";
-            this.chkJavaScript.Size = new System.Drawing.Size(38, 17);
+            this.chkJavaScript.Size = new System.Drawing.Size(54, 24);
             this.chkJavaScript.TabIndex = 2;
             this.chkJavaScript.Tag = ".js|.json";
             this.chkJavaScript.Text = "JS";
@@ -202,9 +240,10 @@
             this.chkCss.Checked = true;
             this.chkCss.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCss.Enabled = false;
-            this.chkCss.Location = new System.Drawing.Point(6, 71);
+            this.chkCss.Location = new System.Drawing.Point(9, 109);
+            this.chkCss.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkCss.Name = "chkCss";
-            this.chkCss.Size = new System.Drawing.Size(47, 17);
+            this.chkCss.Size = new System.Drawing.Size(68, 24);
             this.chkCss.TabIndex = 1;
             this.chkCss.Tag = ".css";
             this.chkCss.Text = "CSS";
@@ -216,49 +255,23 @@
             this.chkHtml.Checked = true;
             this.chkHtml.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkHtml.Enabled = false;
-            this.chkHtml.Location = new System.Drawing.Point(6, 47);
+            this.chkHtml.Location = new System.Drawing.Point(9, 72);
+            this.chkHtml.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkHtml.Name = "chkHtml";
-            this.chkHtml.Size = new System.Drawing.Size(56, 17);
+            this.chkHtml.Size = new System.Drawing.Size(78, 24);
             this.chkHtml.TabIndex = 0;
             this.chkHtml.Tag = ".html|.htm";
             this.chkHtml.Text = "HTML";
             this.chkHtml.UseVisualStyleBackColor = true;
             // 
-            // chkSvg
-            // 
-            this.chkSvg.AutoSize = true;
-            this.chkSvg.Checked = true;
-            this.chkSvg.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSvg.Enabled = false;
-            this.chkSvg.Location = new System.Drawing.Point(338, 71);
-            this.chkSvg.Name = "chkSvg";
-            this.chkSvg.Size = new System.Drawing.Size(48, 17);
-            this.chkSvg.TabIndex = 11;
-            this.chkSvg.Tag = ".svg";
-            this.chkSvg.Text = "SVG";
-            this.chkSvg.UseVisualStyleBackColor = true;
-            // 
-            // chkResx
-            // 
-            this.chkResx.AutoSize = true;
-            this.chkResx.Checked = true;
-            this.chkResx.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkResx.Enabled = false;
-            this.chkResx.Location = new System.Drawing.Point(338, 94);
-            this.chkResx.Name = "chkResx";
-            this.chkResx.Size = new System.Drawing.Size(55, 17);
-            this.chkResx.TabIndex = 12;
-            this.chkResx.Tag = ".resx";
-            this.chkResx.Text = "RESX";
-            this.chkResx.UseVisualStyleBackColor = true;
-            // 
             // WebResourceTypePicker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox2);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "WebResourceTypePicker";
-            this.Size = new System.Drawing.Size(404, 122);
+            this.Size = new System.Drawing.Size(606, 188);
             this.Load += new System.EventHandler(this.WebResourceTypePicker_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();

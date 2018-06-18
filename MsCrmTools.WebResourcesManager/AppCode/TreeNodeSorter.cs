@@ -1,13 +1,8 @@
-﻿// PROJECT : MsCrmTools.WebResourcesManager
-// This project was developed by Tanguy Touzard
-// CODEPLEX: http://xrmtoolbox.codeplex.com
-// BLOG: http://mscrmtools.blogspot.com
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager
+namespace MscrmTools.WebresourcesManager.AppCode
 {
     // Create a node sorter that implements the IComparer interface.
     public class NodeSorter : IComparer
@@ -23,7 +18,7 @@ namespace MsCrmTools.WebResourcesManager
             {
                 if (tx.ImageIndex == ty.ImageIndex)
                 {
-                    return String.CompareOrdinal(tx.Text, ty.Text);
+                    return String.CompareOrdinal(tx.Text.ToLower(), ty.Text.ToLower());
                 }
 
                 if (tx.ImageIndex == 0)
@@ -41,7 +36,7 @@ namespace MsCrmTools.WebResourcesManager
                     return 1;
                 }
 
-                return String.CompareOrdinal(tx.Text, ty.Text);
+                return String.CompareOrdinal(tx.Text.ToLower(), ty.Text.ToLower());
             }
 
             return 0;

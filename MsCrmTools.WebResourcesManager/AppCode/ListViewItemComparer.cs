@@ -1,13 +1,8 @@
-﻿// PROJECT : MsCrmTools.WebResourcesManager
-// This project was developed by Tanguy Touzard
-// CODEPLEX: http://xrmtoolbox.codeplex.com
-// BLOG: http://mscrmtools.blogspot.com
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager.AppCode
+namespace MscrmTools.WebresourcesManager.AppCode
 {
     /// <summary>
     /// Compares two listview items for sorting

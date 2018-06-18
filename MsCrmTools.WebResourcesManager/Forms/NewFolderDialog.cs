@@ -1,26 +1,17 @@
-﻿// PROJECT : MsCrmTools.WebResourcesManager
-// This project was developed by Tanguy Touzard
-// CODEPLEX: http://xrmtoolbox.codeplex.com
-// BLOG: http://mscrmtools.blogspot.com
-
-using System;
-using System.Text.RegularExpressions;
+﻿using System;
 using System.Windows.Forms;
+using MscrmTools.WebresourcesManager.AppCode;
 
-namespace MsCrmTools.WebResourcesManager.Forms
+namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class NewFolderDialog : Form
     {
-        private readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
-
-        private string folderName;
-
         public NewFolderDialog()
         {
             InitializeComponent();
         }
 
-        public string FolderName { get { return folderName; } }
+        public string FolderName { get; private set; }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -30,16 +21,16 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private void btnValidate_Click(object sender, EventArgs e)
         {
-            if (txtFolderName.Text.Length > 0 && !inValidWrNameRegex.IsMatch(txtFolderName.Text))
+            if (txtFolderName.Text.Length > 0 && !Webresource.InValidWrNameRegex.IsMatch(txtFolderName.Text))
             {
-                folderName = txtFolderName.Text;
+                FolderName = txtFolderName.Text;
 
                 DialogResult = DialogResult.OK;
                 Close();
             }
             else
             {
-                MessageBox.Show(this, "Please provide a valid folder name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, @"Please type a valid folder name!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

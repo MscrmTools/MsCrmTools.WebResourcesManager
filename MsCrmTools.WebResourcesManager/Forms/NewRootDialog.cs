@@ -1,13 +1,8 @@
-﻿// PROJECT : MsCrmTools.WebResourcesManager
-// This project was developed by Tanguy Touzard
-// CODEPLEX: http://xrmtoolbox.codeplex.com
-// BLOG: http://mscrmtools.blogspot.com
-
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager.Forms
+namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class NewRootDialog : Form
     {
@@ -20,7 +15,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             InitializeComponent();
         }
 
-        public string RootName { get { return rootName; } }
+        public string RootName => rootName;
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -32,14 +27,14 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             if (txtRootName.Text.Length > 0 && !inValidWrNameRegex.IsMatch(txtRootName.Text))
             {
-                rootName = string.Format("{0}_", txtRootName.Text);
+                rootName = $"{txtRootName.Text}_";
 
                 DialogResult = DialogResult.OK;
                 Close();
             }
             else
             {
-                MessageBox.Show(this, "Please provide a valid root name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, @"Please provide a valid root name!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -53,7 +48,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private void txtFolderName_TextChanged(object sender, EventArgs e)
         {
-            label2.Text = string.Format("Final root name: {0}_", txtRootName.Text);
+            label2.Text = $@"Final root name: {txtRootName.Text}_";
         }
     }
 }

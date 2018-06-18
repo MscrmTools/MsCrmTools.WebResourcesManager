@@ -1,21 +1,12 @@
-﻿// PROJECT : MsCrmTools.WebResourcesManager
-// This project was developed by Tanguy Touzard
-// CODEPLEX: http://xrmtoolbox.codeplex.com
-// BLOG: http://mscrmtools.blogspot.com
-
-using System;
+﻿using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using MscrmTools.WebresourcesManager.AppCode;
 
-namespace MsCrmTools.WebResourcesManager.Forms
+namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class RenameWebResourceDialog : Form
     {
-        private readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
-
-        private string _webResourceName;
-
         public RenameWebResourceDialog(string name)
         {
             InitializeComponent();
@@ -23,7 +14,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             txtWebResourceName.Text = name;
         }
 
-        public string WebResourceName { get { return _webResourceName; } }
+        public string WebResourceName { get; private set; }
 
         private void BtnCancelClick(object sender, EventArgs e)
         {
@@ -34,17 +25,17 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void BtnValidateClick(object sender, EventArgs e)
         {
             if (txtWebResourceName.Text.Length > 0
-                && !inValidWrNameRegex.IsMatch(txtWebResourceName.Text)
+                && !Webresource.InValidWrNameRegex.IsMatch(txtWebResourceName.Text)
                 && txtWebResourceName.Text.Split('/').All(x => x.Length != 0))
             {
-                _webResourceName = txtWebResourceName.Text;
+                WebResourceName = txtWebResourceName.Text;
 
                 DialogResult = DialogResult.OK;
                 Close();
             }
             else
             {
-                MessageBox.Show(this, "Please provide a valid web resource name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, @"Please type a valid webresource name!", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -58,7 +49,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private void TxtWebResourceNameTextChanged(object sender, EventArgs e)
         {
-            label2.Text = string.Format("Final file name: {0}", txtWebResourceName.Text);
+            label2.Text = $@"Final file name: {txtWebResourceName.Text}";
         }
     }
 }

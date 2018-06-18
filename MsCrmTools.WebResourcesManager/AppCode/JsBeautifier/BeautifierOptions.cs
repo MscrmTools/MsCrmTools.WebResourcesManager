@@ -4,18 +4,18 @@
     {
         public BeautifierOptions()
         {
-            this.IndentSize = 4;
-            this.IndentChar = ' ';
-            this.IndentWithTabs = false;
-            this.PreserveNewlines = true;
-            this.MaxPreserveNewlines = 10.0f;
-            this.JslintHappy = false;
-            this.BraceStyle = Jsbeautifier.BraceStyle.Collapse;
-            this.KeepArrayIndentation = false;
-            this.KeepFunctionIndentation = false;
-            this.EvalCode = false;
+            IndentSize = 4;
+            IndentChar = ' ';
+            IndentWithTabs = false;
+            PreserveNewlines = true;
+            MaxPreserveNewlines = 10.0f;
+            JslintHappy = false;
+            BraceStyle = BraceStyle.Collapse;
+            KeepArrayIndentation = false;
+            KeepFunctionIndentation = false;
+            EvalCode = false;
             //this.UnescapeStrings = false;
-            this.BreakChainedMethods = false;
+            BreakChainedMethods = false;
         }
 
         public BraceStyle BraceStyle { get; set; }

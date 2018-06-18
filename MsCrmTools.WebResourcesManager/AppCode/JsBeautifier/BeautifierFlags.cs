@@ -4,20 +4,20 @@
     {
         public BeautifierFlags(string mode)
         {
-            this.PreviousMode = "BLOCK";
-            this.Mode = mode;
-            this.VarLine = false;
-            this.VarLineTainted = false;
-            this.VarLineReindented = false;
-            this.InHtmlComment = false;
-            this.IfLine = false;
-            this.ChainExtraIndentation = 0;
-            this.InCase = false;
-            this.InCaseStatement = false;
-            this.CaseBody = false;
-            this.EatNextSpace = false;
-            this.IndentationLevel = 0;
-            this.TernaryDepth = 0;
+            PreviousMode = "BLOCK";
+            Mode = mode;
+            VarLine = false;
+            VarLineTainted = false;
+            VarLineReindented = false;
+            InHtmlComment = false;
+            IfLine = false;
+            ChainExtraIndentation = 0;
+            InCase = false;
+            InCaseStatement = false;
+            CaseBody = false;
+            EatNextSpace = false;
+            IndentationLevel = 0;
+            TernaryDepth = 0;
         }
 
         public bool CaseBody { get; set; }

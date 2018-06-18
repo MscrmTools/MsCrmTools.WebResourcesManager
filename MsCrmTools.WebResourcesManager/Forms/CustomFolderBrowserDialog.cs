@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager.Forms
+namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class CustomFolderBrowserDialog : Form
     {
@@ -16,18 +16,24 @@ namespace MsCrmTools.WebResourcesManager.Forms
             {
                 webResourceTypePicker1.Visible = false;
                 Size = new Size(500, 200);
-                lblTitle.Text = "Save folder";
-                Text = "Save web resources";
+                lblTitle.Text = @"Save folder";
+                Text = @"Save web resources";
 
                 Invalidate();
             }
             else if (!showExtensionOptions)
             {
                 webResourceTypePicker1.Visible = false;
-                lblTitle.Text = "Folder";
+                lblTitle.Text = @"Folder";
 
                 Invalidate();
             }
+        }
+
+        public sealed override string Text
+        {
+            get => base.Text;
+            set => base.Text = value;
         }
 
         public List<string> ExtensionsToLoad { get; private set; }
@@ -37,7 +43,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             var fbd = new FolderBrowserDialog
             {
-                Description = "Select the folder where the files are located",
+                Description = @"Select the folder where the files are located",
                 ShowNewFolderButton = true
             };
 
@@ -58,7 +64,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         {
             if (!Directory.Exists(txtFolderPath.Text))
             {
-                MessageBox.Show(this, "Invalid folder specified!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, @"Invalid folder specified!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

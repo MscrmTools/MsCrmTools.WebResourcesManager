@@ -1,4 +1,4 @@
-﻿namespace MsCrmTools.WebResourcesManager.Forms
+﻿namespace MscrmTools.WebresourcesManager.Forms
 {
     partial class RenameWebResourceDialog
     {
@@ -40,10 +40,11 @@
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 100);
+            this.label2.AutoEllipsis = true;
+            this.label2.Location = new System.Drawing.Point(22, 154);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 13);
+            this.label2.Size = new System.Drawing.Size(672, 49);
             this.label2.TabIndex = 16;
             this.label2.Text = "Final file name:";
             // 
@@ -51,19 +52,21 @@
             // 
             this.txtWebResourceName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWebResourceName.Location = new System.Drawing.Point(13, 69);
+            this.txtWebResourceName.Location = new System.Drawing.Point(20, 106);
+            this.txtWebResourceName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtWebResourceName.Name = "txtWebResourceName";
-            this.txtWebResourceName.Size = new System.Drawing.Size(451, 20);
+            this.txtWebResourceName.Size = new System.Drawing.Size(674, 26);
             this.txtWebResourceName.TabIndex = 12;
             this.txtWebResourceName.TextChanged += new System.EventHandler(this.TxtWebResourceNameTextChanged);
             this.txtWebResourceName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtWebResourceNameKeyUp);
             // 
             // btnValidate
             // 
-            this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnValidate.Location = new System.Drawing.Point(307, 114);
+            this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnValidate.Location = new System.Drawing.Point(460, 213);
+            this.btnValidate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnValidate.Name = "btnValidate";
-            this.btnValidate.Size = new System.Drawing.Size(75, 23);
+            this.btnValidate.Size = new System.Drawing.Size(112, 35);
             this.btnValidate.TabIndex = 13;
             this.btnValidate.Text = "OK";
             this.btnValidate.UseVisualStyleBackColor = true;
@@ -71,11 +74,12 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(388, 114);
+            this.btnCancel.Location = new System.Drawing.Point(582, 213);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 14;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -84,12 +88,13 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Font = new System.Drawing.Font("Segoe UI Light", 14F);
+            this.label1.Location = new System.Drawing.Point(18, 14);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(333, 25);
+            this.label1.Size = new System.Drawing.Size(458, 38);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Change the name of the web resource";
+            this.label1.Text = "Change the name of the webresource";
             // 
             // panel1
             // 
@@ -99,32 +104,38 @@
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(481, 60);
+            this.panel1.Size = new System.Drawing.Size(722, 92);
             this.panel1.TabIndex = 15;
             // 
             // label3
             // 
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(15, 39);
+            this.label3.Font = new System.Drawing.Font("Segoe UI Light", 10F);
+            this.label3.Location = new System.Drawing.Point(22, 60);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(449, 21);
+            this.label3.Size = new System.Drawing.Size(674, 32);
             this.label3.TabIndex = 2;
             this.label3.Text = "This will delete the web resource and create a new one with the specified name";
             // 
             // RenameWebResourceDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(475, 149);
+            this.ClientSize = new System.Drawing.Size(712, 267);
+            this.ControlBox = false;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtWebResourceName);
             this.Controls.Add(this.btnValidate);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "RenameWebResourceDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

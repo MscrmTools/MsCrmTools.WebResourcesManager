@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager.UserControls
+namespace MscrmTools.WebresourcesManager.UserControls
 {
     public partial class WebResourceTypePicker : UserControl
     {

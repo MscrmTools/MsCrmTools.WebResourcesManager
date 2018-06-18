@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MsCrmTools.WebResourcesManager.Properties {
+namespace MscrmTools.WebresourcesManager.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace MsCrmTools.WebResourcesManager.Properties {
     // à l'aide d'un outil, tel que ResGen ou Visual Studio.
     // Pour ajouter ou supprimer un membre, modifiez votre fichier .ResX, puis réexécutez ResGen
     // avec l'option /str ou régénérez votre projet VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace MsCrmTools.WebResourcesManager.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MsCrmTools.WebResourcesManager.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MscrmTools.WebresourcesManager.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,48 +61,32 @@ namespace MsCrmTools.WebResourcesManager.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Error.
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static string MessageBox_ErrorTitle {
+        internal static System.Drawing.Bitmap check_box {
             get {
-                return ResourceManager.GetString("MessageBox_ErrorTitle", resourceCulture);
+                object obj = ResourceManager.GetObject("check_box", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Information.
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static string MessageBox_InformationTitle {
+        internal static System.Drawing.Bitmap check_box_uncheck {
             get {
-                return ResourceManager.GetString("MessageBox_InformationTitle", resourceCulture);
+                object obj = ResourceManager.GetObject("check_box_uncheck", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Question.
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static string MessageBox_QuestionTitle {
+        internal static System.Drawing.Bitmap component {
             get {
-                return ResourceManager.GetString("MessageBox_QuestionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Warning.
-        /// </summary>
-        internal static string MessageBox_WarningTitle {
-            get {
-                return ResourceManager.GetString("MessageBox_WarningTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Some file have not been added because their name does not match naming policy
-        ///.
-        /// </summary>
-        internal static string WebresourceTreeView_InvalidFileNameWarningMessage {
-            get {
-                return ResourceManager.GetString("WebresourceTreeView_InvalidFileNameWarningMessage", resourceCulture);
+                object obj = ResourceManager.GetObject("component", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

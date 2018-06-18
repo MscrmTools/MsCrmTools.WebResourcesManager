@@ -1,23 +1,18 @@
-﻿// PROJECT : MsCrmTools.WebResourcesManager
-// This project was developed by Tanguy Touzard
-// CODEPLEX: http://xrmtoolbox.codeplex.com
-// BLOG: http://mscrmtools.blogspot.com
-
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.WebResourcesManager.AppCode;
+﻿using Microsoft.Xrm.Sdk;
+using MscrmTools.WebresourcesManager.AppCode;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager.Forms
+namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class UnusedWebResourcesListDialog : Form
     {
         private readonly IOrganizationService service;
 
-        public UnusedWebResourcesListDialog(IEnumerable<WebResource> unusedWebResources, IOrganizationService service)
+        public UnusedWebResourcesListDialog(IEnumerable<Webresource> unusedWebResources, IOrganizationService service)
         {
             InitializeComponent();
 
@@ -25,7 +20,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
             foreach (var wr in unusedWebResources)
             {
-                var item = new ListViewItem(wr.EntityName) { Tag = wr };
+                var item = new ListViewItem(wr.Name) { Tag = wr };
                 lvWebResources.Items.Add(item);
             }
         }
@@ -42,8 +37,8 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
             if (DialogResult.No ==
                 MessageBox.Show(this,
-                                "Are your sure you want to delete selected web resources?\r\n\r\nEven web resources without any dependencies could be used by other web resources",
-                                "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                                @"Are your sure you want to delete selected web resources?\r\n\r\nEven web resources without any dependencies could be used by other web resources",
+                                @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                 return;
 
             var list = (from ListViewItem item in lvWebResources.SelectedItems select (Entity)item.Tag).ToList();
@@ -71,8 +66,10 @@ namespace MsCrmTools.WebResourcesManager.Forms
                 {
                     service.Delete(wr.LogicalName, wr.Id);
                 }
-                catch
-                { }
+                finally
+                {
+                    // Do nothing
+                }
 
                 i++;
             }

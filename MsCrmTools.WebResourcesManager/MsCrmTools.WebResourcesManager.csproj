@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{71737D43-3B0A-4709-93F2-ED9C62C836B3}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DD6AF32E-4585-44A8-8561-D656A53336D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MsCrmTools.WebResourcesManager</RootNamespace>
-    <AssemblyName>MsCrmTools.WebResourcesManager</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>MscrmTools.WebresourcesManager</RootNamespace>
+    <AssemblyName>MscrmTools.WebresourcesManager</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,80 +29,69 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Without GemBox|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug Without GemBox\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EcmaScript.NET, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EcmaScript.Net.1.0.1.0\lib\net20\EcmaScript.NET.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2017.10.15, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.10.15\lib\net462\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2017.5.14, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.5.14\lib\net452\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.10.15, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.10.15\lib\net462\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.4.13, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.5.14\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.8.2.0.2\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.0.7\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.9.1126, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.9\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.29.0.1078, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.29.0\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.9.1126, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.9\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms, Version=2.29.0.1078, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.29.0\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.2\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.8.2.0.2\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.0.7\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.8.2.0.2\lib\net452\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.0.7\lib\net452\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.8.2.0.2\lib\net452\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.0.7\lib\net452\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.8.2.0.5\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.0.7\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.VisualStudio.CoreUtility">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Activities.Presentation" />
@@ -124,185 +111,199 @@
     <Reference Include="System.Workflow.Activities" />
     <Reference Include="System.Workflow.ComponentModel" />
     <Reference Include="System.Workflow.Runtime" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="XrmToolBox, Version=1.2017.7.18, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.7.18\lib\net452\XrmToolBox.exe</HintPath>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    </Reference>
+    <Reference Include="XrmToolBox, Version=1.2018.3.21, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2018.3.21-beta2\lib\net462\XrmToolBox.exe</HintPath>
     </Reference>
     <Reference Include="XrmToolBox.Extensibility, Version=1.2017.7.10, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.7.18\lib\net452\XrmToolBox.Extensibility.dll</HintPath>
+      <HintPath>..\packages\XrmToolBoxPackage.1.2018.3.21-beta2\lib\net462\XrmToolBox.Extensibility.dll</HintPath>
     </Reference>
-    <Reference Include="XrmToolBox.PluginsStore, Version=1.2017.6.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2017.7.18\lib\net452\XrmToolBox.PluginsStore.dll</HintPath>
+    <Reference Include="XrmToolBox.PluginsStore, Version=1.2017.10.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XrmToolBoxPackage.1.2018.3.21-beta2\lib\net462\XrmToolBox.PluginsStore.dll</HintPath>
     </Reference>
     <Reference Include="Yahoo.Yui.Compressor, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\YUICompressor.NET.2.7.0.0\lib\NET20\Yahoo.Yui.Compressor.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCode\CustomTabPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="AppCode\Enumerations.cs" />
+    <Compile Include="AppCode\Args\InvalidFilesEventArgs.cs" />
+    <Compile Include="AppCode\Args\NodeSelectedEventArgs.cs" />
+    <Compile Include="AppCode\Args\ResourceEventArgs.cs" />
+    <Compile Include="AppCode\Args\StateEventArgs.cs" />
+    <Compile Include="AppCode\DockContentExtensions.cs" />
+    <Compile Include="AppCode\Editors\DependencyXmlEditor.cs" />
     <Compile Include="AppCode\EventManager.cs" />
-    <Compile Include="AppCode\Globals.cs" />
+    <Compile Include="AppCode\Exceptions\MoreRecentRecordExistsException.cs" />
     <Compile Include="AppCode\JsBeautifier\Beautifier.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierFlags.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierOptions.cs" />
     <Compile Include="AppCode\JsBeautifier\BraceStyle.cs" />
-    <Compile Include="AppCode\LoadCrmResourcesSettings.cs" />
-    <Compile Include="AppCode\Options.cs" />
-    <Compile Include="AppCode\SolutionComponentType.cs" />
-    <Compile Include="AppCode\TreeViewHelper.cs" />
-    <Compile Include="AppCode\WebresourceStateChangedArgs.cs" />
-    <Compile Include="AppCode\XmlSerializerHelper.cs" />
-    <Compile Include="DelegatesHelpers\CommonDelegates.cs" />
-    <Compile Include="Forms\CharacterRange.cs" />
-    <Compile Include="Forms\CompareSettingsDialog.cs">
+    <Compile Include="AppCode\ListViewItemComparer.cs" />
+    <Compile Include="AppCode\LoadResourcesSettings.cs" />
+    <Compile Include="AppCode\Settings.cs" />
+    <Compile Include="AppCode\TreeNodeSorter.cs" />
+    <Compile Include="AppCode\UpdateResourcesResult.cs" />
+    <Compile Include="AppCode\UpdateResourcesSettings.cs" />
+    <Compile Include="AppCode\Webresource.Static.cs" />
+    <Compile Include="AppCode\Webresource.BulkStatic.cs" />
+    <Compile Include="AppCode\Webresource.cs" />
+    <Compile Include="AppCode\WebresourceMapper.cs" />
+    <Compile Include="CustomControls\CssNode.cs" />
+    <Compile Include="CustomControls\DataNode.cs" />
+    <Compile Include="CustomControls\FolderNode.cs" />
+    <Compile Include="CustomControls\GifNode.cs" />
+    <Compile Include="CustomControls\IcoNode.cs" />
+    <Compile Include="CustomControls\JpgNode.cs" />
+    <Compile Include="CustomControls\PngNode.cs" />
+    <Compile Include="CustomControls\ResxNode.cs" />
+    <Compile Include="CustomControls\SilverlightNode.cs" />
+    <Compile Include="CustomControls\VectorNode.cs" />
+    <Compile Include="CustomControls\WebpageNode.cs" />
+    <Compile Include="CustomControls\XslNode.cs" />
+    <Compile Include="Forms\CodeEditor\CharacterRange.cs" />
+    <Compile Include="Forms\CodeEditor\FindReplace\FindOption.cs" />
+    <Compile Include="Forms\CodeEditor\FindReplace\FindReplace.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\CodeEditor\FindReplace\FindReplaceDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CompareSettingsDialog.Designer.cs">
-      <DependentUpon>CompareSettingsDialog.cs</DependentUpon>
+    <Compile Include="Forms\CodeEditor\FindReplace\FindReplaceDialog.Designer.cs">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CodeEditor\GoTo\GoTo.cs" />
+    <Compile Include="Forms\CodeEditor\GoTo\GoToDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CodeEditor\GoTo\GoToDialog.Designer.cs">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ConcurrencySummaryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConcurrencySummaryDialog.Designer.cs">
+      <DependentUpon>ConcurrencySummaryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Contents\BaseContentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Contents\BaseContentForm.Designer.cs">
+      <DependentUpon>BaseContentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Contents\CodeEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Contents\CodeEditorForm.Designer.cs">
+      <DependentUpon>CodeEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Contents\ImageContentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Contents\ImageContentForm.Designer.cs">
+      <DependentUpon>ImageContentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Contents\ResxContentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Contents\ResxContentForm.Designer.cs">
+      <DependentUpon>ResxContentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CustomFolderBrowserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CustomFolderBrowserDialog.Designer.cs">
+    <Compile Include="Forms\CustomFolderBrowserDialog.designer.cs">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DependencyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DependencyDialog.Designer.cs">
+    <Compile Include="Forms\DependencyDialog.designer.cs">
       <DependentUpon>DependencyDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FindReplace\FindOption.cs" />
-    <Compile Include="Forms\FindReplace\FindReplace.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Forms\FindReplace\FindReplaceDialog.cs">
+    <Compile Include="Forms\InvalidFilenamesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FindReplace\FindReplaceDialog.Designer.cs">
-      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\GoTo\GoTo.cs" />
-    <Compile Include="Forms\GoTo\GoToDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GoTo\GoToDialog.Designer.cs">
-      <DependentUpon>GoToDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UpdateOptionsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UpdateOptionsDialog.Designer.cs">
-      <DependentUpon>UpdateOptionsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\RenameWebResourceDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RenameWebResourceDialog.Designer.cs">
-      <DependentUpon>RenameWebResourceDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\OptionsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\OptionsDialog.Designer.cs">
-      <DependentUpon>OptionsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\UnusedWebResourcesListDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UnusedWebResourcesListDialog.Designer.cs">
-      <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\InvalidFileListDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\InvalidFileListDialog.Designer.cs">
-      <DependentUpon>InvalidFileListDialog.cs</DependentUpon>
+    <Compile Include="Forms\InvalidFilenamesDialog.Designer.cs">
+      <DependentUpon>InvalidFilenamesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NewFolderDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewFolderDialog.Designer.cs">
+    <Compile Include="Forms\NewFolderDialog.designer.cs">
       <DependentUpon>NewFolderDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NewRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewRootDialog.Designer.cs">
+    <Compile Include="Forms\NewRootDialog.designer.cs">
       <DependentUpon>NewRootDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NewWebResourceDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewWebResourceDialog.Designer.cs">
+    <Compile Include="Forms\NewWebResourceDialog.designer.cs">
       <DependentUpon>NewWebResourceDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Solutions\SolutionPicker.cs">
+    <Compile Include="Forms\PendingUpdatesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Solutions\SolutionPicker.Designer.cs">
+    <Compile Include="Forms\PendingUpdatesDialog.Designer.cs">
+      <DependentUpon>PendingUpdatesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RenameWebResourceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RenameWebResourceDialog.designer.cs">
+      <DependentUpon>RenameWebResourceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ResourcePropertiesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ResourcePropertiesDialog.Designer.cs">
+      <DependentUpon>ResourcePropertiesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SolutionPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SolutionPicker.designer.cs">
       <DependentUpon>SolutionPicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UpdateForm.cs">
+    <Compile Include="Forms\UnusedWebResourcesListDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UpdateForm.Designer.cs">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
+    <Compile Include="Forms\UnusedWebResourcesListDialog.designer.cs">
+      <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\WebPreviewDialog.cs">
+    <Compile Include="Forms\WebresourcesTreeView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\WebPreviewDialog.Designer.cs">
-      <DependentUpon>WebPreviewDialog.cs</DependentUpon>
+    <Compile Include="Forms\WebresourcesTreeView.Designer.cs">
+      <DependentUpon>WebresourcesTreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\WebResourceTypeSelectorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\WebResourceTypeSelectorDialog.Designer.cs">
+    <Compile Include="Forms\WebResourceTypeSelectorDialog.designer.cs">
       <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\ListViewItemComparer.cs" />
-    <Compile Include="AppCode\EventHandlers\WebResourceContextMenuRequestedEventArgs.cs" />
-    <Compile Include="AppCode\EventHandlers\WebResourceSelectedEventArgs.cs" />
-    <Compile Include="AppCode\Extensions\TreeNodeExtensions.cs" />
-    <Compile Include="UserControls\CodeEditorScintilla.cs">
+    <Compile Include="Interfaces\IWebresourceNode.cs" />
+    <Compile Include="MyPlugin.cs" />
+    <Compile Include="MyPluginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\CodeEditorScintilla.designer.cs">
-      <DependentUpon>CodeEditorScintilla.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ResourceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ResourceControl.Designer.cs">
-      <DependentUpon>ResourceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\WebresourceTreeView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\WebresourceTreeView.Designer.cs">
-      <DependentUpon>WebresourceTreeView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin.cs" />
-    <Compile Include="AppCode\EventHandlers\WebResourceUpdateRequestedEventArgs.cs" />
-    <Compile Include="WebResourcesManager.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WebResourcesManager.Designer.cs">
-      <DependentUpon>WebResourcesManager.cs</DependentUpon>
+    <Compile Include="MyPluginControl.designer.cs">
+      <DependentUpon>MyPluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -310,44 +311,43 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="AppCode\TreeNodeSorter.cs" />
-    <Compile Include="UserControls\IconControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\IconControl.Designer.cs">
-      <DependentUpon>IconControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ImageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\ImageControl.Designer.cs">
-      <DependentUpon>ImageControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\IWebResourceControl.cs" />
-    <Compile Include="UserControls\SilverlightControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\SilverlightControl.Designer.cs">
-      <DependentUpon>SilverlightControl.cs</DependentUpon>
-    </Compile>
+    <Compile Include="CustomControls\JavaScriptNode.cs" />
+    <Compile Include="CustomControls\WebresourceNode.cs" />
     <Compile Include="UserControls\WebResourceTypePicker.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\WebResourceTypePicker.Designer.cs">
+    <Compile Include="UserControls\WebResourceTypePicker.designer.cs">
       <DependentUpon>WebResourceTypePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\EventHandlers\WebResourceUpdatedEventArgs.cs" />
-    <Compile Include="AppCode\WebResource.cs" />
-    <Compile Include="AppCode\WebResourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\CompareSettingsDialog.resx">
-      <DependentUpon>CompareSettingsDialog.cs</DependentUpon>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\component.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\CodeEditor\FindReplace\FindReplaceDialog.resx">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CodeEditor\GoTo\GoToDialog.resx">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConcurrencySummaryDialog.resx">
+      <DependentUpon>ConcurrencySummaryDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Contents\BaseContentForm.resx">
+      <DependentUpon>BaseContentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Contents\CodeEditorForm.resx">
+      <DependentUpon>CodeEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Contents\ImageContentForm.resx">
+      <DependentUpon>ImageContentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Contents\ResxContentForm.resx">
+      <DependentUpon>ResxContentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
@@ -355,26 +355,8 @@
     <EmbeddedResource Include="Forms\DependencyDialog.resx">
       <DependentUpon>DependencyDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FindReplace\FindReplaceDialog.resx">
-      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\GoTo\GoToDialog.resx">
-      <DependentUpon>GoToDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UpdateOptionsDialog.resx">
-      <DependentUpon>UpdateOptionsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RenameWebResourceDialog.resx">
-      <DependentUpon>RenameWebResourceDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\OptionsDialog.resx">
-      <DependentUpon>OptionsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UnusedWebResourcesListDialog.resx">
-      <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\InvalidFileListDialog.resx">
-      <DependentUpon>InvalidFileListDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\InvalidFilenamesDialog.resx">
+      <DependentUpon>InvalidFilenamesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewFolderDialog.resx">
       <DependentUpon>NewFolderDialog.cs</DependentUpon>
@@ -385,69 +367,59 @@
     <EmbeddedResource Include="Forms\NewWebResourceDialog.resx">
       <DependentUpon>NewWebResourceDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Solutions\SolutionPicker.resx">
+    <EmbeddedResource Include="Forms\PendingUpdatesDialog.resx">
+      <DependentUpon>PendingUpdatesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RenameWebResourceDialog.resx">
+      <DependentUpon>RenameWebResourceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ResourcePropertiesDialog.resx">
+      <DependentUpon>ResourcePropertiesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SolutionPicker.resx">
       <DependentUpon>SolutionPicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UpdateForm.resx">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\UnusedWebResourcesListDialog.resx">
+      <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\WebPreviewDialog.resx">
-      <DependentUpon>WebPreviewDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\WebresourcesTreeView.resx">
+      <DependentUpon>WebresourcesTreeView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebResourceTypeSelectorDialog.resx">
       <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\CodeEditorScintilla.resx">
-      <DependentUpon>CodeEditorScintilla.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ResourceControl.resx">
-      <DependentUpon>ResourceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\WebresourceTreeView.resx">
-      <DependentUpon>WebresourceTreeView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WebResourcesManager.resx">
-      <DependentUpon>WebResourcesManager.cs</DependentUpon>
+    <EmbeddedResource Include="MyPluginControl.resx">
+      <DependentUpon>MyPluginControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\IconControl.resx">
-      <DependentUpon>IconControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ImageControl.resx">
-      <DependentUpon>ImageControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\SilverlightControl.resx">
-      <DependentUpon>SilverlightControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WebResourceTypePicker.resx">
       <DependentUpon>WebResourceTypePicker.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="app.manifest" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <None Include="Resources\check_box.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\check_box_uncheck.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF NOT EXIST merged mkdir merged
-"$(SolutionDir)packages\ILMerge.2.14.1208\tools\ILMerge.exe" /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)Merged\$(TargetFileName)" $(TargetFileName)  $(TargetDir)EcmaScript.NET.dll $(TargetDir)HtmlAgilityPack.dll $(TargetDir)ScintillaNET.dll $(TargetDir)Yahoo.Yui.Compressor.dll svg.dll</PostBuildEvent>
+    <PostBuildEvent>IF NOT EXIST Storage mkdir storage
+IF NOT EXIST Storage\Plugins mkdir Storage\Plugins
+"$(SolutionDir)packages\ILMerge.2.14.1208\tools\ILMerge.exe" /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)Storage\Plugins \$(TargetFileName)" "$(TargetFileName)" "$(TargetDir)ScintillaNET.dll" "$(TargetDir)Yahoo.Yui.Compressor.dll" "$(TargetDir)svg.dll" "$(TargetDir)EcmaScript.NET.dll"
+</PostBuildEvent>
   </PropertyGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
-    </VisualStudio>
-  </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

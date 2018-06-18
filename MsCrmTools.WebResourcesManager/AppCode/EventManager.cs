@@ -1,38 +1,31 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace MsCrmTools.WebResourcesManager.AppCode
+namespace MscrmTools.WebresourcesManager.AppCode
 {
-    public class EventManager
+    internal class EventManager
     {
-        private readonly Options options;
-
-        public EventManager(Options options)
+        public static void ActAfterPublish(Webresource resource, Settings settings)
         {
-            this.options = options;
-        }
-
-        public void ActAfterPublish(WebResource resource)
-        {
-            if (options.AfterPublishCommand.Contains("{FilePath}") && string.IsNullOrEmpty(resource.FilePath))
+            if (settings.AfterPublishCommand.Contains("{FilePath}") && string.IsNullOrEmpty(resource.FilePath))
             {
                 throw new Exception("It is required that the web resource has a file path in its properties to use a command referencing the tag {FilePath}");
             }
 
-            RunCommand(options.AfterPublishCommand.Replace("{FilePath}", resource.FilePath));
+            RunCommand(settings.AfterPublishCommand.Replace("{FilePath}", resource.FilePath));
         }
 
-        public void ActAfterUpdate(WebResource resource)
+        public static void ActAfterUpdate(Webresource resource, Settings settings)
         {
-            if (options.AfterUpdateCommand.Contains("{FilePath}") && string.IsNullOrEmpty(resource.FilePath))
+            if (settings.AfterUpdateCommand.Contains("{FilePath}") && string.IsNullOrEmpty(resource.FilePath))
             {
                 throw new Exception("It is required that the web resource has a file path in its properties to use a command referencing the tag {FilePath}");
             }
 
-            RunCommand(options.AfterUpdateCommand.Replace("{FilePath}", resource.FilePath));
+            RunCommand(settings.AfterUpdateCommand.Replace("{FilePath}", resource.FilePath));
         }
 
-        private void RunCommand(string command)
+        private static void RunCommand(string command)
         {
             Process process = Process.Start(new ProcessStartInfo(command)
             {
@@ -43,14 +36,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 WindowStyle = ProcessWindowStyle.Hidden
             });
 
-            string stderr = process.StandardError.ReadToEnd();
-
-            process.WaitForExit();
+            string stderr = process?.StandardError.ReadToEnd();
+            process?.WaitForExit();
 
             if (!string.IsNullOrEmpty(stderr))
             {
-                throw new Exception("An error occured when executing additional action (" + command + "):\r\n\r\n" +
-                                    stderr);
+                throw new Exception($"An error occured when executing additional action ({command}):\r\n\r\n{stderr}");
             }
         }
     }

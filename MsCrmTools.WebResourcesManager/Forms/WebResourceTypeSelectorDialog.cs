@@ -1,26 +1,21 @@
-﻿using System;
+﻿using MscrmTools.WebresourcesManager.AppCode;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MsCrmTools.WebResourcesManager.AppCode;
 
-namespace MsCrmTools.WebResourcesManager.Forms
+namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class WebResourceTypeSelectorDialog : Form
     {
-        public WebResourceTypeSelectorDialog(bool fromSolution, int majorVersion)
+        public WebResourceTypeSelectorDialog(int majorVersion)
         {
             InitializeComponent();
 
-            if (majorVersion < 8 || fromSolution)
-            {
-                chkLoadResourcesFromMicrosoft.Visible = false;
-            }
-
             webResourceTypePicker1.ShowV9Types = majorVersion >= 9;
 
-            if (!string.IsNullOrEmpty(Options.Instance.ExcludedPrefixes))
+            if (!string.IsNullOrEmpty(Settings.Instance.ExcludedPrefixes))
             {
-                lblFilter.Text = string.Format(lblFilter.Text, string.Join(" or ", Options.Instance.ExcludedPrefixes.Split(',')));
+                lblFilter.Text = string.Format(lblFilter.Text, string.Join(" or ", Settings.Instance.ExcludedPrefixes.Split(',')));
             }
             else
             {
@@ -28,9 +23,8 @@ namespace MsCrmTools.WebResourcesManager.Forms
             }
         }
 
-        public bool HideMicrosoftWebresources { get; internal set; }
-        public List<int> TypesToLoad { get; private set; }
         public bool FilterByLcid { get; private set; }
+        public List<int> TypesToLoad { get; private set; }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -41,7 +35,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void btnOk_Click(object sender, EventArgs e)
         {
             TypesToLoad = new List<int>();
-            HideMicrosoftWebresources = !chkLoadResourcesFromMicrosoft.Checked;
             FilterByLcid = chkFilterByLcid.Checked;
 
             foreach (string s in webResourceTypePicker1.CheckedExtensions)
