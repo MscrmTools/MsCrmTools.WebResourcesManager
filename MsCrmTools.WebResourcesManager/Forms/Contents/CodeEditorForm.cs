@@ -32,15 +32,12 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
             Controls.SetChildIndex(scintilla, 0);
 
             Text = resource.Name;
-            resource.ContentReplaced += (sender, e) =>
-            {
-                Invoke(new Action(() =>
-                {
-                    scintilla.TextChanged -= scintilla_TextChanged;
-                    scintilla.Text = e.Resource.StringContent;
-                    scintilla.TextChanged += scintilla_TextChanged;
-                }));
-            };
+            resource.ContentReplaced += Resource_ContentReplaced;
+        }
+
+        protected override void ClearEvents()
+        {
+            Resource.ContentReplaced -= Resource_ContentReplaced;
         }
 
         private void CodeEditorForm_Load(object sender, EventArgs e)
@@ -106,6 +103,16 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
         private void MyFindReplace_KeyPressed(object sender, KeyEventArgs e)
         {
             genericScintilla_KeyDown(sender, e);
+        }
+
+        private void Resource_ContentReplaced(object sender, AppCode.Args.ResourceEventArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+                scintilla.TextChanged -= scintilla_TextChanged;
+                scintilla.Text = e.Resource.StringContent;
+                scintilla.TextChanged += scintilla_TextChanged;
+            }));
         }
 
         private void scintilla_CharAdded(object sender, CharAddedEventArgs e)

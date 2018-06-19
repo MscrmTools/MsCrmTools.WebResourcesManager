@@ -1,18 +1,18 @@
-﻿using System;
+﻿using MscrmTools.WebresourcesManager.AppCode;
+using System;
 using System.Collections;
 using System.Data;
 using System.IO;
 using System.Resources;
 using System.Text;
 using System.Windows.Forms;
-using MscrmTools.WebresourcesManager.AppCode;
 
 namespace MscrmTools.WebresourcesManager.Forms.Contents
 {
     public partial class ResxContentForm : BaseContentForm
     {
-        private DataTable table;
         private ResXResourceReader rsxr;
+        private DataTable table;
 
         public ResxContentForm()
         {
@@ -23,13 +23,24 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
         {
             InitializeComponent();
 
-            resource.ContentReplaced += (sender, e) =>
-            {
-                resource = e.Resource;
-                DisplayResx();
-            };
+            resource.ContentReplaced += Resource_ContentReplaced;
 
             Text = resource.Name;
+        }
+
+        protected override void ClearEvents()
+        {
+            Resource.ContentReplaced -= Resource_ContentReplaced;
+        }
+
+        private void dgv_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            Resource.Content = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
+        }
+
+        private void dgv_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            Resource.Content = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
         }
 
         private void DisplayResx()
@@ -64,16 +75,6 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
             dgv.UserDeletedRow += dgv_UserDeletedRow;
         }
 
-        private void dgv_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            Resource.Content = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
-        }
-
-        private void dgv_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            Resource.Content = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
-        }
-
         private string GetBase64WebResourceContent()
         {
             using (var ms = new MemoryStream())
@@ -96,6 +97,12 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
                 return Convert.ToBase64String(ms.ToArray());
             }
+        }
+
+        private void Resource_ContentReplaced(object sender, AppCode.Args.ResourceEventArgs e)
+        {
+            Resource.Content = e.Resource.Content;
+            DisplayResx();
         }
 
         private void ResxContentForm_Load(object sender, EventArgs e)

@@ -11,7 +11,7 @@ using XrmToolBox.Extensibility;
 
 namespace MscrmTools.WebresourcesManager.Forms.Contents
 {
-    public partial class BaseContentForm : DockContent
+    public abstract partial class BaseContentForm : DockContent
     {
         protected Size SavedSize;
         private const string OpenfileTitleMask = "Select the {0} to replace the existing webresource";
@@ -63,6 +63,8 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
         public Webresource Resource { get; }
 
+        protected abstract void ClearEvents();
+
         private void BaseContentForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (Resource.State == WebresourceState.Draft)
@@ -89,6 +91,7 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
             Resource.StateChanged -= Resource_StateChanged;
             Resource.SavedToDisk -= Resource_SavedToDisk;
+            ClearEvents();
         }
 
         private void CleanCompareFolder()

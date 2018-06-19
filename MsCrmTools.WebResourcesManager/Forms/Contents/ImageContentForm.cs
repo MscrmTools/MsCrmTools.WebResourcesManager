@@ -21,13 +21,14 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
             pb = new PictureBox();
 
-            resource.ContentReplaced += (sender, e) =>
-            {
-                resource = e.Resource;
-                ShowImage();
-            };
+            resource.ContentReplaced += Resource_ContentReplaced;
 
             Text = resource.Name;
+        }
+
+        protected override void ClearEvents()
+        {
+            Resource.ContentReplaced -= Resource_ContentReplaced;
         }
 
         private void ImageContentForm_Load(object sender, EventArgs e)
@@ -37,6 +38,12 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
         private void ImageContentForm_Resize(object sender, EventArgs e)
         {
+            ShowImage();
+        }
+
+        private void Resource_ContentReplaced(object sender, AppCode.Args.ResourceEventArgs e)
+        {
+            Resource.Content = e.Resource.Content;
             ShowImage();
         }
 
