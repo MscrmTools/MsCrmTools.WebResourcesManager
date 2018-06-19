@@ -599,7 +599,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
             Name = newName;
 
-            Node.TreeView.Invoke(new Action(() => { Node.Text = newName.Split('/').First(); }));
+            Node.TreeView.Invoke(new Action(() =>
+            {
+                Node.Text = newName.Split('/').First();
+                Node.Name = newName.Split('/').First();
+            }));
 
             Create(Plugin.Service);
 

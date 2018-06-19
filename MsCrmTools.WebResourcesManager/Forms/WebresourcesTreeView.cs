@@ -152,20 +152,31 @@ namespace MscrmTools.WebresourcesManager.Forms
         public WebresourceNode AddSingleNode(Webresource resource, string[] nameParts, FolderNode folder = null)
         {
             var fileName = nameParts.Last();
-            WebresourceType type;
-            if (fileName.IndexOf(".", StringComparison.Ordinal) < 0)
-            {
-                if (resource.Type == 0)
-                {
-                    return null;
-                }
+            WebresourceType type = WebresourceType.Auto;
 
+            if (resource.Type != 0)
+            {
                 type = (WebresourceType)resource.Type;
             }
-            else
+
+            if (type == WebresourceType.Auto)
             {
-                type = Webresource.GetTypeFromExtension(fileName.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last());
+                if (fileName.IndexOf(".", StringComparison.Ordinal) < 0)
+                {
+                    if (resource.Type == 0)
+                    {
+                        return null;
+                    }
+
+                    type = (WebresourceType)resource.Type;
+                }
+                else
+                {
+                    type = Webresource.GetTypeFromExtension(fileName
+                        .Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Last());
+                }
             }
+
             WebresourceNode node = null;
 
             switch (type)
@@ -367,7 +378,7 @@ namespace MscrmTools.WebresourcesManager.Forms
 
         internal void RefreshFolderNodeContent(FolderNode folderNode, List<string> invalidFilenames, List<string> extensionsToLoad)
         {
-            var path = folderNode.ResourceFullPath;
+            var path = folderNode.FolderPath;
             if (string.IsNullOrEmpty(path) || !Directory.Exists(path)) return;
 
             var di = new DirectoryInfo(path);

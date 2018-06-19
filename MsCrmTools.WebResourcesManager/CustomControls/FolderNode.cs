@@ -1,18 +1,17 @@
-﻿using System;
+﻿using MscrmTools.WebresourcesManager.AppCode;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using MscrmTools.WebresourcesManager.AppCode;
 
 namespace MscrmTools.WebresourcesManager.CustomControls
 {
     public class FolderNode : TreeNode
     {
-        private static int DraftRootImageIndex = 14;
         private static int DraftFolderImageIndex = 15;
-        private static int SyncedRootImageIndex = 0;
+        private static int DraftRootImageIndex = 14;
         private static int SyncedFolderImageIndex = 1;
-
+        private static int SyncedRootImageIndex = 0;
         private bool synced = true;
 
         public FolderNode(bool isRoot, string resourcefullPath, string folderPath = null)
@@ -22,13 +21,13 @@ namespace MscrmTools.WebresourcesManager.CustomControls
             IsRoot = isRoot;
 
             Text = resourcefullPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
-
+            Name = Text;
             SetImageIndexes();
         }
 
-        public string ResourceFullPath { get; }
         public string FolderPath { get; set; }
         public bool IsRoot { get; }
+        public string ResourceFullPath { get; }
 
         public bool Synced
         {
@@ -41,6 +40,19 @@ namespace MscrmTools.WebresourcesManager.CustomControls
                 if (Parent is FolderNode parent)
                 {
                     parent.Synced = value;
+                }
+            }
+        }
+
+        public void SetChildsCheckState()
+        {
+            foreach (TreeNode node in Nodes)
+            {
+                node.Checked = Checked;
+
+                if (node is FolderNode folder)
+                {
+                    folder.SetChildsCheckState();
                 }
             }
         }
@@ -73,19 +85,6 @@ namespace MscrmTools.WebresourcesManager.CustomControls
             if (Parent is FolderNode parent)
             {
                 parent.SetFolderColor();
-            }
-        }
-
-        public void SetChildsCheckState()
-        {
-            foreach (TreeNode node in Nodes)
-            {
-                node.Checked = Checked;
-
-                if (node is FolderNode folder)
-                {
-                    folder.SetChildsCheckState();
-                }
             }
         }
 

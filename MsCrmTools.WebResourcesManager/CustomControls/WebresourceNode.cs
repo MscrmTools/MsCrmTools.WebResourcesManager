@@ -23,6 +23,7 @@ namespace MscrmTools.WebresourcesManager.CustomControls
             ImageIndex = Resource.Synced ? syncedImageIndex : draftImageIndex;
             SelectedImageIndex = Resource.Synced ? syncedImageIndex : draftImageIndex;
             Text = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
+            Name = Text;
         }
 
         public Webresource Resource { get; }

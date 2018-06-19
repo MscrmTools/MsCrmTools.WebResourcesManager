@@ -48,7 +48,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     return WebresourceType.Resx;
             }
 
-            throw new ArgumentException(@"Fiel extension cannot be mapped to a webresource type", nameof(extension));
+            throw new ArgumentException(@"Field extension cannot be mapped to a webresource type", nameof(extension));
         }
 
         public static bool IsValidExtension(string ext)

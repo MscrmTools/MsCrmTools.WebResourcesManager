@@ -43,18 +43,17 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
         private void Resource_ContentReplaced(object sender, AppCode.Args.ResourceEventArgs e)
         {
-            Resource.Content = e.Resource.Content;
-            ShowImage();
+            ShowImage(true);
         }
 
-        private void ShowImage()
+        private void ShowImage(bool force = false)
         {
             if (Resource == null)
             {
                 return;
             }
 
-            if (SavedSize.Equals(Size))
+            if (SavedSize.Equals(Size) && force == false)
             {
                 return;
             }
@@ -146,6 +145,8 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
                                 pb.Image = image;
                                 pb.Height = pb.Image.Size.Height;
                                 pb.Width = pb.Image.Size.Width;
+
+                                pnlError.Visible = false;
                             }
 
                             if (pb.Width > Width)

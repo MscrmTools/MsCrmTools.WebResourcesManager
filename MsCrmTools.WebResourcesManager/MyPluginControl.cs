@@ -1031,6 +1031,12 @@ namespace MscrmTools.WebresourcesManager
                             }
                         }
 
+                        if (resource.Node.Parent is FolderNode fldNode)
+                        {
+                            fldNode.FolderPath = path;
+                            fldNode.Synced = true;
+                        }
+
                         path = Path.Combine(path, partPath[partPath.Length - 1]);
 
                         byte[] bytes = Convert.FromBase64String(resource.Content);

@@ -101,7 +101,6 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
         private void Resource_ContentReplaced(object sender, AppCode.Args.ResourceEventArgs e)
         {
-            Resource.Content = e.Resource.Content;
             DisplayResx();
         }
 
