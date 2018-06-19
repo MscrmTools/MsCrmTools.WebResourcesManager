@@ -67,16 +67,23 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
         {
             if (Resource.State == WebresourceState.Draft)
             {
-                var message =
-                    @"This webresource has some unsaved changes.\n\nAre you sure you want to close this window and loose the changes?";
-                if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                    DialogResult.No)
+                if (Settings.Instance.AutoSaveWhenLeaving)
                 {
-                    e.Cancel = true;
+                    Resource.Save();
                 }
                 else
                 {
-                    Resource.CancelChanges();
+                    var message =
+                        @"This webresource has some unsaved changes.\n\nAre you sure you want to close this window and loose the changes?";
+                    if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+                        DialogResult.No)
+                    {
+                        e.Cancel = true;
+                    }
+                    else
+                    {
+                        Resource.CancelChanges();
+                    }
                 }
             }
 
