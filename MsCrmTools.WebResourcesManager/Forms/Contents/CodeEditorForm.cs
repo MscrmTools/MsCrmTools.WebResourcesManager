@@ -36,7 +36,9 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
             {
                 Invoke(new Action(() =>
                 {
+                    scintilla.TextChanged -= scintilla_TextChanged;
                     scintilla.Text = e.Resource.StringContent;
+                    scintilla.TextChanged += scintilla_TextChanged;
                 }));
             };
         }
