@@ -335,6 +335,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(584, 1254);
             this.CloseButton = false;
+            this.CloseButtonVisible = false;
             this.Controls.Add(this.tv);
             this.Controls.Add(this.pnlSearch);
             this.Controls.Add(this.pnlBottom);
