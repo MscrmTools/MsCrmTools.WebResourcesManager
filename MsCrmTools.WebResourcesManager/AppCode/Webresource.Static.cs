@@ -53,8 +53,13 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public static bool IsValidExtension(string ext)
         {
-            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
-            return ValidExtensions.Contains(ext);
+            if (Settings.Instance.LoadOnlyValidExtensions)
+            {
+                ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
+                return ValidExtensions.Contains(ext);
+            }
+
+            return true;
         }
 
         public static bool SkipErrorForInvalidExtension(string ext)

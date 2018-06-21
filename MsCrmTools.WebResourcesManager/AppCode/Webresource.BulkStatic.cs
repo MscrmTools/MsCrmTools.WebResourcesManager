@@ -205,6 +205,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                                     FilterOperator = LogicalOperator.Or,
                                      Conditions =
                                     {
+                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
                                         new ConditionExpression("ismanaged", ConditionOperator.Equal, Settings.Instance.LoadManaged),
                                         new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
                                     }
@@ -288,6 +289,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                                     FilterOperator = LogicalOperator.Or,
                                      Conditions =
                                     {
+                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
                                         new ConditionExpression("ismanaged", ConditionOperator.Equal, Settings.Instance.LoadManaged),
                                         new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
                                     }
@@ -302,7 +304,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                         qe.Criteria.Filters.First().Conditions.Add(new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()));
                     }
 
-                    if (lcids.Length != 0)
+                    if (filterByLcid && lcids.Length != 0)
                     {
                         var lcidFilter = qe.Criteria.Filters.First().AddFilter(LogicalOperator.Or);
                         lcidFilter.AddCondition("languagecode", ConditionOperator.In, lcids.Select(l => (object)l).ToArray());

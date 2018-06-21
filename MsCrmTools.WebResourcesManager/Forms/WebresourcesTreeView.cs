@@ -293,6 +293,10 @@ namespace MscrmTools.WebresourcesManager.Forms
                         AddFolderNode(resource, nameParts, rootNodes);
                     }
                 }
+                else
+                {
+                    invalidFilesList.Add(resource.Name);
+                }
             }
 
             if (invalidFilesList.Any())

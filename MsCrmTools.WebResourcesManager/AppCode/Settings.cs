@@ -92,6 +92,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("Defines if managed webresources must be loaded")]
         public bool LoadManaged { get; set; } = false;
 
+        [Category("Loading Settings")]
+        [DisplayName("Load only resources with valid extension")]
+        [Description("Check the extension of a webresource name and load it only if valid")]
+        public bool LoadOnlyValidExtensions { get; set; } = false;
+
         [Browsable(false)]
         public bool ObfuscateJavascript { get; set; }
 
