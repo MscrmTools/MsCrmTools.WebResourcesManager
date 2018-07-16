@@ -104,41 +104,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
             // the prefix of customizations
             foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
             {
-                foreach (FileInfo fi in diChild.GetFiles("*.*", SearchOption.AllDirectories))
-                {
-                    if (fi.Extension.Length == 0)
-                    {
-                        invalidFilenames.Add(fi.FullName);
-                        continue;
-                    }
-
-                    if (!IsNameValid(fi.Name))
-                    {
-                        invalidFilenames.Add(fi.FullName);
-                        continue;
-                    }
-
-                    if (!extensionsToLoad.Contains(fi.Extension))
-                    {
-                        invalidFilenames.Add(fi.FullName);
-                        continue;
-                    }
-
-                    var fileRelativePath = fi.FullName;
-                    fileRelativePath = fileRelativePath.Replace(di.FullName, string.Empty);
-                    fileRelativePath = fileRelativePath.Remove(0, 1);
-                    fileRelativePath = fileRelativePath.Replace("\\", "/");
-
-                    var resource = new Webresource(fileRelativePath, fi.FullName,
-                        GetTypeFromExtension(fi.Extension.Remove(0, 1)), parent);
-
-                    if (parent.WebresourcesCache.All(r => r.Name.ToLower() != fileRelativePath.ToLower()))
-                    {
-                        parent.WebresourcesCache.Add(resource);
-                    }
-                    list.Add(resource);
-                }
+                LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, di, list);
             }
+
+            LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, di, di, list);
 
             return list;
         }
@@ -319,6 +288,46 @@ namespace MscrmTools.WebresourcesManager.AppCode
             catch (Exception error)
             {
                 throw new Exception($"An exception occured while retrieving webresources: {error.Message}");
+            }
+        }
+
+        private static void LoadFilesFromFolder(MyPluginControl parent, List<string> extensionsToLoad, List<string> invalidFilenames,
+                                    DirectoryInfo diChild, DirectoryInfo di, List<Webresource> list)
+        {
+            foreach (FileInfo fi in diChild.GetFiles("*.*", SearchOption.AllDirectories))
+            {
+                if (fi.Extension.Length == 0)
+                {
+                    invalidFilenames.Add(fi.FullName);
+                    continue;
+                }
+
+                if (!IsNameValid(fi.Name))
+                {
+                    invalidFilenames.Add(fi.FullName);
+                    continue;
+                }
+
+                if (!extensionsToLoad.Contains(fi.Extension))
+                {
+                    invalidFilenames.Add(fi.FullName);
+                    continue;
+                }
+
+                var fileRelativePath = fi.FullName;
+                fileRelativePath = fileRelativePath.Replace(di.FullName, string.Empty);
+                fileRelativePath = fileRelativePath.Remove(0, 1);
+                fileRelativePath = fileRelativePath.Replace("\\", "/");
+
+                var resource = new Webresource(fileRelativePath, fi.FullName,
+                    GetTypeFromExtension(fi.Extension.Remove(0, 1)), parent);
+
+                if (parent.WebresourcesCache.All(r => r.Name.ToLower() != fileRelativePath.ToLower()))
+                {
+                    parent.WebresourcesCache.Add(resource);
+                }
+
+                list.Add(resource);
             }
         }
     }

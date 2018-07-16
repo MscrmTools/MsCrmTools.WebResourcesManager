@@ -962,7 +962,7 @@ namespace MscrmTools.WebresourcesManager
                 // Let the user decides where to find files
                 var fbd = new CustomFolderBrowserDialog(true);
 
-                if (!string.IsNullOrWhiteSpace(Settings.Instance.LastFolderUsed))
+                if (!string.IsNullOrWhiteSpace(Settings.Instance.LastFolderUsed) && Directory.Exists(Settings.Instance.LastFolderUsed))
                 {
                     fbd.FolderPath = Settings.Instance.LastFolderUsed;
                 }
