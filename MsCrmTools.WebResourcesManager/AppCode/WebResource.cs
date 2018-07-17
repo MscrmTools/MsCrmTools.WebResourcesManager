@@ -97,9 +97,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
 
             this.filePath = filePath;
-            State = WebresourceState.None;
             loadedOn = DateTime.Now;
             Plugin = parent;
+            Plugin.WebresourcesCache.Add(this);
+            Plugin.DisplayWaitingForUpdatePanel();
+
+            State = filePath != null ? WebresourceState.Saved : WebresourceState.None;
 
             LoadAssociatedResources();
         }
