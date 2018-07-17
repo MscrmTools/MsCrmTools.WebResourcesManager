@@ -47,6 +47,7 @@ namespace MscrmTools.WebresourcesManager.Forms
 
         public event EventHandler ShowPendingUpdatesRequested;
 
+        public int OrganizationMajorVersion { get; set; }
         public IOrganizationService Service { get; set; }
 
         private void llSynchronize_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -275,7 +276,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             var orderedResources = resourcesToDisplay.OrderBy(r => r.Name.ToLower());
             foreach (var resource in orderedResources)
             {
-                if (Webresource.IsNameValid(resource.Name) &&
+                if (Webresource.IsNameValid(resource.Name, OrganizationMajorVersion) &&
                     Webresource.IsValidExtension(Path.GetExtension(resource.Name)))
                 {
                     var nameParts = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -325,7 +326,7 @@ namespace MscrmTools.WebresourcesManager.Forms
                 }
 
                 //Test valid characters
-                if (Webresource.IsNameValid(fi.Name) && Webresource.IsValidExtension(ext))
+                if (Webresource.IsNameValid(fi.Name, OrganizationMajorVersion) && Webresource.IsValidExtension(ext))
                 {
                     var name = $"{parentNode.ResourceFullPath}/{fi.Name}";
 
@@ -350,7 +351,7 @@ namespace MscrmTools.WebresourcesManager.Forms
         {
             var map = WebresourceMapper.Instance.Items.First(i => i.Type == type);
 
-            var nwrDialog = new NewWebResourceDialog(map.Extension);
+            var nwrDialog = new NewWebResourceDialog(map.Extension, OrganizationMajorVersion);
             if (nwrDialog.ShowDialog(mainControl) == DialogResult.OK)
             {
                 var name = $"{parentNode.ResourceFullPath}/{nwrDialog.WebresourceName}";
@@ -406,7 +407,7 @@ namespace MscrmTools.WebresourcesManager.Forms
 
             foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                if (Webresource.IsNameValid(fiChild.Name) && Webresource.IsValidExtension(fiChild.Extension))
+                if (Webresource.IsNameValid(fiChild.Name, OrganizationMajorVersion) && Webresource.IsValidExtension(fiChild.Extension))
                 {
                     if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
                     {
@@ -425,7 +426,7 @@ namespace MscrmTools.WebresourcesManager.Forms
                         }
                     }
                 }
-                else if (!Webresource.IsNameValid(fiChild.Name) || !Webresource.SkipErrorForInvalidExtension(fiChild.Extension))
+                else if (!Webresource.IsNameValid(fiChild.Name, OrganizationMajorVersion) || !Webresource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
                     invalidFilenames.Add(fiChild.FullName);
                 }

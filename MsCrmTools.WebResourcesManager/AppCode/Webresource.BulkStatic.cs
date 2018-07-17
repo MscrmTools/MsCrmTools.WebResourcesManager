@@ -13,6 +13,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
     public partial class Webresource
     {
         public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
+        public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> ExtensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
         private static readonly HashSet<string> ValidExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt", "svg", "resx" };
 
@@ -49,9 +50,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        public static bool IsNameValid(string name)
+        public static bool IsNameValid(string name, int organizationMajorVersion)
         {
-            if (InValidWrNameRegex.IsMatch(name))
+            if (InValidWrNameRegex.IsMatch(name) && organizationMajorVersion < 9
+            || InValidWrNameRegexForV9.IsMatch(name) && organizationMajorVersion >= 9)
             {
                 return false;
             }
@@ -91,7 +93,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        public static IEnumerable<Webresource> RetrieveFromDirectory(MyPluginControl parent, string path, List<string> extensionsToLoad, List<string> invalidFilenames)
+        public static IEnumerable<Webresource> RetrieveFromDirectory(MyPluginControl parent, string path, List<string> extensionsToLoad, List<string> invalidFilenames, int organizationMajorVersion)
         {
             if (!Directory.Exists(path))
                 throw new DirectoryNotFoundException(path);
@@ -104,10 +106,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
             // the prefix of customizations
             foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
             {
-                LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, di, list);
+                LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, di, list, organizationMajorVersion);
             }
 
-            LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, di, di, list);
+            LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, di, di, list, organizationMajorVersion);
 
             return list;
         }
@@ -292,7 +294,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         }
 
         private static void LoadFilesFromFolder(MyPluginControl parent, List<string> extensionsToLoad, List<string> invalidFilenames,
-                                    DirectoryInfo diChild, DirectoryInfo di, List<Webresource> list)
+                                    DirectoryInfo diChild, DirectoryInfo di, List<Webresource> list, int organizationMajorVersion)
         {
             foreach (FileInfo fi in diChild.GetFiles("*.*", SearchOption.AllDirectories))
             {
@@ -302,7 +304,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     continue;
                 }
 
-                if (!IsNameValid(fi.Name))
+                if (!IsNameValid(fi.Name, organizationMajorVersion))
                 {
                     invalidFilenames.Add(fi.FullName);
                     continue;

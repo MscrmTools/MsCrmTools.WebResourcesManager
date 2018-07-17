@@ -1,14 +1,17 @@
-﻿using System;
+﻿using MscrmTools.WebresourcesManager.AppCode;
+using System;
 using System.Windows.Forms;
-using MscrmTools.WebresourcesManager.AppCode;
 
 namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class NewFolderDialog : Form
     {
-        public NewFolderDialog()
+        private readonly int organizationMajorVersion;
+
+        public NewFolderDialog(int organizationMajorVersion)
         {
             InitializeComponent();
+            this.organizationMajorVersion = organizationMajorVersion;
         }
 
         public string FolderName { get; private set; }
@@ -21,7 +24,9 @@ namespace MscrmTools.WebresourcesManager.Forms
 
         private void btnValidate_Click(object sender, EventArgs e)
         {
-            if (txtFolderName.Text.Length > 0 && !Webresource.InValidWrNameRegex.IsMatch(txtFolderName.Text))
+            if (txtFolderName.Text.Length > 0 &&
+                (organizationMajorVersion < 9 && !Webresource.InValidWrNameRegex.IsMatch(txtFolderName.Text)
+                 || organizationMajorVersion >= 9 && !Webresource.InValidWrNameRegexForV9.IsMatch(txtFolderName.Text)))
             {
                 FolderName = txtFolderName.Text;
 

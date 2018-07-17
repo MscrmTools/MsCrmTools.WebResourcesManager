@@ -1,4 +1,6 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using MscrmTools.WebresourcesManager.AppCode;
 using MscrmTools.WebresourcesManager.AppCode.Args;
 using MscrmTools.WebresourcesManager.AppCode.Exceptions;
@@ -111,15 +113,6 @@ namespace MscrmTools.WebresourcesManager
             }
         }
 
-        //public void ShowContentNotUpdated()
-        //{
-        //    Invoke(new Action(() =>
-        //    {
-        //        var message = @"Whereas update action succeeded, it seems that the content of the webresource did not change on the database. This might be due to a temporary problem on the target organization";
-        //        MessageBox.Show(this, message, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //    }));
-        //}
-
         public void ShowSettings()
         {
             if (sd.IsDisposed)
@@ -130,6 +123,22 @@ namespace MscrmTools.WebresourcesManager
             sd.ShowDocked();
         }
 
+        public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
+        {
+            tv.Service = newService;
+            tv.OrganizationMajorVersion = detail.OrganizationMajorVersion;
+
+            base.UpdateConnection(newService, detail, actionName, parameter);
+        }
+
+        //public void ShowContentNotUpdated()
+        //{
+        //    Invoke(new Action(() =>
+        //    {
+        //        var message = @"Whereas update action succeeded, it seems that the content of the webresource did not change on the database. This might be due to a temporary problem on the target organization";
+        //        MessageBox.Show(this, message, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }));
+        //}
         internal void DisplayWaitingForUpdatePanel()
         {
             tv.DisplayWaitingForUpdatePanel();
@@ -297,7 +306,7 @@ namespace MscrmTools.WebresourcesManager
             }
             else if (e.ClickedItem == tsmiRenameWebresource)
             {
-                var renameDialog = new RenameWebResourceDialog(contextStripResource.Name);
+                var renameDialog = new RenameWebResourceDialog(contextStripResource.Name, ConnectionDetail.OrganizationMajorVersion);
 
                 if (renameDialog.ShowDialog(this) == DialogResult.OK)
                 {
@@ -309,7 +318,7 @@ namespace MscrmTools.WebresourcesManager
             }
             else if (e.ClickedItem == tsmiAddNewFolder)
             {
-                var newFolderDialog = new NewFolderDialog();
+                var newFolderDialog = new NewFolderDialog(ConnectionDetail.OrganizationMajorVersion);
                 if (newFolderDialog.ShowDialog(this) == DialogResult.OK)
                 {
                     tv.AddSingleFolder(contextFolderNode, newFolderDialog.FolderName);
@@ -386,6 +395,7 @@ namespace MscrmTools.WebresourcesManager
                     Work = (bw, e) =>
                     {
                         ((Webresource)e.Argument).Delete(Service);
+                        WebresourcesCache.Remove((Webresource)e.Argument);
                     },
                     PostWorkCallBack = e =>
                     {
@@ -904,6 +914,7 @@ namespace MscrmTools.WebresourcesManager
         private void LoadWebresources(LoadResourcesSettings settings)
         {
             tv.Enabled = false;
+            tv.OrganizationMajorVersion = ConnectionDetail.OrganizationMajorVersion;
             tv.Service = Service;
 
             CloseOpenedContents();
@@ -975,7 +986,7 @@ namespace MscrmTools.WebresourcesManager
                     CloseOpenedContents();
 
                     var invalidFilenames = new List<string>();
-                    var resources = Webresource.RetrieveFromDirectory(this, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames);
+                    var resources = Webresource.RetrieveFromDirectory(this, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail.OrganizationMajorVersion);
 
                     tv.DisplayNodes(resources, null, Settings.Instance.ExpandAllOnLoadingResources);
 
