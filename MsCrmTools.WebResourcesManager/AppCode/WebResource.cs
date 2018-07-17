@@ -474,6 +474,9 @@ namespace MscrmTools.WebresourcesManager.AppCode
             if (base64Content != record.GetAttributeValue<string>("content"))
             {
                 record["content"] = base64Content;
+
+                stringContent = GetPlainText();
+
                 State = WebresourceState.Saved;
                 ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
             }
