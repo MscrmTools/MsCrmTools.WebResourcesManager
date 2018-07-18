@@ -4,6 +4,7 @@ using MscrmTools.WebresourcesManager.AppCode.Args;
 using MscrmTools.WebresourcesManager.CustomControls;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -35,6 +36,7 @@ namespace MscrmTools.WebresourcesManager.Forms
         public WebresourcesTreeView(MyPluginControl mainControl) : this()
         {
             this.mainControl = mainControl;
+            mainControl.WebresourcesCache.CollectionChanged += WebresourcesCache_CollectionChanged;
         }
 
         public event EventHandler<NodeSelectedEventArgs> ContextMenuRequested;
@@ -48,7 +50,22 @@ namespace MscrmTools.WebresourcesManager.Forms
         public event EventHandler ShowPendingUpdatesRequested;
 
         public int OrganizationMajorVersion { get; set; }
+
         public IOrganizationService Service { get; set; }
+
+        private void llDismissPendingUpdates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var result = MessageBox.Show(this, @"Are you sure you want to dismiss pending updates?
+
+Webresources will be considered has unchanged", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.No) return;
+
+            foreach (var webresource in mainControl.WebresourcesCache)
+            {
+                webresource.ResetState();
+            }
+        }
 
         private void llSynchronize_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -129,6 +146,20 @@ namespace MscrmTools.WebresourcesManager.Forms
             else
             {
                 e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void WebresourcesCache_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var resource in e.NewItems.OfType<Webresource>())
+                {
+                    resource.StateChanged += (s, evt) =>
+                    {
+                        DisplayWaitingForUpdatePanel();
+                    };
+                }
             }
         }
 
@@ -245,7 +276,7 @@ namespace MscrmTools.WebresourcesManager.Forms
         {
             Invoke(new Action(() =>
             {
-                pnlTop.Visible = false;
+                //pnlTop.Visible = false;
 
                 solution = theSolution;
                 if (solution != null)
@@ -606,8 +637,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             {
                 if (waitingUpdateResources.Any())
                 {
-                    lblWaitingUpdate.Text = string.Format(
-                        "{0} resource{1} need{2} to be updated and published to CRM server",
+                    lblWaitingUpdate.Text = string.Format(lblWaitingUpdate.Tag.ToString(),
                         waitingUpdateResources.Count,
                         waitingUpdateResources.Count > 1 ? "s" : "",
                         waitingUpdateResources.Count > 1 ? "" : "s");

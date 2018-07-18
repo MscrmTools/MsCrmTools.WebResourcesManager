@@ -76,7 +76,9 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
                 else
                 {
                     var message =
-                        @"This webresource has some unsaved changes.\n\nAre you sure you want to close this window and loose the changes?";
+                        @"This webresource has some unsaved changes.
+
+Are you sure you want to close this window and loose the changes?";
                     if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
                         DialogResult.No)
                     {

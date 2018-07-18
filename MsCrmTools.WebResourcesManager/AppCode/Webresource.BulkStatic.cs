@@ -106,24 +106,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
             // the prefix of customizations
             foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
             {
-                LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, di, list, organizationMajorVersion);
+                LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, di.FullName, list, organizationMajorVersion);
             }
 
-            LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, di, di, list, organizationMajorVersion);
+            LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, di, di.FullName, list, organizationMajorVersion);
 
             return list;
-        }
-
-        public static Entity RetrieveWebresource(Guid webresourceId, IOrganizationService service)
-        {
-            try
-            {
-                return service.Retrieve("webresource", webresourceId, new ColumnSet(true));
-            }
-            catch (Exception error)
-            {
-                throw new Exception($"An error occured while retrieving a webresource with id {webresourceId:B}: {error.Message}");
-            }
         }
 
         public static Entity RetrieveWebresource(string name, IOrganizationService service)
@@ -294,9 +282,17 @@ namespace MscrmTools.WebresourcesManager.AppCode
         }
 
         private static void LoadFilesFromFolder(MyPluginControl parent, List<string> extensionsToLoad, List<string> invalidFilenames,
-                                    DirectoryInfo diChild, DirectoryInfo di, List<Webresource> list, int organizationMajorVersion)
+                                    DirectoryInfo di, string rootPath, List<Webresource> list, int organizationMajorVersion)
         {
-            foreach (FileInfo fi in diChild.GetFiles("*.*", SearchOption.AllDirectories))
+            if (di.FullName != rootPath)
+            {
+                foreach (var diChild in di.GetDirectories())
+                {
+                    LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, rootPath, list, organizationMajorVersion);
+                }
+            }
+
+            foreach (FileInfo fi in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
                 if (fi.Extension.Length == 0)
                 {
@@ -317,7 +313,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 }
 
                 var fileRelativePath = fi.FullName;
-                fileRelativePath = fileRelativePath.Replace(di.FullName, string.Empty);
+                fileRelativePath = fileRelativePath.Replace(rootPath, string.Empty);
                 fileRelativePath = fileRelativePath.Remove(0, 1);
                 fileRelativePath = fileRelativePath.Replace("\\", "/");
 

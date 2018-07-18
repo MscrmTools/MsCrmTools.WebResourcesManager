@@ -41,7 +41,6 @@ namespace MscrmTools.WebresourcesManager.Forms
             this.tsbCollapseAll = new System.Windows.Forms.ToolStripButton();
             this.pnlTop = new System.Windows.Forms.Panel();
             this.llSynchronize = new System.Windows.Forms.LinkLabel();
-            this.lblWaitingUpdate = new System.Windows.Forms.Label();
             this.pnlBottom = new System.Windows.Forms.Panel();
             this.pnlSearch = new System.Windows.Forms.Panel();
             this.txtSearch = new System.Windows.Forms.TextBox();
@@ -52,10 +51,15 @@ namespace MscrmTools.WebresourcesManager.Forms
             this.ilWebResourceTypes = new System.Windows.Forms.ImageList(this.components);
             this.pnlSolution = new System.Windows.Forms.Panel();
             this.lblSolution = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lblWaitingUpdate = new System.Windows.Forms.Label();
+            this.lblSplit = new System.Windows.Forms.Label();
+            this.llDismissPendingUpdates = new System.Windows.Forms.LinkLabel();
             this.tsTvMain.SuspendLayout();
             this.pnlTop.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             this.pnlSolution.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tsTvMain
@@ -142,38 +146,29 @@ namespace MscrmTools.WebresourcesManager.Forms
             // 
             this.pnlTop.BackColor = System.Drawing.SystemColors.Info;
             this.pnlTop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlTop.Controls.Add(this.llSynchronize);
             this.pnlTop.Controls.Add(this.lblWaitingUpdate);
+            this.pnlTop.Controls.Add(this.panel1);
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 74);
             this.pnlTop.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(584, 63);
+            this.pnlTop.Size = new System.Drawing.Size(584, 80);
             this.pnlTop.TabIndex = 9;
             this.pnlTop.Visible = false;
             // 
             // llSynchronize
             // 
-            this.llSynchronize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.llSynchronize.Location = new System.Drawing.Point(0, 37);
+            this.llSynchronize.AutoSize = true;
+            this.llSynchronize.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llSynchronize.Location = new System.Drawing.Point(370, 0);
             this.llSynchronize.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.llSynchronize.Name = "llSynchronize";
-            this.llSynchronize.Size = new System.Drawing.Size(582, 24);
+            this.llSynchronize.Size = new System.Drawing.Size(212, 25);
             this.llSynchronize.TabIndex = 1;
             this.llSynchronize.TabStop = true;
             this.llSynchronize.Text = "Show pending updates";
             this.llSynchronize.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             this.llSynchronize.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llSynchronize_LinkClicked);
-            // 
-            // lblWaitingUpdate
-            // 
-            this.lblWaitingUpdate.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblWaitingUpdate.Location = new System.Drawing.Point(0, 0);
-            this.lblWaitingUpdate.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblWaitingUpdate.Name = "lblWaitingUpdate";
-            this.lblWaitingUpdate.Size = new System.Drawing.Size(582, 37);
-            this.lblWaitingUpdate.TabIndex = 0;
-            this.lblWaitingUpdate.Text = "[lblWaitingUpdate]";
             // 
             // pnlBottom
             // 
@@ -260,11 +255,11 @@ namespace MscrmTools.WebresourcesManager.Forms
             this.tv.HideSelection = false;
             this.tv.ImageIndex = 0;
             this.tv.ImageList = this.ilWebResourceTypes;
-            this.tv.Location = new System.Drawing.Point(0, 137);
+            this.tv.Location = new System.Drawing.Point(0, 154);
             this.tv.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.tv.Name = "tv";
             this.tv.SelectedImageIndex = 0;
-            this.tv.Size = new System.Drawing.Size(584, 984);
+            this.tv.Size = new System.Drawing.Size(584, 967);
             this.tv.TabIndex = 87;
             this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
             this.tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterSelect);
@@ -328,6 +323,52 @@ namespace MscrmTools.WebresourcesManager.Forms
             this.lblSolution.Text = "[solution loaded]";
             this.lblSolution.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.llDismissPendingUpdates);
+            this.panel1.Controls.Add(this.lblSplit);
+            this.panel1.Controls.Add(this.llSynchronize);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 54);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(582, 24);
+            this.panel1.TabIndex = 3;
+            // 
+            // lblWaitingUpdate
+            // 
+            this.lblWaitingUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblWaitingUpdate.Location = new System.Drawing.Point(0, 0);
+            this.lblWaitingUpdate.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblWaitingUpdate.Name = "lblWaitingUpdate";
+            this.lblWaitingUpdate.Size = new System.Drawing.Size(582, 54);
+            this.lblWaitingUpdate.TabIndex = 4;
+            this.lblWaitingUpdate.Tag = "{0} resource{1} need{2} to be updated and published on the organization";
+            this.lblWaitingUpdate.Text = "[lblWaitingUpdate]";
+            // 
+            // lblSplit
+            // 
+            this.lblSplit.AutoSize = true;
+            this.lblSplit.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblSplit.Location = new System.Drawing.Point(353, 0);
+            this.lblSplit.Name = "lblSplit";
+            this.lblSplit.Size = new System.Drawing.Size(17, 25);
+            this.lblSplit.TabIndex = 2;
+            this.lblSplit.Text = "|";
+            // 
+            // llDismissPendingUpdates
+            // 
+            this.llDismissPendingUpdates.AutoSize = true;
+            this.llDismissPendingUpdates.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llDismissPendingUpdates.Location = new System.Drawing.Point(123, 0);
+            this.llDismissPendingUpdates.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.llDismissPendingUpdates.Name = "llDismissPendingUpdates";
+            this.llDismissPendingUpdates.Size = new System.Drawing.Size(230, 25);
+            this.llDismissPendingUpdates.TabIndex = 3;
+            this.llDismissPendingUpdates.TabStop = true;
+            this.llDismissPendingUpdates.Text = "Dismiss pending updates";
+            this.llDismissPendingUpdates.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.llDismissPendingUpdates.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llDismissPendingUpdates_LinkClicked);
+            // 
             // WebresourcesTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -353,6 +394,8 @@ namespace MscrmTools.WebresourcesManager.Forms
             this.pnlSearch.ResumeLayout(false);
             this.pnlSearch.PerformLayout();
             this.pnlSolution.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,9 +420,12 @@ namespace MscrmTools.WebresourcesManager.Forms
         private System.Windows.Forms.Label lblSearch;
         private System.Windows.Forms.TreeView tv;
         private System.Windows.Forms.ImageList ilWebResourceTypes;
-        private System.Windows.Forms.Label lblWaitingUpdate;
         private System.Windows.Forms.LinkLabel llSynchronize;
         private System.Windows.Forms.Panel pnlSolution;
         private System.Windows.Forms.Label lblSolution;
+        private System.Windows.Forms.Label lblWaitingUpdate;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.LinkLabel llDismissPendingUpdates;
+        private System.Windows.Forms.Label lblSplit;
     }
 }

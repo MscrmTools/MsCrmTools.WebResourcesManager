@@ -100,7 +100,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
             loadedOn = DateTime.Now;
             Plugin = parent;
             Plugin.WebresourcesCache.Add(this);
-            Plugin.DisplayWaitingForUpdatePanel();
 
             State = filePath != null ? WebresourceState.Saved : WebresourceState.None;
 
@@ -162,6 +161,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
             this.filePath = filePath;
 
             LoadAssociatedResources();
+        }
+
+        internal void ResetState()
+        {
+            State = WebresourceState.None;
         }
 
         #endregion Constructors

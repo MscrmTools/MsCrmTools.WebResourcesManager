@@ -306,7 +306,7 @@ namespace MscrmTools.WebresourcesManager
             }
             else if (e.ClickedItem == tsmiRenameWebresource)
             {
-                var renameDialog = new RenameWebResourceDialog(contextStripResource.Name, ConnectionDetail.OrganizationMajorVersion);
+                var renameDialog = new RenameWebResourceDialog(contextStripResource.Name, ConnectionDetail?.OrganizationMajorVersion ?? -1);
 
                 if (renameDialog.ShowDialog(this) == DialogResult.OK)
                 {
@@ -318,7 +318,7 @@ namespace MscrmTools.WebresourcesManager
             }
             else if (e.ClickedItem == tsmiAddNewFolder)
             {
-                var newFolderDialog = new NewFolderDialog(ConnectionDetail.OrganizationMajorVersion);
+                var newFolderDialog = new NewFolderDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1);
                 if (newFolderDialog.ShowDialog(this) == DialogResult.OK)
                 {
                     tv.AddSingleFolder(contextFolderNode, newFolderDialog.FolderName);
@@ -383,7 +383,8 @@ namespace MscrmTools.WebresourcesManager
         {
             if (DialogResult.Yes == MessageBox.Show(this,
                     @"This webresource will be deleted from the organization if it exists.
-                      Are you sure you want to delete this webresource?",
+
+Are you sure you want to delete this webresource?",
                     @"Question",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question))
@@ -756,7 +757,7 @@ namespace MscrmTools.WebresourcesManager
             if (!lastSettings.LoadAllWebresources)
             {
                 // Display web resource types selection dialog
-                var dialog = new WebResourceTypeSelectorDialog(ConnectionDetail.OrganizationMajorVersion);
+                var dialog = new WebResourceTypeSelectorDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1);
                 if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
                 {
                     lastSettings.TypesToload = dialog.TypesToLoad;
@@ -914,7 +915,7 @@ namespace MscrmTools.WebresourcesManager
         private void LoadWebresources(LoadResourcesSettings settings)
         {
             tv.Enabled = false;
-            tv.OrganizationMajorVersion = ConnectionDetail.OrganizationMajorVersion;
+            tv.OrganizationMajorVersion = ConnectionDetail?.OrganizationMajorVersion ?? -1;
             tv.Service = Service;
 
             CloseOpenedContents();
@@ -983,10 +984,15 @@ namespace MscrmTools.WebresourcesManager
                     Settings.Instance.LastFolderUsed = fbd.FolderPath;
                     Settings.Instance.Save();
 
+                    if (fbd.FolderPath.EndsWith("\\"))
+                        fbd.FolderPath = fbd.FolderPath.Substring(0, fbd.FolderPath.Length - 1);
+
                     CloseOpenedContents();
 
                     var invalidFilenames = new List<string>();
-                    var resources = Webresource.RetrieveFromDirectory(this, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail.OrganizationMajorVersion);
+                    WebresourcesCache.Clear();
+                    tv.DisplayWaitingForUpdatePanel();
+                    var resources = Webresource.RetrieveFromDirectory(this, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail?.OrganizationMajorVersion ?? -1);
 
                     tv.DisplayNodes(resources, null, Settings.Instance.ExpandAllOnLoadingResources);
 
