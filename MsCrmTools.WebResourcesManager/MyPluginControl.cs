@@ -1084,11 +1084,11 @@ Are you sure you want to delete this webresource?",
             }
             else if (e.ClickedItem == tsmiSaveToDiskWithRoots)
             {
-                SaveToDisk(WebresourcesCache.Where(r => r.Node.Checked), true);
+                SaveToDisk(WebresourcesCache.Where(r => r.Node?.Checked ?? false), true);
             }
             else if (e.ClickedItem == tsmiSaveToDisk)
             {
-                SaveToDisk(WebresourcesCache.Where(r => r.Node.Checked));
+                SaveToDisk(WebresourcesCache.Where(r => r.Node?.Checked ?? false));
             }
         }
 
