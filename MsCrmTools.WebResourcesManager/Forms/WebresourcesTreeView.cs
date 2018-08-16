@@ -96,7 +96,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
 
                 var fi = new FileInfo(file);
 
-                AddFileAsNode((FolderNode)currentNode, new List<string> { fi.FullName }, invalidFilesList);
+                AddFilesAsNodes((FolderNode)currentNode, new List<string> { fi.FullName }, invalidFilesList);
 
                 // Create file if the current node has a filepath in its tag
                 // this means, wen resources come from disk
@@ -345,7 +345,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             }
         }
 
-        internal void AddFileAsNode(FolderNode parentNode, List<string> files, List<string> invalidFileNames)
+        internal void AddFilesAsNodes(FolderNode parentNode, List<string> files, List<string> invalidFileNames)
         {
             foreach (string fileName in files)
             {
@@ -408,7 +408,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                     AddSingleFolder(folderNode, subdirectory.Name, subdirectory, invalidFileNames);
                 }
 
-                AddFileAsNode(folderNode, di.GetFiles().Select(f => f.FullName).ToList(), invalidFileNames);
+                AddFilesAsNodes(folderNode, di.GetFiles().Select(f => f.FullName).ToList(), invalidFileNames);
             }
         }
 

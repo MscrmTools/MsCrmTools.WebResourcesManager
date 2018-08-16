@@ -292,8 +292,21 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 }
             }
 
-            foreach (FileInfo fi in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
+            var fileInfos = di.GetFiles("*", SearchOption.TopDirectoryOnly);
+            var files = new HashSet<string>(fileInfos.Select(f => f.FullName));
+            var extensionlessFiles = new HashSet<string>();
+
+            foreach (var fi in fileInfos)
             {
+                var relativePath = GetRelativePath(rootPath, fi);
+
+                if (Settings.Instance.IgnoredLocalFiles.Contains(relativePath, StringComparer.CurrentCultureIgnoreCase)
+                    || Settings.Instance.IgnoredLocalFiles.Contains(fi.FullName, StringComparer.CurrentCultureIgnoreCase))
+                {
+                    // File is set to be ignored, ignore it.
+                    continue;
+                }
+
                 if (fi.Extension.Length == 0)
                 {
                     invalidFilenames.Add(fi.FullName);
@@ -312,21 +325,33 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     continue;
                 }
 
-                var fileRelativePath = fi.FullName;
-                fileRelativePath = fileRelativePath.Replace(rootPath, string.Empty);
-                fileRelativePath = fileRelativePath.Remove(0, 1);
-                fileRelativePath = fileRelativePath.Replace("\\", "/");
-
-                var resource = new Webresource(fileRelativePath, fi.FullName,
+                var resource = new Webresource(relativePath, fi.FullName,
                     GetTypeFromExtension(fi.Extension.Remove(0, 1)), parent);
+                var extensionless = Path.Combine(fi.DirectoryName ?? "", Path.GetFileNameWithoutExtension(fi.FullName));
+                if (files.Contains(extensionless))
+                {
+                    resource.ExtensionlessMappingFilePath = extensionless;
+                    extensionlessFiles.Add(extensionless);
+                }
 
-                if (parent.WebresourcesCache.All(r => r.Name.ToLower() != fileRelativePath.ToLower()))
+                if (parent.WebresourcesCache.All(r => !string.Equals(r.Name, resource.Name, StringComparison.CurrentCultureIgnoreCase)))
                 {
                     parent.WebresourcesCache.Add(resource);
                 }
 
                 list.Add(resource);
             }
+
+            invalidFilenames.RemoveAll(f => extensionlessFiles.Contains(f));
+        }
+
+        private static string GetRelativePath(string rootPath, FileInfo fi)
+        {
+            var fileRelativePath = fi.FullName;
+            fileRelativePath = fileRelativePath.Replace(rootPath, string.Empty);
+            fileRelativePath = fileRelativePath.Remove(0, 1);
+            fileRelativePath = fileRelativePath.Replace("\\", "/");
+            return fileRelativePath;
         }
     }
 }

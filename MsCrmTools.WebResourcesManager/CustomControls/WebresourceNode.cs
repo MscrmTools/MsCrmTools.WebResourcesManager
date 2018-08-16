@@ -14,6 +14,7 @@ namespace MscrmTools.WebresourcesManager.CustomControls
 
         public WebresourceNode(Webresource resource, int draftImageIndex, int syncedImageIndex)
         {
+
             this.draftImageIndex = draftImageIndex;
             this.syncedImageIndex = syncedImageIndex;
 
@@ -23,6 +24,10 @@ namespace MscrmTools.WebresourcesManager.CustomControls
             ImageIndex = Resource.Synced ? syncedImageIndex : draftImageIndex;
             SelectedImageIndex = Resource.Synced ? syncedImageIndex : draftImageIndex;
             Text = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
+            if (resource.HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
+            {
+                Text = System.IO.Path.GetFileNameWithoutExtension(Text ?? string.Empty);
+            }
             Name = Text;
         }
 

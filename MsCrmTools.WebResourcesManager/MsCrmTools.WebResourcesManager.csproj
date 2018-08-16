@@ -143,6 +143,7 @@
     <Compile Include="AppCode\JsBeautifier\BeautifierFlags.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierOptions.cs" />
     <Compile Include="AppCode\JsBeautifier\BraceStyle.cs" />
+    <Compile Include="AppCode\ListConverter.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LoadResourcesSettings.cs" />
     <Compile Include="AppCode\Settings.cs" />
