@@ -22,7 +22,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MscrmTools.WebresourcesManager
 {
-    public partial class MyPluginControl : PluginControlBase, IShortcutReceiver
+    public partial class MyPluginControl : PluginControlBase, IShortcutReceiver, IGitHubPlugin
     {
         private FolderNode contextFolderNode;
         private Webresource contextStripResource;
@@ -32,6 +32,13 @@ namespace MscrmTools.WebresourcesManager
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
+
+        #region IGitHubPlugin
+
+        public virtual string RepositoryName => "MsCrmTools.WebResourcesManager";
+        public virtual string UserName => "MscrmTools";
+
+        #endregion IGitHubPlugin
 
         public MyPluginControl()
         {
@@ -331,7 +338,7 @@ namespace MscrmTools.WebresourcesManager
                 if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
                 {
                     var invalidFileNames = new List<string>();
-                    tv.AddFileAsNode(contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
+                    tv.AddFilesAsNodes(contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
 
                     if (invalidFileNames.Any())
                     {
@@ -663,8 +670,7 @@ Are you sure you want to delete this webresource?",
         {
             if (ifnd == null || ifnd.IsDisposed)
             {
-                ifnd = new InvalidFilenamesDialog();
-                ifnd.DockPanel = dpMain;
+                ifnd = new InvalidFilenamesDialog {DockPanel = dpMain};
             }
 
             ifnd.InvalidFiles = e.InvalidFilesList;
@@ -1084,11 +1090,11 @@ Are you sure you want to delete this webresource?",
             }
             else if (e.ClickedItem == tsmiSaveToDiskWithRoots)
             {
-                SaveToDisk(WebresourcesCache.Where(r => r.Node.Checked), true);
+                SaveToDisk(WebresourcesCache.Where(r => r?.Node?.Checked == true), true);
             }
             else if (e.ClickedItem == tsmiSaveToDisk)
             {
-                SaveToDisk(WebresourcesCache.Where(r => r.Node.Checked));
+                SaveToDisk(WebresourcesCache.Where(r => r?.Node?.Checked == true));
             }
         }
 
