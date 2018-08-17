@@ -295,13 +295,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
             var fileInfos = di.GetFiles("*", SearchOption.TopDirectoryOnly);
             var files = new HashSet<string>(fileInfos.Select(f => f.FullName));
             var extensionlessFiles = new HashSet<string>();
-
+            var ignoredLocalFiles = new List<string>();
+            ignoredLocalFiles.AddRange(Settings.Instance.IgnoredLocalFiles);
+            ignoredLocalFiles.AddRange(Settings.Instance.IgnoredLocalFiles.Select(f => f.Replace("\\", "/")));
             foreach (var fi in fileInfos)
             {
-                var relativePath = GetRelativePath(rootPath, fi);
+                var relativePath = GetRelativePath(rootPath, fi.FullName);
 
-                if (Settings.Instance.IgnoredLocalFiles.Contains(relativePath, StringComparer.CurrentCultureIgnoreCase)
-                    || Settings.Instance.IgnoredLocalFiles.Contains(fi.FullName, StringComparer.CurrentCultureIgnoreCase))
+                if (ignoredLocalFiles.Contains(relativePath, StringComparer.CurrentCultureIgnoreCase)
+                    || ignoredLocalFiles.Contains(fi.FullName, StringComparer.CurrentCultureIgnoreCase))
                 {
                     // File is set to be ignored, ignore it.
                     continue;
@@ -345,13 +347,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
             invalidFilenames.RemoveAll(f => extensionlessFiles.Contains(f));
         }
 
-        private static string GetRelativePath(string rootPath, FileInfo fi)
+        private static string GetRelativePath(string rootPath, string path)
         {
-            var fileRelativePath = fi.FullName;
-            fileRelativePath = fileRelativePath.Replace(rootPath, string.Empty);
-            fileRelativePath = fileRelativePath.Remove(0, 1);
-            fileRelativePath = fileRelativePath.Replace("\\", "/");
-            return fileRelativePath;
+            path = path.Replace(rootPath, string.Empty)
+                       .Remove(0, 1)
+                       .Replace("\\", "/");
+            return path;
         }
     }
 }

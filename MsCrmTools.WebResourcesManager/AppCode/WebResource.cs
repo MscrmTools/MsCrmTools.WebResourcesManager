@@ -108,7 +108,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public Webresource(Entity record, MyPluginControl parent)
         {
             this.record = record;
-
             StringContent = GetPlainText();
             updatedStringContent = StringContent;
 
@@ -333,6 +332,17 @@ namespace MscrmTools.WebresourcesManager.AppCode
         }
 
         [Browsable(false)]
+        public string NameWithoutExtension {
+            get
+            {
+                var index = Name?.LastIndexOf(".");
+                return index < 0 || index == null
+                    ? Name
+                    : Name.Substring(0, index.Value);
+            }
+        }
+
+        [Browsable(false)]
         public TreeNode Node { get; set; }
 
         [Browsable(false)]
@@ -417,14 +427,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void GetLatestVersion(bool fromUpdate = false)
         {
-            var originalName = Name;
-            try
-            {
-                if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
-                {
-                    record["name"] = Path.GetFileNameWithoutExtension(Name);
-                }
-                var latestRecord = RetrieveWebresource(Name, Plugin.Service);
+                var name = HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless
+                    ? NameWithoutExtension
+                    : Name;
+
+                var latestRecord = RetrieveWebresource(name, Plugin.Service);
 
                 if (fromUpdate)
                 {
@@ -438,7 +445,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 else
                 {
                     record = latestRecord ??
-                             throw new Exception($"Webresource {Name} does not exist on the connected organization");
+                             throw new Exception($"Webresource {name} does not exist on the connected organization");
 
                     if (updatedBase64Content != latestRecord.GetAttributeValue<string>("content"))
                     {
@@ -450,11 +457,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 Synced = true;
                 State = WebresourceState.None;
                 Plugin.DisplayWaitingForUpdatePanel();
-            }
-            finally
-            {
-                record["name"] = originalName;
-            }
         }
 
         public string GetPlainText()
@@ -517,80 +519,75 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void Update(IOrganizationService service, bool overwrite = false)
         {
-            var originalName = Name;
-            try
+            var name = Name;
+            if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
             {
-                if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
-                {
-                    record["name"] = Path.GetFileNameWithoutExtension(Name);
-                }
-                if (Id == Guid.Empty)
-                {
-                    var remoteRecord = RetrieveWebresource(Name, service);
-                    if (remoteRecord == null)
-                    {
-                        Create(service);
-                        State = WebresourceState.None;
-                        return;
-                    }
-
-                    record.Id = remoteRecord.Id;
-
-                    if (remoteRecord.Contains("displayname") && string.IsNullOrEmpty(DisplayName))
-                    {
-                        DisplayName = remoteRecord.GetAttributeValue<string>("displayname");
-                    }
-
-                    if (remoteRecord.Contains("description") && string.IsNullOrEmpty(Description))
-                    {
-                        Description = remoteRecord.GetAttributeValue<string>("description");
-                    }
-
-                    if (remoteRecord.Contains("dependencyxml") && string.IsNullOrEmpty(DependencyXml))
-                    {
-                        DependencyXml = remoteRecord.GetAttributeValue<string>("dependencyxml");
-                    }
-
-                    if (remoteRecord.Contains("languagecode") && LanguageCode == 0)
-                    {
-                        LanguageCode = remoteRecord.GetAttributeValue<int>("languagecode");
-                    }
-                }
-
-                // Concurrency Behavior has a bug for webresources
-                // Cannot implemen that
-                //var request = new UpdateRequest
-                //{
-                //    Target = record,
-                //    ConcurrencyBehavior =
-                //        overwrite ? ConcurrencyBehavior.AlwaysOverwrite : ConcurrencyBehavior.IfRowVersionMatches
-                //};
-
-                //service.Execute(request);
-
-                if (!Settings.Instance.ForceResourceUpdate)
-                {
-                    if (overwrite == false)
-                    {
-                        var existingRecord = service.Retrieve("webresource", record.Id, new ColumnSet());
-                        if (!string.IsNullOrEmpty(existingRecord.RowVersion) && !string.IsNullOrEmpty(record.RowVersion) && int.Parse(existingRecord.RowVersion) > int.Parse(record.RowVersion))
-                        {
-                            throw new MoreRecentRecordExistsException();
-                        }
-                    }
-                }
-
-                service.Update(record);
-
-                GetLatestVersion(true);
-
-                Synced = true;
-                State = WebresourceState.None;
+                File.WriteAllText(ExtensionlessMappingFilePath, StringContent);
+                name = NameWithoutExtension;
             }
-            finally
+
+            if (Id == Guid.Empty)
             {
-                record["name"] = originalName;
+                var remoteRecord = RetrieveWebresource(name, service);
+                if (remoteRecord == null)
+                {
+                    Create(service);
+                    State = WebresourceState.None;
+                    return;
+                }
+
+                record.Id = remoteRecord.Id;
+
+                if (remoteRecord.Contains("displayname") && string.IsNullOrEmpty(DisplayName))
+                {
+                    DisplayName = remoteRecord.GetAttributeValue<string>("displayname");
+                }
+
+                if (remoteRecord.Contains("description") && string.IsNullOrEmpty(Description))
+                {
+                    Description = remoteRecord.GetAttributeValue<string>("description");
+                }
+
+                if (remoteRecord.Contains("dependencyxml") && string.IsNullOrEmpty(DependencyXml))
+                {
+                    DependencyXml = remoteRecord.GetAttributeValue<string>("dependencyxml");
+                }
+
+                if (remoteRecord.Contains("languagecode") && LanguageCode == 0)
+                {
+                    LanguageCode = remoteRecord.GetAttributeValue<int>("languagecode");
+                }
             }
+
+            // Concurrency Behavior has a bug for webresources
+            // Cannot implemen that
+            //var request = new UpdateRequest
+            //{
+            //    Target = record,
+            //    ConcurrencyBehavior =
+            //        overwrite ? ConcurrencyBehavior.AlwaysOverwrite : ConcurrencyBehavior.IfRowVersionMatches
+            //};
+
+            //service.Execute(request);
+
+            if (!Settings.Instance.ForceResourceUpdate)
+            {
+                if (overwrite == false)
+                {
+                    var existingRecord = service.Retrieve("webresource", record.Id, new ColumnSet());
+                    if (!string.IsNullOrEmpty(existingRecord.RowVersion) && !string.IsNullOrEmpty(record.RowVersion) && int.Parse(existingRecord.RowVersion) > int.Parse(record.RowVersion))
+                    {
+                        throw new MoreRecentRecordExistsException();
+                    }
+                }
+            }
+
+            service.Update(record);
+
+            GetLatestVersion(true);
+
+            Synced = true;
+            State = WebresourceState.None;
         }
 
         internal void Rename(string newName)

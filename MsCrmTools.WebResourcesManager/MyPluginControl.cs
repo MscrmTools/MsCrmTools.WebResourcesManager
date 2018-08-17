@@ -801,6 +801,8 @@ Are you sure you want to delete this webresource?",
 
             // TODO Disable controls during update
 
+            tv.Service = Service;
+
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Updating web resources...",
@@ -1011,6 +1013,10 @@ Are you sure you want to delete this webresource?",
 
                         ifnd.InvalidFiles = invalidFilenames;
                         ifnd.Show(dpMain, DockState.DockBottom);
+                    }
+                    else if (ifnd != null && !ifnd.IsDisposed)
+                    {
+                        ifnd.InvalidFiles = invalidFilenames;
                     }
                 }
             }
