@@ -51,7 +51,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
         private string filePath;
         private Entity record;
         private WebresourceState state;
-        private string stringContent;
         private string updatedBase64Content;
         private string updatedStringContent;
 
@@ -82,12 +81,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             if (filePath == null)
             {
-                stringContent = string.Empty;
+                StringContent = string.Empty;
             }
             else
             {
                 record["content"] = Convert.ToBase64String(File.ReadAllBytes(filePath));
-                stringContent = GetPlainText();
+                StringContent = GetPlainText();
             }
 
             var map = extMap ?? WebresourceMapper.Instance.Items.FirstOrDefault(i => i.CrmValue == (int)type);
@@ -101,7 +100,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             Plugin = parent;
             Plugin.WebresourcesCache.Add(this);
 
-            State = filePath != null ? WebresourceState.Saved : WebresourceState.None;
+            State = filePath != null && Settings.Instance.LocalFilesOutOfDateOnLoad ? WebresourceState.Saved : WebresourceState.None;
 
             LoadAssociatedResources();
         }
@@ -109,9 +108,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public Webresource(Entity record, MyPluginControl parent)
         {
             this.record = record;
-
-            stringContent = GetPlainText();
-            updatedStringContent = stringContent;
+            StringContent = GetPlainText();
+            updatedStringContent = StringContent;
 
             Synced = true;
             State = WebresourceState.None;
@@ -147,7 +145,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 ["content"] = Convert.ToBase64String(File.ReadAllBytes(filePath))
             };
 
-            stringContent = GetPlainText();
+            StringContent = GetPlainText();
 
             var map = WebresourceMapper.Instance.Items.FirstOrDefault(i => i.Extension.ToLower() == Path.GetExtension(filePath).ToLower().Remove(0, 1));
             if (map != null)
@@ -239,6 +237,13 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
+        
+        [Category("Properties")]
+        [DisplayName("Extensionless mapping file path")]
+        [Description("When combined with the Sync matching files as extensionless, changes to this file will update the matching extensionless file and the extensionless file will be pushed to CRM.")]
+        [ReadOnly(true)]
+        public string ExtensionlessMappingFilePath { get; set; }
+
         [Category("Properties")]
         [DisplayName("File path")]
         [Description("Location of the webresource on disk")]
@@ -258,6 +263,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("Type of the webresource")]
         [ReadOnly(true)]
         public string FormattedType => record?.FormattedValues["webresourcetype"];
+
+        [Category("Properties")]
+        [DisplayName("Has Backing Extensionless File")]
+        [Description("")]
+        [ReadOnly(true)]
+        public bool HasExtensionlessMappingFile => !string.IsNullOrWhiteSpace(ExtensionlessMappingFilePath);
 
         [Category("Attributes")]
         [DisplayName("Unique identifier")]
@@ -321,6 +332,17 @@ namespace MscrmTools.WebresourcesManager.AppCode
         }
 
         [Browsable(false)]
+        public string NameWithoutExtension {
+            get
+            {
+                var index = Name?.LastIndexOf(".");
+                return index < 0 || index == null
+                    ? Name
+                    : Name.Substring(0, index.Value);
+            }
+        }
+
+        [Browsable(false)]
         public TreeNode Node { get; set; }
 
         [Browsable(false)]
@@ -341,7 +363,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         }
 
         [Browsable(false)]
-        public string StringContent => stringContent;
+        public string StringContent { get; private set; }
 
         [Category("Properties")]
         [DisplayName("Synced")]
@@ -360,7 +382,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             {
                 updatedStringContent = value;
                 updatedBase64Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(updatedStringContent));
-                State = updatedStringContent != stringContent ? WebresourceState.Draft : WebresourceState.None;
+                State = updatedStringContent != StringContent ? WebresourceState.Draft : WebresourceState.None;
             }
         }
 
@@ -405,32 +427,36 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void GetLatestVersion(bool fromUpdate = false)
         {
-            var latestRecord = RetrieveWebresource(Name, Plugin.Service);
+                var name = HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless
+                    ? NameWithoutExtension
+                    : Name;
 
-            if (fromUpdate)
-            {
-                record.RowVersion = latestRecord.RowVersion;
+                var latestRecord = RetrieveWebresource(name, Plugin.Service);
 
-                //if (record.GetAttributeValue<string>("content") != latestRecord.GetAttributeValue<string>("content"))
-                //{
-                //    Plugin.ShowContentNotUpdated();
-                //}
-            }
-            else
-            {
-                record = latestRecord ??
-                         throw new Exception($"Webresource {Name} does not exist on the connected organization");
-
-                if (updatedBase64Content != latestRecord.GetAttributeValue<string>("content"))
+                if (fromUpdate)
                 {
-                    stringContent = GetPlainText();
-                    ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
-                }
-            }
+                    record.RowVersion = latestRecord.RowVersion;
 
-            Synced = true;
-            State = WebresourceState.None;
-            Plugin.DisplayWaitingForUpdatePanel();
+                    //if (record.GetAttributeValue<string>("content") != latestRecord.GetAttributeValue<string>("content"))
+                    //{
+                    //    Plugin.ShowContentNotUpdated();
+                    //}
+                }
+                else
+                {
+                    record = latestRecord ??
+                             throw new Exception($"Webresource {name} does not exist on the connected organization");
+
+                    if (updatedBase64Content != latestRecord.GetAttributeValue<string>("content"))
+                    {
+                        StringContent = GetPlainText();
+                        ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
+                    }
+                }
+
+                Synced = true;
+                State = WebresourceState.None;
+                Plugin.DisplayWaitingForUpdatePanel();
         }
 
         public string GetPlainText()
@@ -479,7 +505,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             {
                 record["content"] = base64Content;
 
-                stringContent = GetPlainText();
+                StringContent = GetPlainText();
 
                 State = WebresourceState.Saved;
                 ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
@@ -493,9 +519,16 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void Update(IOrganizationService service, bool overwrite = false)
         {
+            var name = Name;
+            if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
+            {
+                File.WriteAllText(ExtensionlessMappingFilePath, StringContent);
+                name = NameWithoutExtension;
+            }
+
             if (Id == Guid.Empty)
             {
-                var remoteRecord = RetrieveWebresource(Name, service);
+                var remoteRecord = RetrieveWebresource(name, service);
                 if (remoteRecord == null)
                 {
                     Create(service);
@@ -637,7 +670,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         internal void Save()
         {
             record["content"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(updatedStringContent));
-            stringContent = UpdatedStringContent;
+            StringContent = UpdatedStringContent;
             State = WebresourceState.Saved;
 
             Plugin.DisplayWaitingForUpdatePanel();
@@ -657,13 +690,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
                 var path = Path.Combine(Settings.Instance.LastFolderUsed, Name);
                 SaveToDisk(path);
+                if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
+                {
+                    File.WriteAllText(ExtensionlessMappingFilePath, StringContent);
+                }
             }
         }
 
-        internal string SaveToDisk(string folder)
+        internal string SaveToDisk(string path)
         {
-            var path = Path.Combine(folder, Name);
-
             if (string.IsNullOrEmpty(Path.GetExtension(path))
                 && Settings.Instance.AddMissingExtensionOnDiskWrite)
             {

@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing.Design;
+using System.Linq;
 using System.Windows.Forms.Design;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
@@ -97,6 +100,23 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("Check the extension of a webresource name and load it only if valid")]
         public bool LoadOnlyValidExtensions { get; set; } = false;
 
+        [Category("Local Files")]
+        [DisplayName("Ignored Files")]
+        [Description("Files to ignore and not display an error for loading from disk")]
+        [Editor(@"System.Windows.Forms.Design.StringCollectionEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
+        [TypeConverter(typeof(ListConverter))]
+        public List<string> IgnoredLocalFiles { get; set; } = new List<string>();
+
+        [Category("Local Sync Settings")]
+        [DisplayName("Sync matching files as extensionless")]
+        [Description("CRM doesn't enforce adding an extension to a webresource.  If there is a local file \"new_a\" and another \"new_a.js\", \"new_a.js\" will be pushed as \"new_a\"")]
+        public bool SyncMatchingJsFilesAsExtensionless { get; set; } = true;
+
+        [Category("Local Sync Settings")]
+        [DisplayName("Local files out of date on load")]
+        [Description("Treats local files as out of date when they are initially loaded.  Setting to false will only track future changes.")]
+        public bool LocalFilesOutOfDateOnLoad { get; set; } = true;
+
         [Browsable(false)]
         public bool ObfuscateJavascript { get; set; }
 
@@ -122,6 +142,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void Save()
         {
+            for (var i = 0; i < IgnoredLocalFiles.Count; i++)
+            {
+                IgnoredLocalFiles[i] = IgnoredLocalFiles[i].Trim();
+            }
             SettingsManager.Instance.Save(GetType(), instance);
         }
     }
