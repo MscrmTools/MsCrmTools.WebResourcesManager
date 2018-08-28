@@ -242,7 +242,7 @@ namespace MscrmTools.WebresourcesManager
                     Webresources = new List<Webresource> { contextStripResource },
                 };
 
-                UpdateWebResources(us);
+                ExecuteMethod(UpdateWebResources, us);
             }
             else if (e.ClickedItem == tsmiUpdatePublish)
             {
@@ -252,7 +252,7 @@ namespace MscrmTools.WebresourcesManager
                     Publish = true
                 };
 
-                UpdateWebResources(us);
+                ExecuteMethod(UpdateWebResources, us);
             }
             else if (e.ClickedItem == tsmiUpdatePublishAdd)
             {
@@ -263,7 +263,7 @@ namespace MscrmTools.WebresourcesManager
                     AddToSolution = true
                 };
 
-                UpdateWebResources(us);
+                ExecuteMethod(UpdateWebResources, us);
             }
             else if (e.ClickedItem == tsmiGetLatest)
             {
@@ -670,7 +670,7 @@ Are you sure you want to delete this webresource?",
         {
             if (ifnd == null || ifnd.IsDisposed)
             {
-                ifnd = new InvalidFilenamesDialog {DockPanel = dpMain};
+                ifnd = new InvalidFilenamesDialog { DockPanel = dpMain };
             }
 
             ifnd.InvalidFiles = e.InvalidFilesList;
@@ -1096,7 +1096,6 @@ Are you sure you want to delete this webresource?",
             }
             else if (e.ClickedItem == tsmiSaveToDiskWithRoots)
             {
-
                 SaveToDisk(WebresourcesCache.Where(r => r?.Node?.Checked == true), true);
             }
             else if (e.ClickedItem == tsmiSaveToDisk)
@@ -1137,7 +1136,7 @@ Are you sure you want to delete this webresource?",
                             Publish = true
                         };
 
-                        UpdateWebResources(us);
+                        ExecuteMethod(UpdateWebResources, us);
                     }
                 }
                 else if (activeContent is CodeEditorForm cef)
