@@ -1096,6 +1096,7 @@ Are you sure you want to delete this webresource?",
             }
             else if (e.ClickedItem == tsmiSaveToDiskWithRoots)
             {
+
                 SaveToDisk(WebresourcesCache.Where(r => r?.Node?.Checked == true), true);
             }
             else if (e.ClickedItem == tsmiSaveToDisk)
