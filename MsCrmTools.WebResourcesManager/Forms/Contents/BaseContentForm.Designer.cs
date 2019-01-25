@@ -94,6 +94,7 @@
             // 
             // tsmiSave
             // 
+            this.tsmiSave.Enabled = false;
             this.tsmiSave.Name = "tsmiSave";
             this.tsmiSave.Size = new System.Drawing.Size(375, 34);
             this.tsmiSave.Text = "Save (Ctrl + S)";
@@ -262,7 +263,7 @@
             this.ClientSize = new System.Drawing.Size(1365, 293);
             this.Controls.Add(this.toolStrip);
             this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "BaseContentForm";
             this.Text = "BaseContentForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BaseContentForm_FormClosing);
