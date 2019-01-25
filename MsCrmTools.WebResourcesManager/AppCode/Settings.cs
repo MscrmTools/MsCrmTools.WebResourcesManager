@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Linq;
 using System.Windows.Forms.Design;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
@@ -84,6 +82,13 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("If false, a more recent version is searched on the connected organization. If so, you will be prompted before updating this webresource.")]
         public bool ForceResourceUpdate { get; set; }
 
+        [Category("Local Files")]
+        [DisplayName("Ignored Files")]
+        [Description("Files to ignore and not display an error for loading from disk")]
+        [Editor(@"System.Windows.Forms.Design.StringCollectionEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
+        [TypeConverter(typeof(ListConverter))]
+        public List<string> IgnoredLocalFiles { get; set; } = new List<string>();
+
         [Category("Miscellaneous Settings")]
         [DisplayName("Last folder used")]
         [Description("Location of the folder used to save/load webresources")]
@@ -100,17 +105,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("Check the extension of a webresource name and load it only if valid")]
         public bool LoadOnlyValidExtensions { get; set; } = false;
 
-        [Category("Local Files")]
-        [DisplayName("Ignored Files")]
-        [Description("Files to ignore and not display an error for loading from disk")]
-        [Editor(@"System.Windows.Forms.Design.StringCollectionEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
-        [TypeConverter(typeof(ListConverter))]
-        public List<string> IgnoredLocalFiles { get; set; } = new List<string>();
-
-        [Category("Local Sync Settings")]
-        [DisplayName("Sync matching files as extensionless")]
-        [Description("CRM doesn't enforce adding an extension to a webresource.  If there is a local file \"new_a\" and another \"new_a.js\", \"new_a.js\" will be pushed as \"new_a\"")]
-        public bool SyncMatchingJsFilesAsExtensionless { get; set; } = true;
+        [Category("Loading Settings")]
+        [DisplayName("Load Hidden system webresources")]
+        [Description("Specify wether to load system webresources that are normaly hidden. Only works when loading webresources without specifying a solution to load")]
+        public bool LoadSystemHiddenResources { get; set; }
 
         [Category("Local Sync Settings")]
         [DisplayName("Local files out of date on load")]
@@ -138,6 +136,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public bool SaveOnDisk { get; set; }
 
         [Browsable(false)] public DockState SettingsDockState { get; set; } = DockState.DockRightAutoHide;
+
+        [Category("Local Sync Settings")]
+        [DisplayName("Sync matching files as extensionless")]
+        [Description("CRM doesn't enforce adding an extension to a webresource.  If there is a local file \"new_a\" and another \"new_a.js\", \"new_a.js\" will be pushed as \"new_a\"")]
+        public bool SyncMatchingJsFilesAsExtensionless { get; set; } = true;
+
         [Browsable(false)] public DockState TreeviewDockState { get; set; } = DockState.DockLeft;
 
         public void Save()

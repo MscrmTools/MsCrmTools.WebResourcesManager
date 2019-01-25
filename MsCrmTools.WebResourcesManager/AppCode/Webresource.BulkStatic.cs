@@ -151,14 +151,14 @@ namespace MscrmTools.WebresourcesManager.AppCode
                         {
                             Filters =
                             {
-                                new FilterExpression
+                                Settings.Instance.LoadSystemHiddenResources == false ? new FilterExpression
                                 {
                                     FilterOperator = LogicalOperator.And,
                                     Conditions =
                                     {
-                                        new ConditionExpression("ishidden", ConditionOperator.Equal, false),
+                                        new ConditionExpression("ishidden", ConditionOperator.Equal, false)
                                     }
-                                },
+                                }:new FilterExpression(),
                                 new FilterExpression
                                 {
                                     FilterOperator = LogicalOperator.Or,
@@ -281,8 +281,16 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
+        private static string GetRelativePath(string rootPath, string path)
+        {
+            path = path.Replace(rootPath, string.Empty)
+                       .Remove(0, 1)
+                       .Replace("\\", "/");
+            return path;
+        }
+
         private static void LoadFilesFromFolder(MyPluginControl parent, List<string> extensionsToLoad, List<string> invalidFilenames,
-                                    DirectoryInfo di, string rootPath, List<Webresource> list, int organizationMajorVersion)
+                                            DirectoryInfo di, string rootPath, List<Webresource> list, int organizationMajorVersion)
         {
             if (di.FullName != rootPath)
             {
@@ -345,14 +353,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
 
             invalidFilenames.RemoveAll(f => extensionlessFiles.Contains(f));
-        }
-
-        private static string GetRelativePath(string rootPath, string path)
-        {
-            path = path.Replace(rootPath, string.Empty)
-                       .Remove(0, 1)
-                       .Replace("\\", "/");
-            return path;
         }
     }
 }
