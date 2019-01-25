@@ -362,7 +362,10 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                     var name = $"{parentNode.ResourceFullPath}/{fi.Name}";
 
                     var resource = new Webresource(name, fi.FullName, WebresourceType.Auto, mainControl);
-                    mainControl.WebresourcesCache.Add(resource);
+                    if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                    {
+                        mainControl.WebresourcesCache.Add(resource);
+                    }
 
                     AddSingleNode(resource, resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries),
                         parentNode);
@@ -388,7 +391,10 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                 var name = $"{parentNode.ResourceFullPath}/{nwrDialog.WebresourceName}";
 
                 var resource = new Webresource(name, null, type, mainControl);
-                mainControl.WebresourcesCache.Add(resource);
+                if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                {
+                    mainControl.WebresourcesCache.Add(resource);
+                }
 
                 AddSingleNode(resource, name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), parentNode);
 

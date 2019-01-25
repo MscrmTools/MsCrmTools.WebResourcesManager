@@ -1042,37 +1042,43 @@ Are you sure you want to delete this webresource?",
 
                 foreach (var resource in resources)
                 {
-                    if (resource.Content.Length > 0)
+                    string[] partPath = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                    string path = fbd.FolderPath;
+
+                    if (withRoot)
                     {
-                        string[] partPath = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                        string path = fbd.FolderPath;
-
-                        if (withRoot)
+                        for (int i = 0; i < partPath.Length - 1; i++)
                         {
-                            for (int i = 0; i < partPath.Length - 1; i++)
-                            {
-                                path = Path.Combine(path, partPath[i]);
+                            path = Path.Combine(path, partPath[i]);
 
-                                if (!Directory.Exists(path))
-                                {
-                                    Directory.CreateDirectory(path);
-                                }
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
                             }
                         }
+                    }
 
-                        if (resource.Node.Parent is FolderNode fldNode)
-                        {
-                            fldNode.FolderPath = path;
-                            fldNode.Synced = true;
-                        }
+                    if (resource.Node.Parent is FolderNode fldNode)
+                    {
+                        fldNode.FolderPath = path;
+                        fldNode.Synced = true;
+                    }
 
-                        path = Path.Combine(path, partPath[partPath.Length - 1]);
+                    path = Path.Combine(path, partPath[partPath.Length - 1]);
 
+                    if (resource.Content?.Length > 0)
+                    {
                         byte[] bytes = Convert.FromBase64String(resource.Content);
                         File.WriteAllBytes(path, bytes);
-
-                        resource.FilePath = path;
                     }
+                    else
+                    {
+                        if (File.Exists(path))
+                            File.Delete(path);
+                        File.Create(path).Dispose();
+                    }
+
+                    resource.FilePath = path;
                 }
             }
         }

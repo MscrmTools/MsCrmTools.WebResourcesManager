@@ -98,7 +98,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
             this.filePath = filePath;
             loadedOn = DateTime.Now;
             Plugin = parent;
-            Plugin.WebresourcesCache.Add(this);
+
+            if (Plugin.WebresourcesCache.All(w => w.Name != Name))
+            {
+                Plugin.WebresourcesCache.Add(this);
+            }
 
             State = filePath != null && Settings.Instance.LocalFilesOutOfDateOnLoad ? WebresourceState.Saved : WebresourceState.None;
 
