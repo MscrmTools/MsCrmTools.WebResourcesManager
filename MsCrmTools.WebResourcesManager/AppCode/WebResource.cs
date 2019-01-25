@@ -237,7 +237,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        
         [Category("Properties")]
         [DisplayName("Extensionless mapping file path")]
         [Description("When combined with the Sync matching files as extensionless, changes to this file will update the matching extensionless file and the extensionless file will be pushed to CRM.")]
@@ -332,7 +331,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
         }
 
         [Browsable(false)]
-        public string NameWithoutExtension {
+        public string NameWithoutExtension
+        {
             get
             {
                 var index = Name?.LastIndexOf(".");
@@ -427,36 +427,36 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void GetLatestVersion(bool fromUpdate = false)
         {
-                var name = HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless
-                    ? NameWithoutExtension
-                    : Name;
+            var name = HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless
+                ? NameWithoutExtension
+                : Name;
 
-                var latestRecord = RetrieveWebresource(name, Plugin.Service);
+            var latestRecord = RetrieveWebresource(name, Plugin.Service);
 
-                if (fromUpdate)
+            if (fromUpdate)
+            {
+                record.RowVersion = latestRecord.RowVersion;
+
+                //if (record.GetAttributeValue<string>("content") != latestRecord.GetAttributeValue<string>("content"))
+                //{
+                //    Plugin.ShowContentNotUpdated();
+                //}
+            }
+            else
+            {
+                record = latestRecord ??
+                         throw new Exception($"Webresource {name} does not exist on the connected organization");
+
+                if (updatedBase64Content != latestRecord.GetAttributeValue<string>("content"))
                 {
-                    record.RowVersion = latestRecord.RowVersion;
-
-                    //if (record.GetAttributeValue<string>("content") != latestRecord.GetAttributeValue<string>("content"))
-                    //{
-                    //    Plugin.ShowContentNotUpdated();
-                    //}
+                    StringContent = GetPlainText();
+                    ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
                 }
-                else
-                {
-                    record = latestRecord ??
-                             throw new Exception($"Webresource {name} does not exist on the connected organization");
+            }
 
-                    if (updatedBase64Content != latestRecord.GetAttributeValue<string>("content"))
-                    {
-                        StringContent = GetPlainText();
-                        ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
-                    }
-                }
-
-                Synced = true;
-                State = WebresourceState.None;
-                Plugin.DisplayWaitingForUpdatePanel();
+            Synced = true;
+            State = WebresourceState.None;
+            Plugin.DisplayWaitingForUpdatePanel();
         }
 
         public string GetPlainText()
@@ -575,7 +575,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 if (overwrite == false)
                 {
                     var existingRecord = service.Retrieve("webresource", record.Id, new ColumnSet());
-                    if (!string.IsNullOrEmpty(existingRecord.RowVersion) && !string.IsNullOrEmpty(record.RowVersion) && int.Parse(existingRecord.RowVersion) > int.Parse(record.RowVersion))
+                    if (!string.IsNullOrEmpty(existingRecord.RowVersion) && !string.IsNullOrEmpty(record.RowVersion) && long.Parse(existingRecord.RowVersion) > long.Parse(record.RowVersion))
                     {
                         throw new MoreRecentRecordExistsException();
                     }
