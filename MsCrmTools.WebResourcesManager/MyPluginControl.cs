@@ -32,7 +32,7 @@ namespace MscrmTools.WebresourcesManager
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
-        private Dictionary<ToolStripItem, Action> onTvItemClickedMap;
+        private readonly Dictionary<ToolStripItem, Action<MyPluginControl>> onTvItemClickedMap;
 
         #region IGitHubPlugin
 
@@ -65,16 +65,17 @@ namespace MscrmTools.WebresourcesManager
             sd.Show(dpMain, Settings.Instance.SettingsDockState);
 
             tv.Show(dpMain, Settings.Instance.TreeviewDockState);
+            onTvItemClickedMap = InitializeOnTvItemClickedMap();
         }
 
-        private Dictionary<ToolStripItem, Action> InitializeOnTvItemClickedMap()
+        private Dictionary<ToolStripItem, Action<MyPluginControl>> InitializeOnTvItemClickedMap()
         {
-            return new Dictionary<ToolStripItem, Action>
+            return new Dictionary<ToolStripItem, Action<MyPluginControl>>
             {
                 // CRM
-                {tsmiUpdate, () => UpdateResources() },
-                {tsmiUpdatePublish, () => UpdateResources(true) },
-                {tsmiUpdatePublishAdd, () => UpdateResources(true, true) },
+                {tsmiUpdate, (c) => c.UpdateResources() },
+                {tsmiUpdatePublish, (c) => c.UpdateResources(true) },
+                {tsmiUpdatePublishAdd, (c) => c.UpdateResources(true, true) },
 
                 // File
                 {tsmiRefreshFileFromDisk, RefreshFileFromDisk },
@@ -88,22 +89,22 @@ namespace MscrmTools.WebresourcesManager
 
                 // TreeViewNode Right Click Menu
                 {tsmiRenameWebresource, RenameWebResource },
-                {tsmiGetLatest, () => contextStripResource.GetLatestVersion() },
-                {tsmiDelete, () => ExecuteMethod(DeleteWebresource, contextStripResource) },
+                {tsmiGetLatest, (c) => c.contextStripResource.GetLatestVersion() },
+                {tsmiDelete, (c) => c.ExecuteMethod(c.DeleteWebresource, c.contextStripResource) },
                 {tsmiOpenInCrm, OpenInBrowser },
-                {tsmiCopyNameToClipboard, () => Clipboard.SetData(DataFormats.StringFormat, contextStripResource.Name) },
+                {tsmiCopyNameToClipboard, (c) => Clipboard.SetData(DataFormats.StringFormat, c.contextStripResource.Name) },
 
                 // TreeViewNode Folder Right Click Menu
                 {tsmiAddExistingFile, AddExistingFile },
-                {tsmiNewCss, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Css) },
-                {tsmiNewData, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Data) },
-                {tsmiNewHtml, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.WebPage) },
-                {tsmiNewResx, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Resx) },
-                {tsmiNewScript, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Script) },
-                {tsmiNewXsl, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Xsl) },
+                {tsmiNewCss, (c) => c.tv.AddNewWebresource(c.contextFolderNode, WebresourceType.Css) },
+                {tsmiNewData, (c) => c.tv.AddNewWebresource(c.contextFolderNode, WebresourceType.Data) },
+                {tsmiNewHtml, (c) => c.tv.AddNewWebresource(c.contextFolderNode, WebresourceType.WebPage) },
+                {tsmiNewResx, (c) => c.tv.AddNewWebresource(c.contextFolderNode, WebresourceType.Resx) },
+                {tsmiNewScript, (c) => c.tv.AddNewWebresource(c.contextFolderNode, WebresourceType.Script) },
+                {tsmiNewXsl, (c) => c.tv.AddNewWebresource(c.contextFolderNode, WebresourceType.Xsl) },
                 {tsmiAddNewFolder, AddNewFolder },
-                {tsmiCollapse, () => contextFolderNode.Collapse(false) },
-                {tsmiExpand, contextFolderNode.ExpandAll },
+                {tsmiCollapse, (c) => c.contextFolderNode.Collapse(false) },
+                {tsmiExpand, (c) => c.contextFolderNode.ExpandAll() },
             };
         }
 
@@ -243,14 +244,9 @@ namespace MscrmTools.WebresourcesManager
                     cmsWebresourceTreeview.Hide();
                 }
 
-                if (onTvItemClickedMap == null)
-                {
-                    onTvItemClickedMap = InitializeOnTvItemClickedMap();
-                }
-
                 if (onTvItemClickedMap.TryGetValue(e.ClickedItem, out var action))
                 {
-                    action();
+                    action(this);
                 }
             }
             catch (Exception error)
@@ -259,36 +255,36 @@ namespace MscrmTools.WebresourcesManager
             }
         }
 
-        private void ShowProperties()
+        private static void ShowProperties(MyPluginControl plugin)
         {
-            if (rpd.IsDisposed)
+            if (plugin.rpd.IsDisposed)
             {
-                rpd = new ResourcePropertiesDialog();
+                plugin.rpd = new ResourcePropertiesDialog();
             }
 
-            rpd.Resource = contextStripResource;
-            rpd.ShowDocked();
+            plugin.rpd.Resource = plugin.contextStripResource;
+            plugin.rpd.ShowDocked();
         }
 
-        private void SetDependencyXml()
+        private static void SetDependencyXml(MyPluginControl plugin)
         {
-            var dialog = new DependencyDialog(contextStripResource, this);
-            if (dialog.ShowDialog(this) == DialogResult.OK)
+            var dialog = new DependencyDialog(plugin.contextStripResource, plugin);
+            if (dialog.ShowDialog(plugin) == DialogResult.OK)
             {
-                contextStripResource.DependencyXml = dialog.UpdatedDependencyXml;
+                plugin.contextStripResource.DependencyXml = dialog.UpdatedDependencyXml;
             }
         }
 
-        private void OpenInBrowser()
+        private static void OpenInBrowser(MyPluginControl plugin)
         {
-            if (contextStripResource.Id == Guid.Empty)
+            if (plugin.contextStripResource.Id == Guid.Empty)
             {
-                MessageBox.Show(this, @"This web resource does not exist on the CRM organization or is not synced", @"Warning",
+                MessageBox.Show(plugin, @"This web resource does not exist on the CRM organization or is not synced", @"Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            Process.Start($"{ConnectionDetail.WebApplicationUrl}/main.aspx?id={contextStripResource.Id}&etc=9333&pagetype=webresourceedit");
+            Process.Start($"{plugin.ConnectionDetail.WebApplicationUrl}/main.aspx?id={plugin.contextStripResource.Id}&etc=9333&pagetype=webresourceedit");
         }
 
         private void UpdateResources(bool publish = false, bool addToSolution = false)
@@ -303,31 +299,69 @@ namespace MscrmTools.WebresourcesManager
             ExecuteMethod(UpdateWebResources, us);
         }
 
-        private void RefreshFileFromDisk()
+        private static void RefreshFileFromDisk(MyPluginControl plugin)
         {
-            if (string.IsNullOrEmpty(contextStripResource.FilePath))
+            if (string.IsNullOrEmpty(plugin.contextStripResource.FilePath))
             {
-                MessageBox.Show(this, @"This webresource is not synced with a local file", @"Warning",
+                MessageBox.Show(plugin, @"This webresource is not synced with a local file", @"Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            contextStripResource.RefreshFromDisk();
+            plugin.contextStripResource.RefreshFromDisk();
         }
 
-        private void UpdateFolderFromDisk()
+        private static void UpdateFolderFromDisk(MyPluginControl plugin)
         {
-            if (string.IsNullOrEmpty(contextFolderNode.FolderPath))
+            if (string.IsNullOrEmpty(plugin.contextFolderNode.FolderPath))
             {
-                MessageBox.Show(this,
+                MessageBox.Show(plugin,
                     @"This folder node is not synced with a local folder. Cannot refresh from disk", @"Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             var invalidFileNames = new List<string>();
-            tv.RefreshFolderNodeContent(contextFolderNode, invalidFileNames, null);
+            plugin.tv.RefreshFolderNodeContent(plugin.contextFolderNode, invalidFileNames, null);
+            plugin.ShowInvalidFiles(invalidFileNames);
+        }
 
+        private static void RenameWebResource(MyPluginControl plugin)
+        {
+            var renameDialog = new RenameWebResourceDialog(plugin.contextStripResource.Name, plugin.ConnectionDetail?.OrganizationMajorVersion ?? -1);
+
+            if (renameDialog.ShowDialog(plugin) == DialogResult.OK)
+            {
+                if (plugin.contextStripResource.Name != renameDialog.WebResourceName)
+                {
+                    plugin.ExecuteMethod(plugin.RenameWebresource, renameDialog.WebResourceName);
+                }
+            }
+        }
+
+        private static void AddNewFolder(MyPluginControl plugin)
+        {
+            var newFolderDialog = new NewFolderDialog(plugin.ConnectionDetail?.OrganizationMajorVersion ?? -1);
+            if (newFolderDialog.ShowDialog(plugin) == DialogResult.OK)
+            {
+                plugin.tv.AddSingleFolder(plugin.contextFolderNode, newFolderDialog.FolderName);
+            }
+        }
+
+        private static void AddExistingFile(MyPluginControl plugin)
+        {
+            var ofd = new OpenFileDialog {Multiselect = true, Title = @"Select file(s) to add as webresource(s)"};
+
+            if (ofd.ShowDialog(plugin.ParentForm) == DialogResult.OK)
+            {
+                var invalidFileNames = new List<string>();
+                plugin.tv.AddFilesAsNodes(plugin.contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
+                plugin.ShowInvalidFiles(invalidFileNames);
+            }
+        }
+
+        private void ShowInvalidFiles(List<string> invalidFileNames)
+        {
             if (invalidFileNames.Any())
             {
                 if (ifnd == null || ifnd.IsDisposed)
@@ -337,50 +371,6 @@ namespace MscrmTools.WebresourcesManager
 
                 ifnd.InvalidFiles = invalidFileNames;
                 ifnd.ShowDocked(DockState.DockBottom);
-            }
-        }
-
-        private void RenameWebResource()
-        {
-            var renameDialog = new RenameWebResourceDialog(contextStripResource.Name, ConnectionDetail?.OrganizationMajorVersion ?? -1);
-
-            if (renameDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                if (contextStripResource.Name != renameDialog.WebResourceName)
-                {
-                    ExecuteMethod(RenameWebresource, renameDialog.WebResourceName);
-                }
-            }
-        }
-
-        private void AddNewFolder()
-        {
-            var newFolderDialog = new NewFolderDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1);
-            if (newFolderDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                tv.AddSingleFolder(contextFolderNode, newFolderDialog.FolderName);
-            }
-        }
-
-        private void AddExistingFile()
-        {
-            var ofd = new OpenFileDialog {Multiselect = true, Title = @"Select file(s) to add as webresource(s)"};
-
-            if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
-            {
-                var invalidFileNames = new List<string>();
-                tv.AddFilesAsNodes(contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
-
-                if (invalidFileNames.Any())
-                {
-                    if (ifnd == null || ifnd.IsDisposed)
-                    {
-                        ifnd = new InvalidFilenamesDialog();
-                    }
-
-                    ifnd.InvalidFiles = invalidFileNames;
-                    ifnd.ShowDocked(DockState.DockBottom);
-                }
             }
         }
 
