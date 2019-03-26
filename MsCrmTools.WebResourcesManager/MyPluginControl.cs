@@ -32,7 +32,7 @@ namespace MscrmTools.WebresourcesManager
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
-        private readonly Dictionary<ToolStripItem, Action> onTvItemClickedMap;
+        private Dictionary<ToolStripItem, Action> onTvItemClickedMap;
 
         #region IGitHubPlugin
 
@@ -65,8 +65,6 @@ namespace MscrmTools.WebresourcesManager
             sd.Show(dpMain, Settings.Instance.SettingsDockState);
 
             tv.Show(dpMain, Settings.Instance.TreeviewDockState);
-
-            onTvItemClickedMap = InitializeOnTvItemClickedMap();
         }
 
         private Dictionary<ToolStripItem, Action> InitializeOnTvItemClickedMap()
@@ -245,7 +243,12 @@ namespace MscrmTools.WebresourcesManager
                     cmsWebresourceTreeview.Hide();
                 }
 
-                if(onTvItemClickedMap.TryGetValue(e.ClickedItem, out var action))
+                if (onTvItemClickedMap == null)
+                {
+                    onTvItemClickedMap = InitializeOnTvItemClickedMap();
+                }
+
+                if (onTvItemClickedMap.TryGetValue(e.ClickedItem, out var action))
                 {
                     action();
                 }
@@ -254,12 +257,6 @@ namespace MscrmTools.WebresourcesManager
             {
                 MessageBox.Show(this, error.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            if (e.ClickedItem == tsmiProperties)
-            {
-                ShowProperties();
-            }
-
         }
 
         private void ShowProperties()
