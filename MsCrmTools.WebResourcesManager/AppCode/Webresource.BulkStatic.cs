@@ -317,19 +317,9 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     continue;
                 }
 
-                if (fi.Extension.Length == 0)
-                {
-                    invalidFilenames.Add(fi.FullName);
-                    continue;
-                }
-
-                if (!IsNameValid(fi.Name, organizationMajorVersion))
-                {
-                    invalidFilenames.Add(fi.FullName);
-                    continue;
-                }
-
-                if (!extensionsToLoad.Contains(fi.Extension))
+                if (fi.Extension.Length == 0
+                    || !IsNameValid(fi.Name, organizationMajorVersion)
+                    || !extensionsToLoad.Contains(fi.Extension))
                 {
                     invalidFilenames.Add(fi.FullName);
                     continue;
