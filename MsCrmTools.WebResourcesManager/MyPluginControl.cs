@@ -815,7 +815,7 @@ Are you sure you want to delete this webresource?",
                     foreach (var resource in settings.Webresources)
                     {
                         resources.Add(resource);
-                        if (resource.AssociatedResources != null)
+                        if (resource.AssociatedResources.Any())
                         {
                             resources.AddRange(resource.AssociatedResources);
                         }

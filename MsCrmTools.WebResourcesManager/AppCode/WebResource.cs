@@ -58,7 +58,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         #region Constructors
 
-        public Webresource(string name, string filePath, WebresourceType type, MyPluginControl parent)
+        public Webresource(string name, string filePath, WebresourceType type, MyPluginControl parent) : this()
         {
             Map extMap = null;
 
@@ -109,7 +109,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
             LoadAssociatedResources();
         }
 
-        public Webresource(Entity record, MyPluginControl parent)
+        private Webresource()
+        {
+            AssociatedResources = new List<Webresource>();
+        }
+
+        public Webresource(Entity record, MyPluginControl parent): this()
         {
             this.record = record;
             StringContent = GetPlainText();
@@ -121,7 +126,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             Plugin = parent;
         }
 
-        public Webresource(string filePath, MyPluginControl parent)
+        public Webresource(string filePath, MyPluginControl parent) : this()
         {
             var fi = new FileInfo(filePath);
 
