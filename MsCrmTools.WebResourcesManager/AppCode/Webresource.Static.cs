@@ -18,6 +18,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 case "js":
                     return WebresourceType.Script;
 
+                case "json":
                 case "xml":
                     return WebresourceType.Data;
 
@@ -48,7 +49,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     return WebresourceType.Resx;
             }
 
-            throw new ArgumentException(@"Field extension cannot be mapped to a webresource type", nameof(extension));
+            throw new NotImplementedException($@"File extension '{extension}' cannot be mapped to a webresource type!");
         }
 
         public static bool IsValidExtension(string ext)
