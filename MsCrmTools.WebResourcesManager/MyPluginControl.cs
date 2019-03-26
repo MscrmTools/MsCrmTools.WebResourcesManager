@@ -32,6 +32,7 @@ namespace MscrmTools.WebresourcesManager
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
+        private readonly Dictionary<ToolStripItem, Action> onTvItemClickedMap;
 
         #region IGitHubPlugin
 
@@ -64,6 +65,48 @@ namespace MscrmTools.WebresourcesManager
             sd.Show(dpMain, Settings.Instance.SettingsDockState);
 
             tv.Show(dpMain, Settings.Instance.TreeviewDockState);
+
+            onTvItemClickedMap = InitializeOnTvItemClickedMap();
+        }
+
+        private Dictionary<ToolStripItem, Action> InitializeOnTvItemClickedMap()
+        {
+            return new Dictionary<ToolStripItem, Action>
+            {
+                // CRM
+                {tsmiUpdate, () => UpdateResources() },
+                {tsmiUpdatePublish, () => UpdateResources(true) },
+                {tsmiUpdatePublishAdd, () => UpdateResources(true, true) },
+
+                // File
+                {tsmiRefreshFileFromDisk, RefreshFileFromDisk },
+                {tsmiUpdateFolderFromDisk, UpdateFolderFromDisk },
+
+                // Window
+                {tsmiProperties, ShowProperties },
+
+                // Tools
+                {tsmiSetDependencies, SetDependencyXml },
+
+                // TreeViewNode Right Click Menu
+                {tsmiRenameWebresource, RenameWebResource },
+                {tsmiGetLatest, () => contextStripResource.GetLatestVersion() },
+                {tsmiDelete, () => ExecuteMethod(DeleteWebresource, contextStripResource) },
+                {tsmiOpenInCrm, OpenInBrowser },
+                {tsmiCopyNameToClipboard, () => Clipboard.SetData(DataFormats.StringFormat, contextStripResource.Name) },
+
+                // TreeViewNode Folder Right Click Menu
+                {tsmiAddExistingFile, AddExistingFile },
+                {tsmiNewCss, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Css) },
+                {tsmiNewData, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Data) },
+                {tsmiNewHtml, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.WebPage) },
+                {tsmiNewResx, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Resx) },
+                {tsmiNewScript, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Script) },
+                {tsmiNewXsl, () => tv.AddNewWebresource(contextFolderNode, WebresourceType.Xsl) },
+                {tsmiAddNewFolder, AddNewFolder },
+                {tsmiCollapse, () => contextFolderNode.Collapse(false) },
+                {tsmiExpand, contextFolderNode.ExpandAll },
+            };
         }
 
         public ObservableCollection<Webresource> WebresourcesCache { get; set; } = new ObservableCollection<Webresource>();
@@ -195,110 +238,141 @@ namespace MscrmTools.WebresourcesManager
 
         private void cmsWebresourceTreeview_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem != tsmiAddNewResource)
-                cmsWebresourceTreeview.Hide();
+            try
+            {
+                if (e.ClickedItem != tsmiAddNewResource)
+                {
+                    cmsWebresourceTreeview.Hide();
+                }
+
+                if(onTvItemClickedMap.TryGetValue(e.ClickedItem, out var action))
+                {
+                    action();
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, error.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             if (e.ClickedItem == tsmiProperties)
             {
-                if (rpd.IsDisposed)
+                ShowProperties();
+            }
+
+        }
+
+        private void ShowProperties()
+        {
+            if (rpd.IsDisposed)
+            {
+                rpd = new ResourcePropertiesDialog();
+            }
+
+            rpd.Resource = contextStripResource;
+            rpd.ShowDocked();
+        }
+
+        private void SetDependencyXml()
+        {
+            var dialog = new DependencyDialog(contextStripResource, this);
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                contextStripResource.DependencyXml = dialog.UpdatedDependencyXml;
+            }
+        }
+
+        private void OpenInBrowser()
+        {
+            if (contextStripResource.Id == Guid.Empty)
+            {
+                MessageBox.Show(this, @"This web resource does not exist on the CRM organization or is not synced", @"Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Process.Start($"{ConnectionDetail.WebApplicationUrl}/main.aspx?id={contextStripResource.Id}&etc=9333&pagetype=webresourceedit");
+        }
+
+        private void UpdateResources(bool publish = false, bool addToSolution = false)
+        {
+            var us = new UpdateResourcesSettings
+            {
+                Webresources = new List<Webresource> {contextStripResource},
+                Publish = publish,
+                AddToSolution = addToSolution
+            };
+
+            ExecuteMethod(UpdateWebResources, us);
+        }
+
+        private void RefreshFileFromDisk()
+        {
+            if (string.IsNullOrEmpty(contextStripResource.FilePath))
+            {
+                MessageBox.Show(this, @"This webresource is not synced with a local file", @"Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            contextStripResource.RefreshFromDisk();
+        }
+
+        private void UpdateFolderFromDisk()
+        {
+            if (string.IsNullOrEmpty(contextFolderNode.FolderPath))
+            {
+                MessageBox.Show(this,
+                    @"This folder node is not synced with a local folder. Cannot refresh from disk", @"Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var invalidFileNames = new List<string>();
+            tv.RefreshFolderNodeContent(contextFolderNode, invalidFileNames, null);
+
+            if (invalidFileNames.Any())
+            {
+                if (ifnd == null || ifnd.IsDisposed)
                 {
-                    rpd = new ResourcePropertiesDialog();
+                    ifnd = new InvalidFilenamesDialog();
                 }
 
-                rpd.Resource = contextStripResource;
-                rpd.ShowDocked();
+                ifnd.InvalidFiles = invalidFileNames;
+                ifnd.ShowDocked(DockState.DockBottom);
             }
-            else if (e.ClickedItem == tsmiSetDependencies)
+        }
+
+        private void RenameWebResource()
+        {
+            var renameDialog = new RenameWebResourceDialog(contextStripResource.Name, ConnectionDetail?.OrganizationMajorVersion ?? -1);
+
+            if (renameDialog.ShowDialog(this) == DialogResult.OK)
             {
-                var dialog = new DependencyDialog(contextStripResource, this);
-                if (dialog.ShowDialog(this) == DialogResult.OK)
+                if (contextStripResource.Name != renameDialog.WebResourceName)
                 {
-                    contextStripResource.DependencyXml = dialog.UpdatedDependencyXml;
+                    ExecuteMethod(RenameWebresource, renameDialog.WebResourceName);
                 }
             }
-            else if (e.ClickedItem == tsmiCopyNameToClipboard)
-            {
-                Clipboard.SetData(DataFormats.StringFormat, contextStripResource.Name);
-            }
-            else if (e.ClickedItem == tsmiOpenInCrm)
-            {
-                if (contextStripResource.Id == Guid.Empty)
-                {
-                    MessageBox.Show(this, @"This web resource does not exist on the CRM organization or is not synced", @"Warning",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+        }
 
-                Process.Start($"{ConnectionDetail.WebApplicationUrl}/main.aspx?id={contextStripResource.Id}&etc=9333&pagetype=webresourceedit");
-            }
-            else if (e.ClickedItem == tsmiDelete)
+        private void AddNewFolder()
+        {
+            var newFolderDialog = new NewFolderDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1);
+            if (newFolderDialog.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteMethod(DeleteWebresource, contextStripResource);
+                tv.AddSingleFolder(contextFolderNode, newFolderDialog.FolderName);
             }
-            else if (e.ClickedItem == tsmiUpdate)
-            {
-                var us = new UpdateResourcesSettings
-                {
-                    Webresources = new List<Webresource> { contextStripResource },
-                };
+        }
 
-                ExecuteMethod(UpdateWebResources, us);
-            }
-            else if (e.ClickedItem == tsmiUpdatePublish)
-            {
-                var us = new UpdateResourcesSettings
-                {
-                    Webresources = new List<Webresource> { contextStripResource },
-                    Publish = true
-                };
+        private void AddExistingFile()
+        {
+            var ofd = new OpenFileDialog {Multiselect = true, Title = @"Select file(s) to add as webresource(s)"};
 
-                ExecuteMethod(UpdateWebResources, us);
-            }
-            else if (e.ClickedItem == tsmiUpdatePublishAdd)
+            if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
             {
-                var us = new UpdateResourcesSettings
-                {
-                    Webresources = new List<Webresource> { contextStripResource },
-                    Publish = true,
-                    AddToSolution = true
-                };
-
-                ExecuteMethod(UpdateWebResources, us);
-            }
-            else if (e.ClickedItem == tsmiGetLatest)
-            {
-                try
-                {
-                    contextStripResource.GetLatestVersion();
-                }
-                catch (Exception error)
-                {
-                    MessageBox.Show(this, error.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else if (e.ClickedItem == tsmiRefreshFileFromDisk)
-            {
-                if (string.IsNullOrEmpty(contextStripResource.FilePath))
-                {
-                    MessageBox.Show(this, @"This webresource is not synced with a local file", @"Warning",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                contextStripResource.RefreshFromDisk();
-            }
-            else if (e.ClickedItem == tsmiUpdateFolderFromDisk)
-            {
-                if (string.IsNullOrEmpty(contextFolderNode.FolderPath))
-                {
-                    MessageBox.Show(this,
-                        @"This folder node is not synced with a local folder. Cannot refresh from disk", @"Warning",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 var invalidFileNames = new List<string>();
-                tv.RefreshFolderNodeContent(contextFolderNode, invalidFileNames, null);
+                tv.AddFilesAsNodes(contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
 
                 if (invalidFileNames.Any())
                 {
@@ -310,79 +384,6 @@ namespace MscrmTools.WebresourcesManager
                     ifnd.InvalidFiles = invalidFileNames;
                     ifnd.ShowDocked(DockState.DockBottom);
                 }
-            }
-            else if (e.ClickedItem == tsmiRenameWebresource)
-            {
-                var renameDialog = new RenameWebResourceDialog(contextStripResource.Name, ConnectionDetail?.OrganizationMajorVersion ?? -1);
-
-                if (renameDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    if (contextStripResource.Name != renameDialog.WebResourceName)
-                    {
-                        ExecuteMethod(RenameWebresource, renameDialog.WebResourceName);
-                    }
-                }
-            }
-            else if (e.ClickedItem == tsmiAddNewFolder)
-            {
-                var newFolderDialog = new NewFolderDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1);
-                if (newFolderDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    tv.AddSingleFolder(contextFolderNode, newFolderDialog.FolderName);
-                }
-            }
-            else if (e.ClickedItem == tsmiAddExistingFile)
-            {
-                var ofd = new OpenFileDialog { Multiselect = true, Title = @"Select file(s) to add as webresource(s)" };
-
-                if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
-                {
-                    var invalidFileNames = new List<string>();
-                    tv.AddFilesAsNodes(contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
-
-                    if (invalidFileNames.Any())
-                    {
-                        if (ifnd == null || ifnd.IsDisposed)
-                        {
-                            ifnd = new InvalidFilenamesDialog();
-                        }
-
-                        ifnd.InvalidFiles = invalidFileNames;
-                        ifnd.ShowDocked(DockState.DockBottom);
-                    }
-                }
-            }
-            else if (e.ClickedItem == tsmiNewCss)
-            {
-                tv.AddNewWebresource(contextFolderNode, WebresourceType.Css);
-            }
-            else if (e.ClickedItem == tsmiNewData)
-            {
-                tv.AddNewWebresource(contextFolderNode, WebresourceType.Data);
-            }
-            else if (e.ClickedItem == tsmiNewHtml)
-            {
-                tv.AddNewWebresource(contextFolderNode, WebresourceType.WebPage);
-            }
-            else if (e.ClickedItem == tsmiNewResx)
-            {
-                tv.AddNewWebresource(contextFolderNode, WebresourceType.Resx);
-            }
-            else if (e.ClickedItem == tsmiNewScript)
-            {
-                tv.AddNewWebresource(contextFolderNode, WebresourceType.Script);
-            }
-            else if (e.ClickedItem == tsmiNewXsl)
-            {
-                tv.AddNewWebresource(contextFolderNode, WebresourceType.Xsl);
-            }
-            else if (e.ClickedItem == tsmiExpand)
-            {
-                contextFolderNode.ExpandAll();
-            }
-            else if (e.ClickedItem == tsmiCollapse)
-            {
-                contextFolderNode.Collapse(false);
             }
         }
 
@@ -496,7 +497,7 @@ Are you sure you want to delete this webresource?",
             tssResource5.Visible = visible && ConnectionDetail?.OrganizationMajorVersion >= 9;
         }
 
-        private void FindUnunsedResources()
+        private void FindUnusedResources()
         {
             WorkAsync(new WorkAsyncInfo
             {
@@ -597,7 +598,7 @@ Are you sure you want to delete this webresource?",
                     return;
                 }
 
-                ExecuteMethod(FindUnunsedResources);
+                ExecuteMethod(FindUnusedResources);
             }
             else if (e.ClickedItem == toCSVToolStripMenuItem)
             {
