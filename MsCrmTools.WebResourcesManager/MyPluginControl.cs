@@ -334,7 +334,18 @@ namespace MscrmTools.WebresourcesManager
             {
                 if (plugin.contextStripResource.Name != renameDialog.WebResourceName)
                 {
-                    plugin.ExecuteMethod(plugin.RenameWebresource, renameDialog.WebResourceName);
+                    if (plugin.contextStripResource.Id == Guid.Empty)
+                    {
+                        plugin.contextStripResource.Name = renameDialog.WebResourceName;
+                        var newName = renameDialog.WebResourceName.Split('/').Last();
+                        plugin.contextStripResource.Node.Name = newName;
+                        plugin.contextStripResource.Node.Text = newName;
+
+                    }
+                    else
+                    {
+                        plugin.ExecuteMethod(plugin.RenameWebresource, renameDialog.WebResourceName);
+                    }
                 }
             }
         }

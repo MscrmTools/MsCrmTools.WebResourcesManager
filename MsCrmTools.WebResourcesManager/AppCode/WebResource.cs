@@ -653,8 +653,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             Node.TreeView.Invoke(new Action(() =>
             {
-                Node.Text = newName.Split('/').First();
-                Node.Name = newName.Split('/').First();
+                Node.Text = newName.Split('/').Last();
+                Node.Name = newName.Split('/').Last();
             }));
 
             Create(Plugin.Service);
