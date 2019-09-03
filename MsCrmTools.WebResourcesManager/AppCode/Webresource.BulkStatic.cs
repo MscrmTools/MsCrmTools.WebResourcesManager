@@ -13,7 +13,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
     public partial class Webresource
     {
         public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
-        public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
+        public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\-\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> ExtensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
         private static readonly HashSet<string> ValidExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt", "svg", "resx" };
 
