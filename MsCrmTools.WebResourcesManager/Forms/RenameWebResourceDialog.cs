@@ -28,8 +28,8 @@ namespace MscrmTools.WebresourcesManager.Forms
         private void BtnValidateClick(object sender, EventArgs e)
         {
             if (txtWebResourceName.Text.Length > 0
-                && (organizationMajorVersion < 9 && !Webresource.InValidWrNameRegex.IsMatch(txtWebResourceName.Text)
-                    || organizationMajorVersion >= 9 && !Webresource.InValidWrNameRegexForV9.IsMatch(txtWebResourceName.Text))
+                && (organizationMajorVersion < 9 && organizationMajorVersion > 0 && !Webresource.InValidWrNameRegex.IsMatch(txtWebResourceName.Text)
+                    || (organizationMajorVersion <= 0 || organizationMajorVersion >= 9) && !Webresource.InValidWrNameRegexForV9.IsMatch(txtWebResourceName.Text))
                 && txtWebResourceName.Text.Split('/').All(x => x.Length != 0))
             {
                 WebResourceName = txtWebResourceName.Text;

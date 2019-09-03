@@ -411,9 +411,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF NOT EXIST Storage mkdir storage
-IF NOT EXIST Storage\Plugins mkdir Storage\Plugins
-"$(SolutionDir)packages\ILMerge.2.14.1208\tools\ILMerge.exe" /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)Storage\Plugins \$(TargetFileName)" "$(TargetFileName)" "$(TargetDir)ScintillaNET.dll" "$(TargetDir)Yahoo.Yui.Compressor.dll" "$(TargetDir)svg.dll" "$(TargetDir)EcmaScript.NET.dll"
+    <PostBuildEvent>IF NOT EXIST Plugins mkdir Plugins
+"$(SolutionDir)packages\ILMerge.2.14.1208\tools\ILMerge.exe" /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)Plugins \$(TargetFileName)" "$(TargetFileName)" "$(TargetDir)ScintillaNET.dll" "$(TargetDir)Yahoo.Yui.Compressor.dll" "$(TargetDir)svg.dll" "$(TargetDir)EcmaScript.NET.dll"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
