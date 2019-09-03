@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.WebresourcesManager.AppCode.Args;
 using MscrmTools.WebresourcesManager.AppCode.Editors;
 using MscrmTools.WebresourcesManager.AppCode.Exceptions;
+using MscrmTools.WebresourcesManager.CustomControls;
 using MscrmTools.WebresourcesManager.Forms;
 using System;
 using System.Collections.Generic;
@@ -114,7 +115,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             AssociatedResources = new List<Webresource>();
         }
 
-        public Webresource(Entity record, MyPluginControl parent): this()
+        public Webresource(Entity record, MyPluginControl parent) : this()
         {
             this.record = record;
             StringContent = GetPlainText();
@@ -599,6 +600,32 @@ namespace MscrmTools.WebresourcesManager.AppCode
             State = WebresourceState.None;
         }
 
+        internal void Rename(TreeNode node, string newName)
+        {
+            var treeView = node.TreeView;
+            var newNamePath = newName.Split('/');
+            node.Remove();
+            node.Name = newNamePath.Last();
+            node.Text = Node.Name;
+            var parentCollection = treeView.Nodes;
+            for (int i = 0; i < newNamePath.Length - 1; i++)
+            {
+                TreeNode folderNode;
+                if (parentCollection.ContainsKey(newNamePath[i]))
+                {
+                    folderNode = parentCollection[newNamePath[i]];
+                }
+                else
+                {
+                    folderNode = new FolderNode(i == 0, string.Join("/", newNamePath, 0, i + 1));
+                    folderNode.Name = folderNode.Text;
+                    parentCollection.Add(folderNode);
+                }
+                parentCollection = folderNode.Nodes;
+            }
+            parentCollection.Add(node);
+        }
+
         internal void Rename(string newName)
         {
             // Check if resource with the same name already exists
@@ -653,8 +680,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             Node.TreeView.Invoke(new Action(() =>
             {
-                Node.Text = newName.Split('/').First();
-                Node.Name = newName.Split('/').First();
+                Rename(Node, newName);
             }));
 
             Create(Plugin.Service);
