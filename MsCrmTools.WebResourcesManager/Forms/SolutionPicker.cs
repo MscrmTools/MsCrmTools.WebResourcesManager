@@ -70,8 +70,34 @@ namespace MscrmTools.WebresourcesManager.Forms
             {
                 QueryExpression qe = new QueryExpression("solution");
                 qe.Distinct = true;
-                qe.ColumnSet = new ColumnSet(true);
+                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid");
                 qe.Criteria = new FilterExpression();
+                qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
+                qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
+                qe.Criteria.AddCondition(new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default"));
+
+                return innerService.RetrieveMultiple(qe);
+            }
+            catch (Exception error)
+            {
+                if (error.InnerException is FaultException)
+                {
+                    throw new Exception("Error while retrieving solutions: " + error.InnerException.Message);
+                }
+
+                throw new Exception("Error while retrieving solutions: " + error.Message);
+            }
+        }
+
+        private EntityCollection RetrieveSolutions(string friendlyName)
+        {
+            try
+            {
+                QueryExpression qe = new QueryExpression("solution");
+                qe.Distinct = true;
+                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid");
+                qe.Criteria = new FilterExpression();
+                qe.Criteria.AddCondition(new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{friendlyName}%"));
                 qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
                 qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
                 qe.Criteria.AddCondition(new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default"));
@@ -128,5 +154,51 @@ namespace MscrmTools.WebresourcesManager.Forms
                 chkFilterByLcid.Checked = false;
             }
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            SearchSolutionByFriendlyName();
+        }
+
+        private void txbSolutionNameFilter_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Return))
+            {
+                SearchSolutionByFriendlyName();
+            }
+        }
+
+        private void SearchSolutionByFriendlyName()
+        {
+            lstSolutions.Items.Clear();
+
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += worker_SearchByFriendlyName;
+            worker.RunWorkerCompleted += worker_SearchCompleted;
+            worker.RunWorkerAsync();
+        }
+
+        private void worker_SearchByFriendlyName(object sender, DoWorkEventArgs e)
+        {
+            e.Result = RetrieveSolutions(txbSolutionNameFilter.Text);
+        }
+
+        private void worker_SearchCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            foreach (Entity solution in ((EntityCollection)e.Result).Entities)
+            {
+                ListViewItem item = new ListViewItem(solution.GetAttributeValue<string>("friendlyname"));
+                item.SubItems.Add(solution.GetAttributeValue<string>("version"));
+                item.SubItems.Add(solution.GetAttributeValue<EntityReference>("publisherid").Name);
+                item.Tag = solution;
+
+                lstSolutions.Items.Add(item);
+            }
+
+            lstSolutions.Enabled = true;
+            btnSolutionPickerValidate.Enabled = true;
+        }
+
+        
     }
 }
