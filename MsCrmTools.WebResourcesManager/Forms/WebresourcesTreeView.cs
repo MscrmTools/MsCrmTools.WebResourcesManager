@@ -31,6 +31,8 @@ namespace MscrmTools.WebresourcesManager.Forms
             tip.SetToolTip(chkDisplayExpanded, "Display results as expanded");
 
             SetNotSyncedImageLayout();
+
+            tv.TreeViewNodeSorter = new NodeSorter();
         }
 
         public WebresourcesTreeView(MyPluginControl mainControl) : this()
@@ -119,6 +121,8 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             {
                 ShowInvalidFilesRequested?.Invoke(this, new InvalidFilesEventArgs(invalidFilesList));
             }
+
+            tv.Sort();
         }
 
         private void tv_DragOver(object sender, DragEventArgs e)
@@ -338,6 +342,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
 
             tv.Nodes.Clear();
             tv.Nodes.AddRange(rootNodes.ToArray());
+            tv.Sort();
 
             if (expanded)
             {
@@ -377,7 +382,6 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                 }
             }
 
-            tv.TreeViewNodeSorter = new NodeSorter();
             tv.Sort();
         }
 

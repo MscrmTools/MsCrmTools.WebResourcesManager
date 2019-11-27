@@ -7,6 +7,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
     // Create a node sorter that implements the IComparer interface.
     public class NodeSorter : IComparer
     {
+        private static int _firstAfterSecond = 1;
+        private static int _folder = 1;
+        private static int _root = 0;
+        private static int _secondAfterFirst = -1;
+
         // Compare the length of the strings, or the strings
         // themselves, if they are the same length.
         public int Compare(object x, object y)
@@ -18,25 +23,30 @@ namespace MscrmTools.WebresourcesManager.AppCode
             {
                 if (tx.ImageIndex == ty.ImageIndex)
                 {
-                    return String.CompareOrdinal(tx.Text.ToLower(), ty.Text.ToLower());
+                    return string.Compare(tx.Text, ty.Text, StringComparison.InvariantCultureIgnoreCase);
                 }
 
-                if (tx.ImageIndex == 0)
+                if (tx.ImageIndex == _root)
                 {
-                    return -1;
+                    return _secondAfterFirst;
                 }
 
-                if (tx.ImageIndex == 1 && tx.ImageIndex < ty.ImageIndex)
+                if (ty.ImageIndex == _root)
                 {
-                    return -1;
+                    return _firstAfterSecond;
                 }
 
-                if (ty.ImageIndex == 1 && ty.ImageIndex < tx.ImageIndex)
+                if (tx.ImageIndex == _folder && tx.ImageIndex < ty.ImageIndex)
                 {
-                    return 1;
+                    return _secondAfterFirst;
                 }
 
-                return String.CompareOrdinal(tx.Text.ToLower(), ty.Text.ToLower());
+                if (ty.ImageIndex == _folder && ty.ImageIndex < tx.ImageIndex)
+                {
+                    return _firstAfterSecond;
+                }
+
+                return string.Compare(tx.Text, ty.Text, StringComparison.InvariantCultureIgnoreCase);
             }
 
             return 0;
