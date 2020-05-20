@@ -162,7 +162,7 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
                     // Set the keywords
                     scintilla.SetKeywords(0,
-                        "debugger abstract as base break case catch checked continue default delegate do else event explicit extern false finally fixed for foreach function goto if implicit in interface internal is lock namespace new null object operator out override params private protected public readonly ref return sealed sizeof stackalloc switch this throw true try typeof unchecked unsafe using var virtual while");
+                        "debugger abstract as base break case catch checked continue default delegate do else event explicit extern false finally fixed for foreach function goto if implicit in interface internal is let lock namespace new null object operator out override params private protected public readonly ref return sealed sizeof stackalloc switch this throw true try typeof unchecked unsafe using var virtual while");
                     scintilla.SetKeywords(1,
                         "bool byte char class const decimal double enum float int long sbyte short static string struct uint ulong ushort void");
                     break;
