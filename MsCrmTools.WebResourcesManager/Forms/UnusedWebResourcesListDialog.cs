@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace MscrmTools.WebresourcesManager.Forms
@@ -98,6 +99,23 @@ namespace MscrmTools.WebresourcesManager.Forms
             }
 
             lvWebResources.ListViewItemSorter = new ListViewItemComparer(e.Column, lvWebResources.Sorting);
+        }
+
+        private void lvWebResources_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (sender != lvWebResources) return;
+
+            if (e.Control && e.KeyCode == Keys.C)
+                CopySelectedValuesToClipboard();
+        }
+
+        private void CopySelectedValuesToClipboard()
+        {
+            var builder = new StringBuilder();
+            foreach (ListViewItem item in lvWebResources.SelectedItems)
+                builder.AppendLine(item.Text);
+
+            Clipboard.SetText(builder.ToString());
         }
     }
 }
