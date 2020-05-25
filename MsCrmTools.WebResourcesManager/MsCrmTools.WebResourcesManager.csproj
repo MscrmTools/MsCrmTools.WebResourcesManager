@@ -181,6 +181,7 @@
     <Compile Include="AppCode\Editors\DependencyXmlEditor.cs" />
     <Compile Include="AppCode\EventManager.cs" />
     <Compile Include="AppCode\Exceptions\MoreRecentRecordExistsException.cs" />
+    <Compile Include="AppCode\Exceptions\UnknownExtensionException.cs" />
     <Compile Include="AppCode\JsBeautifier\Beautifier.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierFlags.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierOptions.cs" />

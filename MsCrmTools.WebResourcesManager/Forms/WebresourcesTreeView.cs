@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using MscrmTools.WebresourcesManager.AppCode;
 using MscrmTools.WebresourcesManager.AppCode.Args;
+using MscrmTools.WebresourcesManager.AppCode.Exceptions;
 using MscrmTools.WebresourcesManager.CustomControls;
 using System;
 using System.Collections.Generic;
@@ -438,10 +439,11 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                     var newFolderNode = new FolderNode(false, subFolder.FullName, subFolder.FullName);
                     folderNode.Nodes.Add(newFolderNode);
 
-                    RefreshFolderNodeContent(folderNode, invalidFilenames, extensionsToLoad);
+                    RefreshFolderNodeContent(newFolderNode, invalidFilenames, extensionsToLoad);
                 }
                 else
                 {
+                    fn.FolderPath = subFolder.FullName;
                     RefreshFolderNodeContent(fn, invalidFilenames, extensionsToLoad);
                 }
             }
@@ -454,16 +456,24 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                     {
                         if (!subNodes.ContainsKey(fiChild.Name) || !(subNodes[fiChild.Name] is WebresourceNode wn))
                         {
-                            var name = $"{folderNode.ResourceFullPath}/{fiChild.Name}";
+                            try
+                            {
+                                var name = $"{folderNode.ResourceFullPath}/{fiChild.Name}";
 
-                            var resource = new Webresource(name, fiChild.FullName, WebresourceType.Auto, mainControl);
-                            AddSingleNode(resource,
-                                resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries),
-                                folderNode);
+                                var resource = new Webresource(name, fiChild.FullName, WebresourceType.Auto,
+                                    mainControl);
+                                AddSingleNode(resource,
+                                    resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries),
+                                    folderNode);
+                            }
+                            catch (UnknownExtensionException)
+                            {
+                                invalidFilenames.Add(fiChild.FullName);
+                            }
                         }
                         else
                         {
-                            wn.Resource.ReplaceContent(Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName)));
+                            wn.Resource.ReplaceContent(Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName)), fiChild.FullName);
                         }
                     }
                 }

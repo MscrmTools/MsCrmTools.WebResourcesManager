@@ -20,7 +20,7 @@ namespace MscrmTools.WebresourcesManager.CustomControls
             ResourceFullPath = resourcefullPath;
             IsRoot = isRoot;
 
-            Text = resourcefullPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
+            Text = resourcefullPath.Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries).Last();
             Name = Text;
             SetImageIndexes();
         }

@@ -110,11 +110,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
             LoadAssociatedResources();
         }
 
-        private Webresource()
-        {
-            AssociatedResources = new List<Webresource>();
-        }
-
         public Webresource(Entity record, MyPluginControl parent) : this()
         {
             this.record = record;
@@ -169,6 +164,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
             this.filePath = filePath;
 
             LoadAssociatedResources();
+        }
+
+        private Webresource()
+        {
+            AssociatedResources = new List<Webresource>();
         }
 
         internal void ResetState()
@@ -509,7 +509,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             ReplaceContent(Convert.ToBase64String(File.ReadAllBytes(FilePath)));
         }
 
-        public void ReplaceContent(string base64Content)
+        public void ReplaceContent(string base64Content, string newFilePath = null)
         {
             if (base64Content != record.GetAttributeValue<string>("content"))
             {
@@ -519,6 +519,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
                 State = WebresourceState.Saved;
                 ContentReplaced?.Invoke(this, new ResourceEventArgs(this));
+            }
+
+            if (newFilePath != null)
+            {
+                FilePath = newFilePath;
             }
         }
 

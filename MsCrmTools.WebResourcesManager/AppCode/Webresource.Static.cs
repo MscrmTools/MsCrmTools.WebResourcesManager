@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MscrmTools.WebresourcesManager.AppCode.Exceptions;
 
 namespace MscrmTools.WebresourcesManager.AppCode
 {
@@ -49,7 +49,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     return WebresourceType.Resx;
             }
 
-            throw new NotImplementedException($@"File extension '{extension}' cannot be mapped to a webresource type!");
+            throw new UnknownExtensionException($@"File extension '{extension}' cannot be mapped to a webresource type!");
         }
 
         public static bool IsValidExtension(string ext)

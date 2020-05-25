@@ -50,9 +50,10 @@
             // 
             // btnSolutionPickerCancel
             // 
-            this.btnSolutionPickerCancel.Location = new System.Drawing.Point(412, 7);
+            this.btnSolutionPickerCancel.Location = new System.Drawing.Point(824, 13);
+            this.btnSolutionPickerCancel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.btnSolutionPickerCancel.Name = "btnSolutionPickerCancel";
-            this.btnSolutionPickerCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnSolutionPickerCancel.Size = new System.Drawing.Size(150, 44);
             this.btnSolutionPickerCancel.TabIndex = 4;
             this.btnSolutionPickerCancel.Text = "Cancel";
             this.btnSolutionPickerCancel.UseVisualStyleBackColor = true;
@@ -61,9 +62,10 @@
             // btnSolutionPickerValidate
             // 
             this.btnSolutionPickerValidate.Enabled = false;
-            this.btnSolutionPickerValidate.Location = new System.Drawing.Point(330, 7);
+            this.btnSolutionPickerValidate.Location = new System.Drawing.Point(660, 13);
+            this.btnSolutionPickerValidate.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.btnSolutionPickerValidate.Name = "btnSolutionPickerValidate";
-            this.btnSolutionPickerValidate.Size = new System.Drawing.Size(75, 23);
+            this.btnSolutionPickerValidate.Size = new System.Drawing.Size(150, 44);
             this.btnSolutionPickerValidate.TabIndex = 3;
             this.btnSolutionPickerValidate.Text = "OK";
             this.btnSolutionPickerValidate.UseVisualStyleBackColor = true;
@@ -74,10 +76,10 @@
             this.chkLoadAllWebResources.AutoSize = true;
             this.chkLoadAllWebResources.Checked = true;
             this.chkLoadAllWebResources.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkLoadAllWebResources.Location = new System.Drawing.Point(7, 2);
-            this.chkLoadAllWebResources.Margin = new System.Windows.Forms.Padding(2);
+            this.chkLoadAllWebResources.Location = new System.Drawing.Point(14, 4);
+            this.chkLoadAllWebResources.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkLoadAllWebResources.Name = "chkLoadAllWebResources";
-            this.chkLoadAllWebResources.Size = new System.Drawing.Size(240, 17);
+            this.chkLoadAllWebResources.Size = new System.Drawing.Size(482, 29);
             this.chkLoadAllWebResources.TabIndex = 2;
             this.chkLoadAllWebResources.Text = "Load all web resources from selected solution";
             this.chkLoadAllWebResources.UseVisualStyleBackColor = true;
@@ -86,10 +88,10 @@
             // chkFilterByLcid
             // 
             this.chkFilterByLcid.AutoSize = true;
-            this.chkFilterByLcid.Location = new System.Drawing.Point(247, 2);
-            this.chkFilterByLcid.Margin = new System.Windows.Forms.Padding(2);
+            this.chkFilterByLcid.Location = new System.Drawing.Point(494, 4);
+            this.chkFilterByLcid.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkFilterByLcid.Name = "chkFilterByLcid";
-            this.chkFilterByLcid.Size = new System.Drawing.Size(166, 17);
+            this.chkFilterByLcid.Size = new System.Drawing.Size(333, 29);
             this.chkFilterByLcid.TabIndex = 11;
             this.chkFilterByLcid.Text = "Filter by provisioned language";
             this.chkFilterByLcid.UseVisualStyleBackColor = true;
@@ -99,10 +101,10 @@
             this.panel2.Controls.Add(this.btnSolutionPickerCancel);
             this.panel2.Controls.Add(this.btnSolutionPickerValidate);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 314);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
+            this.panel2.Location = new System.Drawing.Point(0, 596);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(491, 39);
+            this.panel2.Size = new System.Drawing.Size(974, 75);
             this.panel2.TabIndex = 12;
             // 
             // panel3
@@ -110,10 +112,10 @@
             this.panel3.Controls.Add(this.chkFilterByLcid);
             this.panel3.Controls.Add(this.chkLoadAllWebResources);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 295);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2);
+            this.panel3.Location = new System.Drawing.Point(0, 559);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(491, 19);
+            this.panel3.Size = new System.Drawing.Size(974, 37);
             this.panel3.TabIndex = 13;
             // 
             // panel1
@@ -125,16 +127,19 @@
             this.panel1.Controls.Add(this.lblHeader);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(491, 90);
+            this.panel1.Size = new System.Drawing.Size(974, 173);
             this.panel1.TabIndex = 15;
             // 
             // btnSearch
             // 
+            this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btnSearch.Location = new System.Drawing.Point(253, 51);
+            this.btnSearch.Location = new System.Drawing.Point(809, 95);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 24);
+            this.btnSearch.Size = new System.Drawing.Size(150, 46);
             this.btnSearch.TabIndex = 15;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -142,10 +147,13 @@
             // 
             // txbSolutionNameFilter
             // 
+            this.txbSolutionNameFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txbSolutionNameFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txbSolutionNameFilter.Location = new System.Drawing.Point(7, 53);
+            this.txbSolutionNameFilter.Location = new System.Drawing.Point(14, 102);
+            this.txbSolutionNameFilter.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.txbSolutionNameFilter.Name = "txbSolutionNameFilter";
-            this.txbSolutionNameFilter.Size = new System.Drawing.Size(240, 20);
+            this.txbSolutionNameFilter.Size = new System.Drawing.Size(783, 32);
             this.txbSolutionNameFilter.TabIndex = 13;
             this.txbSolutionNameFilter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbSolutionNameFilter_KeyPress);
             // 
@@ -153,9 +161,10 @@
             // 
             this.lblHeaderDesc.AutoSize = true;
             this.lblHeaderDesc.Font = new System.Drawing.Font("Segoe UI Light", 10F);
-            this.lblHeaderDesc.Location = new System.Drawing.Point(9, 31);
+            this.lblHeaderDesc.Location = new System.Drawing.Point(18, 60);
+            this.lblHeaderDesc.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblHeaderDesc.Name = "lblHeaderDesc";
-            this.lblHeaderDesc.Size = new System.Drawing.Size(316, 19);
+            this.lblHeaderDesc.Size = new System.Drawing.Size(607, 37);
             this.lblHeaderDesc.TabIndex = 12;
             this.lblHeaderDesc.Text = "Web resources will be added to the selected solution";
             // 
@@ -163,9 +172,10 @@
             // 
             this.lblHeader.AutoSize = true;
             this.lblHeader.Font = new System.Drawing.Font("Segoe UI Light", 14F);
-            this.lblHeader.Location = new System.Drawing.Point(3, 6);
+            this.lblHeader.Location = new System.Drawing.Point(6, 12);
+            this.lblHeader.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(141, 25);
+            this.lblHeader.Size = new System.Drawing.Size(278, 51);
             this.lblHeader.TabIndex = 11;
             this.lblHeader.Text = "Select a solution";
             // 
@@ -180,10 +190,11 @@
             this.lstSolutions.FullRowSelect = true;
             this.lstSolutions.GridLines = true;
             this.lstSolutions.HideSelection = false;
-            this.lstSolutions.Location = new System.Drawing.Point(0, 90);
+            this.lstSolutions.Location = new System.Drawing.Point(0, 173);
+            this.lstSolutions.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.lstSolutions.MultiSelect = false;
             this.lstSolutions.Name = "lstSolutions";
-            this.lstSolutions.Size = new System.Drawing.Size(491, 205);
+            this.lstSolutions.Size = new System.Drawing.Size(974, 386);
             this.lstSolutions.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstSolutions.TabIndex = 16;
             this.lstSolutions.UseCompatibleStateImageBehavior = false;
@@ -208,16 +219,17 @@
             // 
             // SolutionPicker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(491, 353);
+            this.ClientSize = new System.Drawing.Size(974, 671);
             this.ControlBox = false;
             this.Controls.Add(this.lstSolutions);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SolutionPicker";
