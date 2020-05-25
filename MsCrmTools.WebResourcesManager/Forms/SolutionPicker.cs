@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using MscrmTools.WebresourcesManager.AppCode;
+using System;
 using System.ComponentModel;
 using System.ServiceModel;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
-using MscrmTools.WebresourcesManager.AppCode;
 
 namespace MscrmTools.WebresourcesManager.Forms
 {
@@ -23,11 +23,14 @@ namespace MscrmTools.WebresourcesManager.Forms
             lblHeaderDesc.Visible = isSelectionToAddWebResources;
         }
 
+        public bool FilterByLcid { get; private set; }
+        public bool LoadAllWebresources { get; private set; }
         public Entity SelectedSolution { get; set; }
 
-        public bool LoadAllWebresources { get; private set; }
-
-        public bool FilterByLcid { get; private set; }
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            SearchSolutionByFriendlyName();
+        }
 
         private void btnSolutionPickerCancel_Click(object sender, EventArgs e)
         {
@@ -52,6 +55,15 @@ namespace MscrmTools.WebresourcesManager.Forms
             }
         }
 
+        private void chkLoadAllWebResources_CheckedChanged(object sender, EventArgs e)
+        {
+            chkFilterByLcid.Enabled = chkLoadAllWebResources.Checked;
+            if (!chkLoadAllWebResources.Checked)
+            {
+                chkFilterByLcid.Checked = false;
+            }
+        }
+
         private void lstSolutions_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var list = (ListView)sender;
@@ -70,7 +82,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             {
                 QueryExpression qe = new QueryExpression("solution");
                 qe.Distinct = true;
-                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid");
+                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid", "uniquename");
                 qe.Criteria = new FilterExpression();
                 qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
                 qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
@@ -95,7 +107,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             {
                 QueryExpression qe = new QueryExpression("solution");
                 qe.Distinct = true;
-                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid");
+                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid", "uniquename");
                 qe.Criteria = new FilterExpression();
                 qe.Criteria.AddCondition(new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{friendlyName}%"));
                 qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
@@ -115,6 +127,16 @@ namespace MscrmTools.WebresourcesManager.Forms
             }
         }
 
+        private void SearchSolutionByFriendlyName()
+        {
+            lstSolutions.Items.Clear();
+
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += worker_SearchByFriendlyName;
+            worker.RunWorkerCompleted += worker_SearchCompleted;
+            worker.RunWorkerAsync();
+        }
+
         private void SolutionPicker_Load(object sender, EventArgs e)
         {
             lstSolutions.Items.Clear();
@@ -123,6 +145,14 @@ namespace MscrmTools.WebresourcesManager.Forms
             worker.DoWork += worker_DoWork;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
             worker.RunWorkerAsync();
+        }
+
+        private void txbSolutionNameFilter_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Return))
+            {
+                SearchSolutionByFriendlyName();
+            }
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
@@ -146,38 +176,6 @@ namespace MscrmTools.WebresourcesManager.Forms
             btnSolutionPickerValidate.Enabled = true;
         }
 
-        private void chkLoadAllWebResources_CheckedChanged(object sender, EventArgs e)
-        {
-            chkFilterByLcid.Enabled = chkLoadAllWebResources.Checked;
-            if (!chkLoadAllWebResources.Checked)
-            {
-                chkFilterByLcid.Checked = false;
-            }
-        }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            SearchSolutionByFriendlyName();
-        }
-
-        private void txbSolutionNameFilter_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == Convert.ToChar(Keys.Return))
-            {
-                SearchSolutionByFriendlyName();
-            }
-        }
-
-        private void SearchSolutionByFriendlyName()
-        {
-            lstSolutions.Items.Clear();
-
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += worker_SearchByFriendlyName;
-            worker.RunWorkerCompleted += worker_SearchCompleted;
-            worker.RunWorkerAsync();
-        }
-
         private void worker_SearchByFriendlyName(object sender, DoWorkEventArgs e)
         {
             e.Result = RetrieveSolutions(txbSolutionNameFilter.Text);
@@ -198,7 +196,5 @@ namespace MscrmTools.WebresourcesManager.Forms
             lstSolutions.Enabled = true;
             btnSolutionPickerValidate.Enabled = true;
         }
-
-        
     }
 }
