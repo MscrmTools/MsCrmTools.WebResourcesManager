@@ -197,7 +197,7 @@ namespace Jsbeautifier
             Wordchar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$";
             Digits = "0123456789";
             Punct =
-                "+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !! , : ? ^ ^= |= :: <?= <? ?> <%= <% %>"
+                "+ - * / % & ++ -- = += -= *= /= %= == === != !== > < => >= <= >> << >>> >>>= >>= <<= && &= | || ! !! , : ? ^ ^= |= :: <?= <? ?> <%= <% %>"
                     .Split(' ');
 
             // Words which always should start on a new line
