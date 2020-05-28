@@ -507,6 +507,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
             if (FilePath == null) return;
 
             ReplaceContent(Convert.ToBase64String(File.ReadAllBytes(FilePath)));
+            AssociatedResources.Clear();
+            LoadAssociatedResources();
         }
 
         public void ReplaceContent(string base64Content, string newFilePath = null)
