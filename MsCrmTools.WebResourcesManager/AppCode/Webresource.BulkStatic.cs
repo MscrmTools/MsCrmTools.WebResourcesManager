@@ -12,6 +12,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
 {
     public partial class Webresource
     {
+        public static readonly ColumnSet Columns = new ColumnSet(
+            "languagecode", "createdon", "name", "dependencyxml", "modifiedby", 
+            "webresourcetype", "displayname", "modifiedon", "createdby", 
+            "webresourceid", "description", "content");
+
         public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\-\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> ExtensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
@@ -121,7 +126,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 var qba = new QueryByAttribute("webresource");
                 qba.Attributes.Add("name");
                 qba.Values.Add(name);
-                qba.ColumnSet = new ColumnSet(true);
+                qba.ColumnSet = Webresource.Columns;
 
                 EntityCollection collection = service.RetrieveMultiple(qba);
 
@@ -146,7 +151,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = new ColumnSet(true),
+                        ColumnSet = Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =
@@ -215,7 +220,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     return resources;
                 }
 
-                var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = new ColumnSet(true) };
+                var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = Webresource.Columns };
                 qba.Attributes.AddRange("solutionid", "componenttype");
                 qba.Values.AddRange(solutionId, 61);
 
@@ -229,7 +234,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = new ColumnSet(true),
+                        ColumnSet = Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =

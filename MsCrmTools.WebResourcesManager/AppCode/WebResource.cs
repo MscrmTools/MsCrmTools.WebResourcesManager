@@ -648,7 +648,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             // Find if the web resource is attached to solutions
             var solutions = Plugin.Service.RetrieveMultiple(new QueryExpression("solution")
             {
-                ColumnSet = new ColumnSet(true),
+                ColumnSet = Webresource.Columns,
                 Criteria = new FilterExpression
                 {
                     Conditions =
