@@ -190,6 +190,7 @@
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LoadResourcesSettings.cs" />
     <Compile Include="AppCode\Settings.cs" />
+    <Compile Include="AppCode\Solution.Static.cs" />
     <Compile Include="AppCode\TreeNodeSorter.cs" />
     <Compile Include="AppCode\UpdateResourcesResult.cs" />
     <Compile Include="AppCode\UpdateResourcesSettings.cs" />
