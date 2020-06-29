@@ -17,6 +17,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
             "webresourcetype", "displayname", "modifiedon", "createdby", 
             "webresourceid", "description", "content");
 
+        public static readonly ColumnSet LazyLoadingColumns = new ColumnSet(
+            "languagecode", "createdon", "name", "dependencyxml", "modifiedby",
+            "webresourcetype", "displayname", "modifiedon", "createdby",
+            "webresourceid", "description");
+
         public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\-\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> ExtensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
@@ -220,7 +225,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     return resources;
                 }
 
-                var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = Webresource.Columns };
+                var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = new ColumnSet("objectid") };
                 qba.Attributes.AddRange("solutionid", "componenttype");
                 qba.Values.AddRange(solutionId, 61);
 
