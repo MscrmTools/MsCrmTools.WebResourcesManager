@@ -111,8 +111,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public bool LoadSystemHiddenResources { get; set; }
 
         [Category("Loading Settings")]
-        [DisplayName("Lazy Loading Of WebResources")]
-        [Description("Determines if web resources content loaded when you open it first time or during loading of the web resources tree")]
+        [DisplayName("Lazy loading of webresources")]
+        [Description("Determines if a web resource content should be loaded when you open it first time or during loading of the web resources tree")]
         public bool LazyLoadingOfWebResources { get; set; } = false;
 
         [Category("Local Sync Settings")]
