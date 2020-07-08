@@ -396,6 +396,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
+        [DisplayName("IsLoaded")]
+        [Browsable(false)]
+        [Description("Shows if webresource content was loaded")]
+        [ReadOnly(true)]
+        public bool IsLoaded => !(string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(StringContent));
+
         #endregion Properties
 
         #region Events
@@ -789,6 +795,14 @@ namespace MscrmTools.WebresourcesManager.AppCode
             entity["name"] = name;
             entity["displayname"] = displayName ?? name;
             return new Webresource(entity, Plugin);
+        }
+
+        public void LazyLoadWebResource(IOrganizationService service)
+        {
+            Content = RetrieveWebresource(Id, service).GetAttributeValue<string>("content");
+            StringContent = GetPlainText();
+
+            State = WebresourceState.None;
         }
 
         #endregion Methods
