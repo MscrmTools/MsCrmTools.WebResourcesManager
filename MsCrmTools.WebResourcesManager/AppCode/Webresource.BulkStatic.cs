@@ -148,6 +148,21 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
+        public static Entity RetrieveWebresource(Guid id, IOrganizationService service)
+        {
+            try
+            {
+                if (id == null || id == Guid.Empty)
+                    throw new Exception($"WebResource id is null or empty");
+
+                return service.Retrieve("webresource", id, Webresource.Columns);
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"An error occured while retrieving a webresource with id {id}: {error.Message}");
+            }
+        }
+
         public static IEnumerable<Webresource> RetrieveWebresources(MyPluginControl parent, IOrganizationService service, Guid solutionId, List<int> types, bool filterByLcid = false, params int[] lcids)
         {
             try
@@ -156,7 +171,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = Webresource.Columns,
+                        ColumnSet = Settings.Instance.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =
@@ -239,7 +254,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = Webresource.Columns,
+                        ColumnSet = Settings.Instance.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =
