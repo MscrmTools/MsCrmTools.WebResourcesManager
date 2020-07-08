@@ -392,6 +392,33 @@ Are you sure you want to delete this webresource?",
                 return;
             }
 
+            if (!resource.IsLoaded)
+            {
+                LazyLoadWebResource(resource);
+            }
+            else
+            {
+                DisplayContentForm(resource);
+            }
+        }
+
+        private void LazyLoadWebResource(Webresource resource)
+        {
+            WorkAsync(
+                new WorkAsyncInfo("Loading web resource...", e =>
+                {
+                    resource.LazyLoadWebResource(Service);
+                })
+                {
+                    PostWorkCallBack = e =>
+                    {
+                        DisplayContentForm(resource);
+                    }
+                });
+        }
+
+        private void DisplayContentForm(Webresource resource)
+        {
             BaseContentForm content = null;
 
             switch (resource.Type)
