@@ -110,6 +110,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("Specify wether to load system webresources that are normaly hidden. Only works when loading webresources without specifying a solution to load")]
         public bool LoadSystemHiddenResources { get; set; }
 
+        [Category("Loading Settings")]
+        [DisplayName("Lazy loading of webresources")]
+        [Description("Determines if a web resource content should be loaded when you open it first time or during loading of the web resources tree")]
+        public bool LazyLoadingOfWebResources { get; set; } = false;
+
         [Category("Local Sync Settings")]
         [DisplayName("Local files out of date on load")]
         [Description("Treats local files as out of date when they are initially loaded.  Setting to false will only track future changes.")]

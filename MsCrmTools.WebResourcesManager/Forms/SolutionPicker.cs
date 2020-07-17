@@ -82,7 +82,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             {
                 QueryExpression qe = new QueryExpression("solution");
                 qe.Distinct = true;
-                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid", "uniquename");
+                qe.ColumnSet = Solution.Columns;
                 qe.Criteria = new FilterExpression();
                 qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
                 qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
@@ -107,7 +107,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             {
                 QueryExpression qe = new QueryExpression("solution");
                 qe.Distinct = true;
-                qe.ColumnSet = new ColumnSet("solutionid", "friendlyname", "version", "publisherid", "uniquename");
+                qe.ColumnSet = Solution.Columns;
                 qe.Criteria = new FilterExpression();
                 qe.Criteria.AddCondition(new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{friendlyName}%"));
                 qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));

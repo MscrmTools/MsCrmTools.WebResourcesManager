@@ -12,6 +12,16 @@ namespace MscrmTools.WebresourcesManager.AppCode
 {
     public partial class Webresource
     {
+        public static readonly ColumnSet Columns = new ColumnSet(
+            "languagecode", "createdon", "name", "dependencyxml", "modifiedby", 
+            "webresourcetype", "displayname", "modifiedon", "createdby", 
+            "webresourceid", "description", "content");
+
+        public static readonly ColumnSet LazyLoadingColumns = new ColumnSet(
+            "languagecode", "createdon", "name", "dependencyxml", "modifiedby",
+            "webresourcetype", "displayname", "modifiedon", "createdby",
+            "webresourceid", "description");
+
         public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\-\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> ExtensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
@@ -121,7 +131,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 var qba = new QueryByAttribute("webresource");
                 qba.Attributes.Add("name");
                 qba.Values.Add(name);
-                qba.ColumnSet = new ColumnSet(true);
+                qba.ColumnSet = Webresource.Columns;
 
                 EntityCollection collection = service.RetrieveMultiple(qba);
 
@@ -138,6 +148,21 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
+        public static Entity RetrieveWebresource(Guid id, IOrganizationService service)
+        {
+            try
+            {
+                if (id == null || id == Guid.Empty)
+                    throw new Exception($"WebResource id is null or empty");
+
+                return service.Retrieve("webresource", id, Webresource.Columns);
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"An error occured while retrieving a webresource with id {id}: {error.Message}");
+            }
+        }
+
         public static IEnumerable<Webresource> RetrieveWebresources(MyPluginControl parent, IOrganizationService service, Guid solutionId, List<int> types, bool filterByLcid = false, params int[] lcids)
         {
             try
@@ -146,7 +171,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = new ColumnSet(true),
+                        ColumnSet = Settings.Instance.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =
@@ -215,7 +240,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     return resources;
                 }
 
-                var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = new ColumnSet(true) };
+                var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = new ColumnSet("objectid") };
                 qba.Attributes.AddRange("solutionid", "componenttype");
                 qba.Values.AddRange(solutionId, 61);
 
@@ -229,7 +254,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = new ColumnSet(true),
+                        ColumnSet = Settings.Instance.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =

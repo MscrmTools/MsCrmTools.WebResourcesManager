@@ -396,6 +396,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
+        [DisplayName("IsLoaded")]
+        [Browsable(false)]
+        [Description("Shows if webresource content was loaded")]
+        [ReadOnly(true)]
+        public bool IsLoaded => !(string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(StringContent));
+
         #endregion Properties
 
         #region Events
@@ -591,7 +597,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             {
                 if (overwrite == false)
                 {
-                    var existingRecord = service.Retrieve("webresource", record.Id, new ColumnSet());
+                    var existingRecord = service.Retrieve("webresource", record.Id, new ColumnSet(false));
                     if (!string.IsNullOrEmpty(existingRecord.RowVersion) && !string.IsNullOrEmpty(record.RowVersion) && long.Parse(existingRecord.RowVersion) > long.Parse(record.RowVersion))
                     {
                         throw new MoreRecentRecordExistsException();
@@ -648,7 +654,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             // Find if the web resource is attached to solutions
             var solutions = Plugin.Service.RetrieveMultiple(new QueryExpression("solution")
             {
-                ColumnSet = new ColumnSet(true),
+                ColumnSet = Solution.Columns,
                 Criteria = new FilterExpression
                 {
                     Conditions =
@@ -789,6 +795,14 @@ namespace MscrmTools.WebresourcesManager.AppCode
             entity["name"] = name;
             entity["displayname"] = displayName ?? name;
             return new Webresource(entity, Plugin);
+        }
+
+        public void LazyLoadWebResource(IOrganizationService service)
+        {
+            Content = RetrieveWebresource(Id, service).GetAttributeValue<string>("content");
+            StringContent = GetPlainText();
+
+            State = WebresourceState.None;
         }
 
         #endregion Methods
