@@ -33,6 +33,7 @@ namespace MscrmTools.WebresourcesManager
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
+        private LocalSettings localSettings;
 
         #region IGitHubPlugin
 
@@ -136,6 +137,15 @@ namespace MscrmTools.WebresourcesManager
         {
             tv.Service = newService;
             tv.OrganizationMajorVersion = detail.OrganizationMajorVersion;
+
+            if (SettingsManager.Instance.TryLoad(GetType(), out LocalSettings s, detail.ConnectionId.ToString()))
+            {
+                localSettings = s;
+            }
+            else
+            {
+                localSettings = new LocalSettings();
+            }
 
             base.UpdateConnection(newService, detail, actionName, parameter);
         }
@@ -1031,15 +1041,18 @@ Are you sure you want to delete this webresource?",
                 // Let the user decides where to find files
                 var fbd = new CustomFolderBrowserDialog(true);
 
-                if (!string.IsNullOrWhiteSpace(Settings.Instance.LastFolderUsed) && Directory.Exists(Settings.Instance.LastFolderUsed))
+                if (!string.IsNullOrWhiteSpace(localSettings.FolderPath) && Directory.Exists(localSettings.FolderPath))
                 {
-                    fbd.FolderPath = Settings.Instance.LastFolderUsed;
+                    fbd.FolderPath = localSettings.FolderPath;
                 }
 
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     Settings.Instance.LastFolderUsed = fbd.FolderPath;
                     Settings.Instance.Save();
+
+                    localSettings.FolderPath = fbd.FolderPath;
+                    SettingsManager.Instance.Save(GetType(), localSettings, ConnectionDetail.ConnectionId.ToString());
 
                     if (fbd.FolderPath.EndsWith("\\"))
                         fbd.FolderPath = fbd.FolderPath.Substring(0, fbd.FolderPath.Length - 1);
@@ -1079,15 +1092,18 @@ Are you sure you want to delete this webresource?",
         private void SaveToDisk(IEnumerable<Webresource> resources, bool withRoot = false)
         {
             var fbd = new CustomFolderBrowserDialog(true, false);
-            if (!string.IsNullOrEmpty(Settings.Instance.LastFolderUsed))
+            if (!string.IsNullOrEmpty(localSettings.FolderPath))
             {
-                fbd.FolderPath = Settings.Instance.LastFolderUsed;
+                fbd.FolderPath = localSettings.FolderPath;
             }
 
             if (fbd.ShowDialog() == DialogResult.OK)
             {
                 Settings.Instance.LastFolderUsed = fbd.FolderPath;
                 Settings.Instance.Save();
+
+                localSettings.FolderPath = fbd.FolderPath;
+                SettingsManager.Instance.Save(GetType(), localSettings, ConnectionDetail.ConnectionId.ToString());
 
                 foreach (var resource in resources)
                 {
