@@ -147,6 +147,17 @@ namespace MscrmTools.WebresourcesManager
                 localSettings = new LocalSettings();
             }
 
+            if (detail.OrganizationMajorVersion < 8 || detail.OrganizationMajorVersion == 8 && detail.OrganizationMajorVersion < 2)
+            {
+                Webresource.Columns.Columns.Remove("dependencyxml");
+                Webresource.LazyLoadingColumns.Columns.Remove("dependencyxml");
+            }
+            else
+            {
+                if (!Webresource.Columns.Columns.Contains("dependencyxml")) Webresource.Columns.Columns.Add("dependencyxml");
+                if (!Webresource.LazyLoadingColumns.Columns.Contains("dependencyxml")) Webresource.LazyLoadingColumns.Columns.Add("dependencyxml");
+            }
+
             base.UpdateConnection(newService, detail, actionName, parameter);
         }
 
