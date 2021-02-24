@@ -13,8 +13,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
     public partial class Webresource
     {
         public static readonly ColumnSet Columns = new ColumnSet(
-            "languagecode", "createdon", "name", "dependencyxml", "modifiedby", 
-            "webresourcetype", "displayname", "modifiedon", "createdby", 
+            "languagecode", "createdon", "name", "dependencyxml", "modifiedby",
+            "webresourcetype", "displayname", "modifiedon", "createdby",
             "webresourceid", "description", "content");
 
         public static readonly ColumnSet LazyLoadingColumns = new ColumnSet(
@@ -331,7 +331,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             var ignoredLocalFiles = new List<string>();
             ignoredLocalFiles.AddRange(Settings.Instance.IgnoredLocalFiles);
             ignoredLocalFiles.AddRange(Settings.Instance.IgnoredLocalFiles.Select(f => f.Replace("\\", "/")));
-            foreach (var fi in fileInfos)
+            foreach (var fi in fileInfos.Where(f => extensionsToLoad.Contains(f.Extension)))
             {
                 var relativePath = GetRelativePath(rootPath, fi.FullName);
 

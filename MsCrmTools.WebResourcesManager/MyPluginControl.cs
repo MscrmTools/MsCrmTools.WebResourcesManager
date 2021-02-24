@@ -34,6 +34,7 @@ namespace MscrmTools.WebresourcesManager
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
         private LocalSettings localSettings;
+        private ConnectionDetail detail;
 
         #region IGitHubPlugin
 
@@ -281,7 +282,7 @@ namespace MscrmTools.WebresourcesManager
             plugin.rpd.ShowDocked();
         }
 
-        private static void UpdateFolderFromDisk(MyPluginControl plugin)
+        private void UpdateFolderFromDisk(MyPluginControl plugin)
         {
             if (string.IsNullOrEmpty(plugin.contextFolderNode.FolderPath))
             {
@@ -291,7 +292,7 @@ namespace MscrmTools.WebresourcesManager
 
                 if (result == DialogResult.Yes)
                 {
-                    var fbd = new CustomFolderBrowserDialog(true, false) { Text = @"Local folder" };
+                    var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false) { Text = @"Local folder" };
                     if (fbd.ShowDialog(plugin) == DialogResult.OK)
                     {
                         plugin.contextFolderNode.FolderPath = fbd.FolderPath;
@@ -1050,7 +1051,7 @@ Are you sure you want to delete this webresource?",
             try
             {
                 // Let the user decides where to find files
-                var fbd = new CustomFolderBrowserDialog(true);
+                var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true);
 
                 if (!string.IsNullOrWhiteSpace(localSettings.FolderPath) && Directory.Exists(localSettings.FolderPath))
                 {
@@ -1102,7 +1103,7 @@ Are you sure you want to delete this webresource?",
 
         private void SaveToDisk(IEnumerable<Webresource> resources, bool withRoot = false)
         {
-            var fbd = new CustomFolderBrowserDialog(true, false);
+            var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false);
             if (!string.IsNullOrEmpty(localSettings.FolderPath))
             {
                 fbd.FolderPath = localSettings.FolderPath;

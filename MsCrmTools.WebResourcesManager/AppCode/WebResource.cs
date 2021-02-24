@@ -715,7 +715,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        internal void Save()
+        internal void Save(int majorVersion = -1)
         {
             record["content"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(updatedStringContent));
             StringContent = UpdatedStringContent;
@@ -727,7 +727,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             {
                 if (string.IsNullOrEmpty(Settings.Instance.LastFolderUsed))
                 {
-                    var cfb = new CustomFolderBrowserDialog(true, false);
+                    var cfb = new CustomFolderBrowserDialog(majorVersion, true, false);
                     if (cfb.ShowDialog(Plugin) != DialogResult.OK)
                     {
                         return;

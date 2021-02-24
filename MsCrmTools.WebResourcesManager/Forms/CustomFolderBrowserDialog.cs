@@ -8,9 +8,11 @@ namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class CustomFolderBrowserDialog : Form
     {
-        public CustomFolderBrowserDialog(bool isLoadFromDisk, bool showExtensionOptions = true)
+        public CustomFolderBrowserDialog(int majorVersion, bool isLoadFromDisk, bool showExtensionOptions = true)
         {
             InitializeComponent();
+
+            webResourceTypePicker1.ShowV9Types = majorVersion >= 9;
 
             if (!isLoadFromDisk)
             {
