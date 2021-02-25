@@ -27,14 +27,14 @@ namespace MscrmTools.WebresourcesManager
         private readonly Dictionary<ToolStripItem, Action<MyPluginControl>> onTvItemClickedMap;
         private FolderNode contextFolderNode;
         private Webresource contextStripResource;
+        private ConnectionDetail detail;
         private InvalidFilenamesDialog ifnd;
         private LoadResourcesSettings lastSettings;
+        private LocalSettings localSettings;
         private PendingUpdatesDialog pud;
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
         private WebresourcesTreeView tv;
-        private LocalSettings localSettings;
-        private ConnectionDetail detail;
 
         #region IGitHubPlugin
 
@@ -148,7 +148,7 @@ namespace MscrmTools.WebresourcesManager
                 localSettings = new LocalSettings();
             }
 
-            if (detail.OrganizationMajorVersion < 8 || detail.OrganizationMajorVersion == 8 && detail.OrganizationMajorVersion < 2)
+            if (detail.OrganizationMajorVersion < 8 || detail.OrganizationMajorVersion == 8 && detail.OrganizationMinorVersion < 2)
             {
                 Webresource.Columns.Columns.Remove("dependencyxml");
                 Webresource.LazyLoadingColumns.Columns.Remove("dependencyxml");
@@ -282,37 +282,6 @@ namespace MscrmTools.WebresourcesManager
             plugin.rpd.ShowDocked();
         }
 
-        private void UpdateFolderFromDisk(MyPluginControl plugin)
-        {
-            if (string.IsNullOrEmpty(plugin.contextFolderNode.FolderPath))
-            {
-                var result = MessageBox.Show(plugin,
-                    @"This folder node is not synced with a local folder. Would you like to choose one?", @"Question",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false) { Text = @"Local folder" };
-                    if (fbd.ShowDialog(plugin) == DialogResult.OK)
-                    {
-                        plugin.contextFolderNode.FolderPath = fbd.FolderPath;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-
-            var invalidFileNames = new List<string>();
-            plugin.tv.RefreshFolderNodeContent(plugin.contextFolderNode, invalidFileNames, null);
-            plugin.ShowInvalidFiles(invalidFileNames);
-        }
-
         private void CloseOpenedContents()
         {
             var toClose = dpMain.Contents.OfType<BaseContentForm>().ToList();
@@ -424,21 +393,6 @@ Are you sure you want to delete this webresource?",
             {
                 DisplayContentForm(resource);
             }
-        }
-
-        private void LazyLoadWebResource(Webresource resource)
-        {
-            WorkAsync(
-                new WorkAsyncInfo("Loading web resource...", e =>
-                {
-                    resource.LazyLoadWebResource(Service);
-                })
-                {
-                    PostWorkCallBack = e =>
-                    {
-                        DisplayContentForm(resource);
-                    }
-                });
         }
 
         private void DisplayContentForm(Webresource resource)
@@ -581,6 +535,21 @@ Are you sure you want to delete this webresource?",
                 {tsmiCollapse, (c) => c.contextFolderNode.Collapse(false) },
                 {tsmiExpand, (c) => c.contextFolderNode.ExpandAll() },
             };
+        }
+
+        private void LazyLoadWebResource(Webresource resource)
+        {
+            WorkAsync(
+                new WorkAsyncInfo("Loading web resource...", e =>
+                {
+                    resource.LazyLoadWebResource(Service);
+                })
+                {
+                    PostWorkCallBack = e =>
+                    {
+                        DisplayContentForm(resource);
+                    }
+                });
         }
 
         private void MyPluginControl_Load(object sender, EventArgs e)
@@ -741,6 +710,37 @@ Are you sure you want to delete this webresource?",
         private void Tv_ShowPendingUpdatesRequested(object sender, EventArgs e)
         {
             pud.ShowDocked();
+        }
+
+        private void UpdateFolderFromDisk(MyPluginControl plugin)
+        {
+            if (string.IsNullOrEmpty(plugin.contextFolderNode.FolderPath))
+            {
+                var result = MessageBox.Show(plugin,
+                    @"This folder node is not synced with a local folder. Would you like to choose one?", @"Question",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false) { Text = @"Local folder" };
+                    if (fbd.ShowDialog(plugin) == DialogResult.OK)
+                    {
+                        plugin.contextFolderNode.FolderPath = fbd.FolderPath;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            var invalidFileNames = new List<string>();
+            plugin.tv.RefreshFolderNodeContent(plugin.contextFolderNode, invalidFileNames, null);
+            plugin.ShowInvalidFiles(invalidFileNames);
         }
 
         private void UpdateResources(bool publish = false, bool addToSolution = false)
