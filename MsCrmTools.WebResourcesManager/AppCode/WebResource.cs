@@ -77,6 +77,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             record = new Entity("webresource")
             {
                 ["name"] = name,
+                ["displayname"] = name,
                 ["webresourcetype"] = new OptionSetValue((int)type),
             };
 
@@ -146,6 +147,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             record = new Entity("webresource")
             {
                 ["name"] = resourceName,
+                ["displayname"] = resourceName,
                 ["webresourcetype"] = new OptionSetValue((int)GetTypeFromExtension(fi.Extension.Remove(0, 1))),
                 ["content"] = Convert.ToBase64String(File.ReadAllBytes(filePath))
             };
@@ -285,6 +287,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [ReadOnly(true)]
         public Guid Id => record?.Id ?? Guid.Empty;
 
+        [DisplayName("IsLoaded")]
+        [Browsable(false)]
+        [Description("Shows if webresource content was loaded")]
+        [ReadOnly(true)]
+        public bool IsLoaded => !(string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(StringContent));
+
         [Category("Attributes")]
         [DisplayName("Language code")]
         [Description("Language of the web resource")]
@@ -396,12 +404,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        [DisplayName("IsLoaded")]
-        [Browsable(false)]
-        [Description("Shows if webresource content was loaded")]
-        [ReadOnly(true)]
-        public bool IsLoaded => !(string.IsNullOrWhiteSpace(Content) && string.IsNullOrWhiteSpace(StringContent));
-
         #endregion Properties
 
         #region Events
@@ -506,6 +508,14 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             var response = (RetrieveDependenciesForDeleteResponse)service.Execute(request);
             return response.EntityCollection.Entities.Count != 0;
+        }
+
+        public void LazyLoadWebResource(IOrganizationService service)
+        {
+            Content = RetrieveWebresource(Id, service).GetAttributeValue<string>("content");
+            StringContent = GetPlainText();
+
+            State = WebresourceState.None;
         }
 
         public void RefreshFromDisk()
@@ -795,14 +805,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
             entity["name"] = name;
             entity["displayname"] = displayName ?? name;
             return new Webresource(entity, Plugin);
-        }
-
-        public void LazyLoadWebResource(IOrganizationService service)
-        {
-            Content = RetrieveWebresource(Id, service).GetAttributeValue<string>("content");
-            StringContent = GetPlainText();
-
-            State = WebresourceState.None;
         }
 
         #endregion Methods
