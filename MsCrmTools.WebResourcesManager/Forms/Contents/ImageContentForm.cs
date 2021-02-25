@@ -6,7 +6,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MscrmTools.WebresourcesManager.Forms.Contents
@@ -82,19 +81,14 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
                     {
                         using (StreamReader reader = new StreamReader(ms))
                         {
-                            using (var xmlStream = new MemoryStream(Encoding.Default.GetBytes(reader.ReadToEnd())))
-                            {
-                                xmlStream.Position = 0;
-                                SvgDocument svgDoc = SvgDocument.Open<SvgDocument>(xmlStream);
+                            SvgDocument svgDoc = SvgDocument.Open<SvgDocument>(ms);
 
-                                pb.Height = 32;
-                                pb.Width = 32;
-                                pb.Image = svgDoc.Draw();
-                                // pb.Image = svgDoc.Draw(32, 32);
-                                pb.Location = new Point(
-                                    Width / 2 - pb.Width / 2,
-                                    Height / 2 - pb.Height / 2);
-                            }
+                            pb.Image = svgDoc.Draw();
+                            pb.Height = pb.Image.Height;
+                            pb.Width = pb.Image.Width;
+                            pb.Location = new Point(
+                                Width / 2 - pb.Width / 2,
+                                Height / 2 - pb.Height / 2);
                         }
                     }
                 }
