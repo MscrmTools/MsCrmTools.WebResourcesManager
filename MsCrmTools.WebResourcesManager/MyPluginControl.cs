@@ -396,8 +396,10 @@ Are you sure you want to delete this webresource?",
                             MessageBox.Show(this, $@"An error occured while deleting the webresource: {e.Error.Message}",
                                 @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-
-                        resource.Node.Remove();
+                        else
+                        {
+                            resource.Node.Remove();
+                        }
                     }
                 });
             }
