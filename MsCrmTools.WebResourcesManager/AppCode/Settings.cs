@@ -27,6 +27,18 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     }
                 }
 
+                if (instance.PendingUpdatesDockState == DockState.Unknown)
+                    instance.PendingUpdatesDockState = DockState.DockLeftAutoHide;
+
+                if (instance.PropertiesDockState == DockState.Unknown)
+                    instance.PropertiesDockState = DockState.DockRightAutoHide;
+
+                if (instance.SettingsDockState == DockState.Unknown)
+                    instance.SettingsDockState = DockState.DockRightAutoHide;
+
+                if (instance.TreeviewDockState == DockState.Unknown)
+                    instance.TreeviewDockState = DockState.DockLeft;
+
                 return instance;
             }
         }
@@ -96,6 +108,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public string LastFolderUsed { get; set; }
 
         [Category("Loading Settings")]
+        [DisplayName("Lazy loading of webresources")]
+        [Description("Determines if a web resource content should be loaded when you open it first time or during loading of the web resources tree")]
+        public bool LazyLoadingOfWebResources { get; set; } = false;
+
+        [Category("Loading Settings")]
         [DisplayName("Load managed webresources")]
         [Description("Defines if managed webresources must be loaded")]
         public bool LoadManaged { get; set; } = false;
@@ -109,11 +126,6 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [DisplayName("Load Hidden system webresources")]
         [Description("Specify wether to load system webresources that are normaly hidden. Only works when loading webresources without specifying a solution to load")]
         public bool LoadSystemHiddenResources { get; set; }
-
-        [Category("Loading Settings")]
-        [DisplayName("Lazy loading of webresources")]
-        [Description("Determines if a web resource content should be loaded when you open it first time or during loading of the web resources tree")]
-        public bool LazyLoadingOfWebResources { get; set; } = false;
 
         [Category("Local Sync Settings")]
         [DisplayName("Local files out of date on load")]
