@@ -80,8 +80,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public bool DisplayExplorerSearchBarOnTop { get; set; }
 
         [Category("Loading Settings")]
-        [DisplayName("Customization prefix to exclude")]
-        [Description("List customization prefix that won't be loaded. Comma separated (example:adx_,msdyn_)")]
+        [DisplayName("Customization prefix blacklist")]
+        [Description("List customization prefix that won't be loaded. Comma separated (example:adx_,msdyn_)\n\n")]
         public string ExcludedPrefixes { get; set; } = "msdyn_,adx_,cc_MscrmControls";
 
         [Category("Display Settings")]
@@ -100,6 +100,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Editor(@"System.Windows.Forms.Design.StringCollectionEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
         [TypeConverter(typeof(ListConverter))]
         public List<string> IgnoredLocalFiles { get; set; } = new List<string>();
+
+        [Category("Loading Settings")]
+        [DisplayName("Customization prefix whitelist")]
+        [Description("List customization prefix that will be loaded. Comma separated (example:adx_,msdyn_)")]
+        public string IncludedPrefixes { get; set; }
 
         [Category("Miscellaneous Settings")]
         [DisplayName("Last folder used")]

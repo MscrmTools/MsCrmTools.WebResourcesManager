@@ -17,13 +17,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
             "webresourcetype", "displayname", "modifiedon", "createdby",
             "webresourceid", "description", "content");
 
+        public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
+
+        public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\-\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
+
         public static readonly ColumnSet LazyLoadingColumns = new ColumnSet(
-            "languagecode", "createdon", "name", "dependencyxml", "modifiedby",
+                            "languagecode", "createdon", "name", "dependencyxml", "modifiedby",
             "webresourcetype", "displayname", "modifiedon", "createdby",
             "webresourceid", "description");
 
-        public static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
-        public static readonly Regex InValidWrNameRegexForV9 = new Regex("[^a-z0-9A-Z_\\-\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
         private static readonly HashSet<string> ExtensionsToSkipLoadingErrorMessage = new HashSet<string> { "map", "ts" };
         private static readonly HashSet<string> ValidExtensions = new HashSet<string> { "htm", "html", "css", "js", "json", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt", "svg", "resx" };
 
@@ -210,6 +212,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
                         foreach (var prefix in prefixes)
                         {
                             qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.DoesNotBeginWith, prefix);
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(Settings.Instance.IncludedPrefixes))
+                    {
+                        var prefixes = Settings.Instance.IncludedPrefixes.Split(',');
+                        foreach (var prefix in prefixes)
+                        {
+                            qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.BeginsWith, prefix);
                         }
                     }
 
