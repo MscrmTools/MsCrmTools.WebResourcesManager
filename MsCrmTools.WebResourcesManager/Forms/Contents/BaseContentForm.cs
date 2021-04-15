@@ -62,6 +62,7 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
         }
 
         public Webresource Resource { get; }
+        public Settings Settings { get; set; }
 
         protected abstract void ClearEvents();
 
@@ -69,7 +70,7 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
         {
             if (Resource.State == WebresourceState.Draft)
             {
-                if (Settings.Instance.AutoSaveWhenLeaving)
+                if (Settings.AutoSaveWhenLeaving)
                 {
                     Resource.Save();
                 }
@@ -107,7 +108,7 @@ Are you sure you want to close this window and lose the changes?";
 
         private void Compare()
         {
-            if (string.IsNullOrWhiteSpace(Settings.Instance.CompareToolPath))
+            if (string.IsNullOrWhiteSpace(Settings.CompareToolPath))
             {
                 MessageBox.Show(this, @"Please define Compare tool before using this feature", @"Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -126,9 +127,9 @@ Are you sure you want to close this window and lose the changes?";
                 {
                     var file2Path = ofd.FileName;
 
-                    var startInfo = new ProcessStartInfo(Settings.Instance.CompareToolPath)
+                    var startInfo = new ProcessStartInfo(Settings.CompareToolPath)
                     {
-                        Arguments = $"{Settings.Instance.CompareToolArgs} \"{file1Path}\" \"{file2Path}\""
+                        Arguments = $"{Settings.CompareToolArgs} \"{file1Path}\" \"{file2Path}\""
                     };
                     Process.Start(startInfo);
                 }

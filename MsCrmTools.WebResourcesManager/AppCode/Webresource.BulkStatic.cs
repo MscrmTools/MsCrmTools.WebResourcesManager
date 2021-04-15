@@ -105,7 +105,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        public static IEnumerable<Webresource> RetrieveFromDirectory(MyPluginControl parent, string path, List<string> extensionsToLoad, List<string> invalidFilenames, int organizationMajorVersion)
+        public static IEnumerable<Webresource> RetrieveFromDirectory(MyPluginControl parent, Settings settings, string path, List<string> extensionsToLoad, List<string> invalidFilenames, int organizationMajorVersion)
         {
             if (!Directory.Exists(path))
                 throw new DirectoryNotFoundException(path);
@@ -118,10 +118,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
             // the prefix of customizations
             foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
             {
-                LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, di.FullName, list, organizationMajorVersion);
+                LoadFilesFromFolder(parent, settings, extensionsToLoad, invalidFilenames, diChild, di.FullName, list, organizationMajorVersion);
             }
 
-            LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, di, di.FullName, list, organizationMajorVersion);
+            LoadFilesFromFolder(parent, settings, extensionsToLoad, invalidFilenames, di, di.FullName, list, organizationMajorVersion);
 
             return list;
         }
@@ -165,7 +165,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        public static IEnumerable<Webresource> RetrieveWebresources(MyPluginControl parent, IOrganizationService service, Guid solutionId, List<int> types, bool filterByLcid = false, params int[] lcids)
+        public static IEnumerable<Webresource> RetrieveWebresources(MyPluginControl parent, IOrganizationService service, Settings settings, Guid solutionId, List<int> types, bool filterByLcid = false, params int[] lcids)
         {
             try
             {
@@ -173,12 +173,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = Settings.Instance.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
+                        ColumnSet = settings.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =
                             {
-                                Settings.Instance.LoadSystemHiddenResources == false ? new FilterExpression
+                                settings.LoadSystemHiddenResources == false ? new FilterExpression
                                 {
                                     FilterOperator = LogicalOperator.And,
                                     Conditions =
@@ -192,7 +192,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                                      Conditions =
                                     {
                                         new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
-                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, Settings.Instance.LoadManaged),
+                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, settings.LoadManaged),
                                         new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
                                     }
                                 }
@@ -206,18 +206,18 @@ namespace MscrmTools.WebresourcesManager.AppCode
                         }
                     };
 
-                    if (!string.IsNullOrEmpty(Settings.Instance.ExcludedPrefixes))
+                    if (!string.IsNullOrEmpty(settings.ExcludedPrefixes))
                     {
-                        var prefixes = Settings.Instance.ExcludedPrefixes.Split(',');
+                        var prefixes = settings.ExcludedPrefixes.Split(',');
                         foreach (var prefix in prefixes)
                         {
                             qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.DoesNotBeginWith, prefix);
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(Settings.Instance.IncludedPrefixes))
+                    if (!string.IsNullOrEmpty(settings.IncludedPrefixes))
                     {
-                        var prefixes = Settings.Instance.IncludedPrefixes.Split(',');
+                        var prefixes = settings.IncludedPrefixes.Split(',');
                         foreach (var prefix in prefixes)
                         {
                             qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.BeginsWith, prefix);
@@ -242,7 +242,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     {
                         ec = service.RetrieveMultiple(qe);
 
-                        resources.AddRange(ec.Entities.Select(e => new Webresource(e, parent)));
+                        resources.AddRange(ec.Entities.Select(e => new Webresource(e, parent, settings)));
 
                         qe.PageInfo.PageNumber++;
                         qe.PageInfo.PagingCookie = ec.PagingCookie;
@@ -265,7 +265,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 {
                     var qe = new QueryExpression("webresource")
                     {
-                        ColumnSet = Settings.Instance.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
+                        ColumnSet = settings.LazyLoadingOfWebResources ? Webresource.LazyLoadingColumns : Webresource.Columns,
                         Criteria = new FilterExpression
                         {
                             Filters =
@@ -285,7 +285,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                                      Conditions =
                                     {
                                         new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
-                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, Settings.Instance.LoadManaged),
+                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, settings.LoadManaged),
                                         new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
                                     }
                                 }
@@ -306,7 +306,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                         lcidFilter.AddCondition("languagecode", ConditionOperator.Null);
                     }
 
-                    return service.RetrieveMultiple(qe).Entities.Select(e => new Webresource(e, parent));
+                    return service.RetrieveMultiple(qe).Entities.Select(e => new Webresource(e, parent, settings));
                 }
 
                 return new List<Webresource>();
@@ -325,14 +325,14 @@ namespace MscrmTools.WebresourcesManager.AppCode
             return path;
         }
 
-        private static void LoadFilesFromFolder(MyPluginControl parent, List<string> extensionsToLoad, List<string> invalidFilenames,
+        private static void LoadFilesFromFolder(MyPluginControl parent, Settings settings, List<string> extensionsToLoad, List<string> invalidFilenames,
                                             DirectoryInfo di, string rootPath, List<Webresource> list, int organizationMajorVersion)
         {
             if (di.FullName != rootPath)
             {
                 foreach (var diChild in di.GetDirectories())
                 {
-                    LoadFilesFromFolder(parent, extensionsToLoad, invalidFilenames, diChild, rootPath, list, organizationMajorVersion);
+                    LoadFilesFromFolder(parent, settings, extensionsToLoad, invalidFilenames, diChild, rootPath, list, organizationMajorVersion);
                 }
             }
 
@@ -340,8 +340,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
             var files = new HashSet<string>(fileInfos.Select(f => f.FullName));
             var extensionlessFiles = new HashSet<string>();
             var ignoredLocalFiles = new List<string>();
-            ignoredLocalFiles.AddRange(Settings.Instance.IgnoredLocalFiles);
-            ignoredLocalFiles.AddRange(Settings.Instance.IgnoredLocalFiles.Select(f => f.Replace("\\", "/")));
+            ignoredLocalFiles.AddRange(settings.IgnoredLocalFiles);
+            ignoredLocalFiles.AddRange(settings.IgnoredLocalFiles.Select(f => f.Replace("\\", "/")));
             foreach (var fi in fileInfos.Where(f => extensionsToLoad.Contains(f.Extension)))
             {
                 var relativePath = GetRelativePath(rootPath, fi.FullName);
@@ -362,7 +362,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 }
 
                 var resource = new Webresource(relativePath, fi.FullName,
-                    GetTypeFromExtension(fi.Extension.Remove(0, 1)), parent);
+                    GetTypeFromExtension(fi.Extension.Remove(0, 1)), parent, settings);
                 var extensionless = Path.Combine(fi.DirectoryName ?? "", Path.GetFileNameWithoutExtension(fi.FullName));
                 if (files.Contains(extensionless))
                 {

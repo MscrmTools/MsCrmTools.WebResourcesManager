@@ -7,7 +7,7 @@ namespace MscrmTools.WebresourcesManager.CustomControls
         private const int DraftImageIndex = 16;
         private const int SyncedImageIndex = 2;
 
-        public WebpageNode(Webresource resource) : base(resource, DraftImageIndex, SyncedImageIndex)
+        public WebpageNode(Webresource resource, Settings settings) : base(resource, DraftImageIndex, SyncedImageIndex, settings)
         {
         }
     }

@@ -7,15 +7,15 @@ namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class WebResourceTypeSelectorDialog : Form
     {
-        public WebResourceTypeSelectorDialog(int majorVersion)
+        public WebResourceTypeSelectorDialog(int majorVersion, Settings settings)
         {
             InitializeComponent();
 
             webResourceTypePicker1.ShowV9Types = majorVersion >= 9;
 
-            if (!string.IsNullOrEmpty(Settings.Instance.ExcludedPrefixes))
+            if (!string.IsNullOrEmpty(settings.ExcludedPrefixes))
             {
-                lblFilter.Text = string.Format(lblFilter.Text, string.Join(" or ", Settings.Instance.ExcludedPrefixes.Split(',')));
+                lblFilter.Text = string.Format(lblFilter.Text, string.Join(" or ", settings.ExcludedPrefixes.Split(',')));
             }
             else
             {

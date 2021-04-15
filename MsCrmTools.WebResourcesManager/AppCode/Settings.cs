@@ -9,39 +9,39 @@ namespace MscrmTools.WebresourcesManager.AppCode
 {
     public class Settings
     {
-        private static Settings instance;
+        //private static Settings instance;
 
-        private Settings()
-        {
-        }
+        //private Settings()
+        //{
+        //}
 
-        public static Settings Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    if (!SettingsManager.Instance.TryLoad(typeof(Settings), out instance))
-                    {
-                        instance = new Settings();
-                    }
-                }
+        //public static Settings Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            if (!SettingsManager.Instance.TryLoad(typeof(Settings), out instance))
+        //            {
+        //                instance = new Settings();
+        //            }
+        //        }
 
-                if (instance.PendingUpdatesDockState == DockState.Unknown)
-                    instance.PendingUpdatesDockState = DockState.DockLeftAutoHide;
+        //        if (instance.PendingUpdatesDockState == DockState.Unknown)
+        //            instance.PendingUpdatesDockState = DockState.DockLeftAutoHide;
 
-                if (instance.PropertiesDockState == DockState.Unknown)
-                    instance.PropertiesDockState = DockState.DockRightAutoHide;
+        //        if (instance.PropertiesDockState == DockState.Unknown)
+        //            instance.PropertiesDockState = DockState.DockRightAutoHide;
 
-                if (instance.SettingsDockState == DockState.Unknown)
-                    instance.SettingsDockState = DockState.DockRightAutoHide;
+        //        if (instance.SettingsDockState == DockState.Unknown)
+        //            instance.SettingsDockState = DockState.DockRightAutoHide;
 
-                if (instance.TreeviewDockState == DockState.Unknown)
-                    instance.TreeviewDockState = DockState.DockLeft;
+        //        if (instance.TreeviewDockState == DockState.Unknown)
+        //            instance.TreeviewDockState = DockState.DockLeft;
 
-                return instance;
-            }
-        }
+        //        return instance;
+        //    }
+        //}
 
         [Category("Local Sync Settings")]
         [DisplayName("Add missing extension")]
@@ -106,10 +106,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("List customization prefix that will be loaded. Comma separated (example:adx_,msdyn_)")]
         public string IncludedPrefixes { get; set; }
 
-        [Category("Miscellaneous Settings")]
-        [DisplayName("Last folder used")]
+        [Category("Local Sync Settings")]
+        [DisplayName("Local folder for webresources")]
         [Description("Location of the folder used to save/load webresources")]
-        [ReadOnly(true)]
+        [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
         public string LastFolderUsed { get; set; }
 
         [Category("Loading Settings")]
@@ -166,13 +166,35 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         [Browsable(false)] public DockState TreeviewDockState { get; set; } = DockState.DockLeft;
 
-        public void Save()
+        public static Settings Load(string name = null)
+        {
+            if (!SettingsManager.Instance.TryLoad(typeof(Settings), out Settings instance))
+            {
+                instance = new Settings();
+            }
+
+            if (instance.PendingUpdatesDockState == DockState.Unknown)
+                instance.PendingUpdatesDockState = DockState.DockLeftAutoHide;
+
+            if (instance.PropertiesDockState == DockState.Unknown)
+                instance.PropertiesDockState = DockState.DockRightAutoHide;
+
+            if (instance.SettingsDockState == DockState.Unknown)
+                instance.SettingsDockState = DockState.DockRightAutoHide;
+
+            if (instance.TreeviewDockState == DockState.Unknown)
+                instance.TreeviewDockState = DockState.DockLeft;
+
+            return instance;
+        }
+
+        public void Save(string name = null)
         {
             for (var i = 0; i < IgnoredLocalFiles.Count; i++)
             {
                 IgnoredLocalFiles[i] = IgnoredLocalFiles[i].Trim();
             }
-            SettingsManager.Instance.Save(GetType(), instance);
+            SettingsManager.Instance.Save(GetType(), this, name);
         }
     }
 }

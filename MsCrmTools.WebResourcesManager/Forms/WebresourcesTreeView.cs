@@ -53,8 +53,8 @@ namespace MscrmTools.WebresourcesManager.Forms
         public event EventHandler ShowPendingUpdatesRequested;
 
         public int OrganizationMajorVersion { get; set; }
-
         public IOrganizationService Service { get; set; }
+        public Settings Settings { get; set; }
 
         private void llDismissPendingUpdates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -139,7 +139,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
 
                 // File must be an expected file format
                 // or a folder
-                bool isExtensionValid = files.All(f => Webresource.IsValidExtension(Path.GetExtension(f)) || File.GetAttributes(f).HasFlag(FileAttributes.Directory));
+                bool isExtensionValid = files.All(f => Webresource.IsValidExtension(Path.GetExtension(f), Settings) || File.GetAttributes(f).HasFlag(FileAttributes.Directory));
 
                 // Destination node must be a Root or Folder node
                 treeview.SelectedNode = currentNode;
@@ -170,11 +170,11 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
 
         private void WebresourcesTreeView_Enter(object sender, EventArgs e)
         {
-            if (lastSearchBarPositionSetting != Settings.Instance.DisplayExplorerSearchBarOnTop)
+            if (lastSearchBarPositionSetting != Settings?.DisplayExplorerSearchBarOnTop)
             {
-                lastSearchBarPositionSetting = Settings.Instance.DisplayExplorerSearchBarOnTop;
+                lastSearchBarPositionSetting = Settings?.DisplayExplorerSearchBarOnTop ?? false;
 
-                pnlSearch.Dock = Settings.Instance.DisplayExplorerSearchBarOnTop ? DockStyle.Top : DockStyle.Bottom;
+                pnlSearch.Dock = Settings?.DisplayExplorerSearchBarOnTop ?? false ? DockStyle.Top : DockStyle.Bottom;
 
                 Invalidate();
             }
@@ -219,51 +219,51 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             switch (type)
             {
                 case WebresourceType.WebPage:
-                    node = new WebpageNode(resource);
+                    node = new WebpageNode(resource, Settings);
                     break;
 
                 case WebresourceType.Css:
-                    node = new CssNode(resource);
+                    node = new CssNode(resource, Settings);
                     break;
 
                 case WebresourceType.Data:
-                    node = new DataNode(resource);
+                    node = new DataNode(resource, Settings);
                     break;
 
                 case WebresourceType.Gif:
-                    node = new GifNode(resource);
+                    node = new GifNode(resource, Settings);
                     break;
 
                 case WebresourceType.Ico:
-                    node = new IcoNode(resource);
+                    node = new IcoNode(resource, Settings);
                     break;
 
                 case WebresourceType.Jpg:
-                    node = new JpgNode(resource);
+                    node = new JpgNode(resource, Settings);
                     break;
 
                 case WebresourceType.Png:
-                    node = new PngNode(resource);
+                    node = new PngNode(resource, Settings);
                     break;
 
                 case WebresourceType.Resx:
-                    node = new ResxNode(resource);
+                    node = new ResxNode(resource, Settings);
                     break;
 
                 case WebresourceType.Script:
-                    node = new JavaScriptNode(resource);
+                    node = new JavaScriptNode(resource, Settings);
                     break;
 
                 case WebresourceType.Silverlight:
-                    node = new SilverlightNode(resource);
+                    node = new SilverlightNode(resource, Settings);
                     break;
 
                 case WebresourceType.Vector:
-                    node = new VectorNode(resource);
+                    node = new VectorNode(resource, Settings);
                     break;
 
                 case WebresourceType.Xsl:
-                    node = new XslNode(resource);
+                    node = new XslNode(resource, Settings);
                     break;
             }
 
@@ -313,7 +313,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             foreach (var resource in orderedResources)
             {
                 if (Webresource.IsNameValid(resource.Name, OrganizationMajorVersion) &&
-                    Webresource.IsValidExtension(Path.GetExtension(resource.Name)))
+                    Webresource.IsValidExtension(Path.GetExtension(resource.Name), Settings))
                 {
                     var nameParts = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -363,11 +363,11 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                 }
 
                 //Test valid characters
-                if (Webresource.IsNameValid(fi.Name, OrganizationMajorVersion) && Webresource.IsValidExtension(ext))
+                if (Webresource.IsNameValid(fi.Name, OrganizationMajorVersion) && Webresource.IsValidExtension(ext, Settings))
                 {
                     var name = $"{parentNode.ResourceFullPath}/{fi.Name}";
 
-                    var resource = new Webresource(name, fi.FullName, WebresourceType.Auto, mainControl);
+                    var resource = new Webresource(name, fi.FullName, WebresourceType.Auto, mainControl, Settings);
                     if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
                     {
                         mainControl.WebresourcesCache.Add(resource);
@@ -395,7 +395,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             {
                 var name = $"{parentNode.ResourceFullPath}/{nwrDialog.WebresourceName}";
 
-                var resource = new Webresource(name, null, type, mainControl);
+                var resource = new Webresource(name, null, type, mainControl, Settings);
                 if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
                 {
                     mainControl.WebresourcesCache.Add(resource);
@@ -450,7 +450,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
 
             foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                if (Webresource.IsNameValid(fiChild.Name, OrganizationMajorVersion) && Webresource.IsValidExtension(fiChild.Extension))
+                if (Webresource.IsNameValid(fiChild.Name, OrganizationMajorVersion) && Webresource.IsValidExtension(fiChild.Extension, Settings))
                 {
                     if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
                     {
@@ -461,7 +461,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                                 var name = $"{folderNode.ResourceFullPath}/{fiChild.Name}";
 
                                 var resource = new Webresource(name, fiChild.FullName, WebresourceType.Auto,
-                                    mainControl);
+                                    mainControl, Settings);
                                 AddSingleNode(resource,
                                     resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries),
                                     folderNode);
@@ -477,7 +477,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                         }
                     }
                 }
-                else if (!Webresource.IsNameValid(fiChild.Name, OrganizationMajorVersion) || !Webresource.SkipErrorForInvalidExtension(fiChild.Extension))
+                else if (!Webresource.IsNameValid(fiChild.Name, OrganizationMajorVersion) || !Webresource.SkipErrorForInvalidExtension(fiChild.Extension, Settings))
                 {
                     invalidFilenames.Add(fiChild.FullName);
                 }
@@ -641,7 +641,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
         {
             if (e.Button == MouseButtons.Right)
             {
-                ContextMenuRequested?.Invoke(this, new NodeSelectedEventArgs(e.Node, new Point(e.Location.X, e.Location.Y + pnlSolution.Height + (Settings.Instance.DisplayExplorerSearchBarOnTop ? pnlSearch.Height : 0))));
+                ContextMenuRequested?.Invoke(this, new NodeSelectedEventArgs(e.Node, new Point(e.Location.X, e.Location.Y + pnlSolution.Height + (Settings.DisplayExplorerSearchBarOnTop ? pnlSearch.Height : 0))));
             }
         }
 

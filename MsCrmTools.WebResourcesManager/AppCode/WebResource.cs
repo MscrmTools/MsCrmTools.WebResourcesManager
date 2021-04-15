@@ -51,6 +51,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         private readonly DateTime loadedOn;
         private string filePath;
         private Entity record;
+        private Settings settings;
         private WebresourceState state;
         private string updatedBase64Content;
         private string updatedStringContent;
@@ -59,7 +60,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         #region Constructors
 
-        public Webresource(string name, string filePath, WebresourceType type, MyPluginControl parent) : this()
+        public Webresource(string name, string filePath, WebresourceType type, MyPluginControl parent, Settings settings) : this(settings)
         {
             Map extMap = null;
 
@@ -106,12 +107,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 Plugin.WebresourcesCache.Add(this);
             }
 
-            State = filePath != null && Settings.Instance.LocalFilesOutOfDateOnLoad ? WebresourceState.Saved : WebresourceState.None;
+            State = filePath != null && settings.LocalFilesOutOfDateOnLoad ? WebresourceState.Saved : WebresourceState.None;
 
             LoadAssociatedResources();
         }
 
-        public Webresource(Entity record, MyPluginControl parent) : this()
+        public Webresource(Entity record, MyPluginControl parent, Settings settings) : this(settings)
         {
             this.record = record;
             StringContent = GetPlainText();
@@ -123,7 +124,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             Plugin = parent;
         }
 
-        public Webresource(string filePath, MyPluginControl parent) : this()
+        public Webresource(string filePath, MyPluginControl parent, Settings settings) : this(settings)
         {
             var fi = new FileInfo(filePath);
 
@@ -168,8 +169,9 @@ namespace MscrmTools.WebresourcesManager.AppCode
             LoadAssociatedResources();
         }
 
-        private Webresource()
+        private Webresource(Settings settings)
         {
+            this.settings = settings;
             AssociatedResources = new List<Webresource>();
         }
 
@@ -445,7 +447,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         public void GetLatestVersion(bool fromUpdate = false)
         {
-            var name = HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless
+            var name = HasExtensionlessMappingFile && settings.SyncMatchingJsFilesAsExtensionless
                 ? NameWithoutExtension
                 : Name;
 
@@ -553,7 +555,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public void Update(IOrganizationService service, bool overwrite = false)
         {
             var name = Name;
-            if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
+            if (HasExtensionlessMappingFile && settings.SyncMatchingJsFilesAsExtensionless)
             {
                 File.WriteAllText(ExtensionlessMappingFilePath, StringContent);
                 name = NameWithoutExtension;
@@ -603,7 +605,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             //service.Execute(request);
 
-            if (!Settings.Instance.ForceResourceUpdate)
+            if (!settings.ForceResourceUpdate)
             {
                 if (overwrite == false)
                 {
@@ -733,9 +735,9 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             Plugin.DisplayWaitingForUpdatePanel();
 
-            if (Settings.Instance.SaveOnDisk)
+            if (settings.SaveOnDisk)
             {
-                if (string.IsNullOrEmpty(Settings.Instance.LastFolderUsed))
+                if (string.IsNullOrEmpty(settings.LastFolderUsed))
                 {
                     var cfb = new CustomFolderBrowserDialog(majorVersion, true, false);
                     if (cfb.ShowDialog(Plugin) != DialogResult.OK)
@@ -743,12 +745,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
                         return;
                     }
 
-                    Settings.Instance.LastFolderUsed = cfb.FolderPath;
+                    settings.LastFolderUsed = cfb.FolderPath;
                 }
 
-                var path = Path.Combine(Settings.Instance.LastFolderUsed, Name);
+                var path = Path.Combine(settings.LastFolderUsed, Name);
                 SaveToDisk(path);
-                if (HasExtensionlessMappingFile && Settings.Instance.SyncMatchingJsFilesAsExtensionless)
+                if (HasExtensionlessMappingFile && settings.SyncMatchingJsFilesAsExtensionless)
                 {
                     File.WriteAllText(ExtensionlessMappingFilePath, StringContent);
                 }
@@ -758,7 +760,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         internal string SaveToDisk(string path)
         {
             if (string.IsNullOrEmpty(Path.GetExtension(path))
-                && Settings.Instance.AddMissingExtensionOnDiskWrite)
+                && settings.AddMissingExtensionOnDiskWrite)
             {
                 var map = WebresourceMapper.Instance.Items.FirstOrDefault(i => (int)i.Type == Type);
                 if (map != null)
@@ -773,7 +775,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
         private void LoadAssociatedResources()
         {
-            if (!Settings.Instance.PushTsMapFiles || string.IsNullOrWhiteSpace(FilePath) || !Path.HasExtension(FilePath) || Path.GetExtension(FilePath).ToLower() != ".js")
+            if (!settings.PushTsMapFiles || string.IsNullOrWhiteSpace(FilePath) || !Path.HasExtension(FilePath) || Path.GetExtension(FilePath).ToLower() != ".js")
             {
                 // Not loaded from Disk, not Extension, not Javascript
                 return;
@@ -804,7 +806,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             entity["webresourcetype"] = new OptionSetValue(mapItem.CrmValue);
             entity["name"] = name;
             entity["displayname"] = displayName ?? name;
-            return new Webresource(entity, Plugin);
+            return new Webresource(entity, Plugin, settings);
         }
 
         #endregion Methods

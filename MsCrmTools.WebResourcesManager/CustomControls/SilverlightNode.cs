@@ -7,7 +7,7 @@ namespace MscrmTools.WebresourcesManager.CustomControls
         private const int DraftImageIndex = 23;
         private const int SyncedImageIndex = 9;
 
-        public SilverlightNode(Webresource resource) : base(resource, DraftImageIndex, SyncedImageIndex)
+        public SilverlightNode(Webresource resource, Settings settings) : base(resource, DraftImageIndex, SyncedImageIndex, settings)
         {
         }
     }

@@ -30,10 +30,10 @@ namespace MscrmTools.WebresourcesManager
         private ConnectionDetail detail;
         private InvalidFilenamesDialog ifnd;
         private LoadResourcesSettings lastSettings;
-        private LocalSettings localSettings;
         private PendingUpdatesDialog pud;
         private ResourcePropertiesDialog rpd;
         private SettingsDialog sd;
+        private Settings settings;
         private WebresourcesTreeView tv;
 
         #region IGitHubPlugin
@@ -55,18 +55,20 @@ namespace MscrmTools.WebresourcesManager
             tv.ResourceSelected += Tv_ResourceSelected;
             tv.ShowInvalidFilesRequested += Tv_ShowInvalidFilesRequested;
             tv.ShowPendingUpdatesRequested += Tv_ShowPendingUpdatesRequested;
-            tv.Show(dpMain, Settings.Instance.TreeviewDockState);
 
             pud = new PendingUpdatesDialog(this);
-            pud.Show(dpMain, Settings.Instance.PendingUpdatesDockState);
-
             rpd = new ResourcePropertiesDialog();
-            rpd.Show(dpMain, Settings.Instance.PropertiesDockState);
-
             sd = new SettingsDialog();
-            sd.Show(dpMain, Settings.Instance.SettingsDockState);
+            sd.OnSettingsChanged += (sender, e) =>
+            {
+                settings.Save(ConnectionDetail?.ConnectionId.ToString());
+            };
 
-            tv.Show(dpMain, Settings.Instance.TreeviewDockState);
+            tv.Show(dpMain, DockState.DockLeft);
+            pud.Show(dpMain, DockState.DockLeftAutoHide);
+            rpd.Show(dpMain, DockState.DockRightAutoHide);
+            sd.Show(dpMain, DockState.DockRightAutoHide);
+
             onTvItemClickedMap = InitializeOnTvItemClickedMap();
         }
 
@@ -74,12 +76,12 @@ namespace MscrmTools.WebresourcesManager
 
         public override void ClosingPlugin(PluginCloseInfo info)
         {
-            Settings.Instance.TreeviewDockState = tv.DockState;
-            Settings.Instance.PendingUpdatesDockState = pud.DockState;
-            Settings.Instance.SettingsDockState = sd.DockState;
-            Settings.Instance.PropertiesDockState = rpd.DockState;
+            settings.TreeviewDockState = tv.DockState;
+            settings.PendingUpdatesDockState = pud.DockState;
+            settings.SettingsDockState = sd.DockState;
+            settings.PropertiesDockState = rpd.DockState;
 
-            Settings.Instance.Save();
+            settings.Save(ConnectionDetail?.ConnectionId.ToString());
 
             base.ClosingPlugin(info);
         }
@@ -139,14 +141,25 @@ namespace MscrmTools.WebresourcesManager
             tv.Service = newService;
             tv.OrganizationMajorVersion = detail.OrganizationMajorVersion;
 
-            if (SettingsManager.Instance.TryLoad(GetType(), out LocalSettings s, detail.ConnectionId.ToString()))
+            try
             {
-                localSettings = s;
+                if (!SettingsManager.Instance.TryLoad(GetType(), out settings, detail.ConnectionId.ToString()))
+                {
+                    settings = new Settings();
+                }
             }
-            else
+            catch
             {
-                localSettings = new LocalSettings();
+                settings = new Settings();
             }
+
+            tv.Show(dpMain, settings.TreeviewDockState);
+            pud.Show(dpMain, settings.PendingUpdatesDockState);
+            rpd.Show(dpMain, settings.PropertiesDockState);
+            sd.Show(dpMain, settings.SettingsDockState);
+
+            tv.Settings = settings;
+            sd.Settings = settings;
 
             if (detail.OrganizationMajorVersion < 8 || detail.OrganizationMajorVersion == 8 && detail.OrganizationMinorVersion < 2)
             {
@@ -437,6 +450,7 @@ Are you sure you want to delete this webresource?",
 
             if (content != null)
             {
+                content.Settings = settings;
                 content.TabPageContextMenuStrip = cmsTabs;
                 content.Show(dpMain, DockState.Document);
             }
@@ -836,7 +850,7 @@ Are you sure you want to delete this webresource?",
             if (!lastSettings.LoadAllWebresources)
             {
                 // Display web resource types selection dialog
-                var dialog = new WebResourceTypeSelectorDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1);
+                var dialog = new WebResourceTypeSelectorDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1, settings);
                 if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
                 {
                     lastSettings.TypesToload = dialog.TypesToLoad;
@@ -882,12 +896,12 @@ Are you sure you want to delete this webresource?",
                 AsyncArgument = us,
                 Work = (bw, e) =>
                 {
-                    var settings = (UpdateResourcesSettings)e.Argument;
+                    var currentSettings = (UpdateResourcesSettings)e.Argument;
                     var resourcesUpdated = new List<Webresource>();
                     var resources = new List<Webresource>();
 
                     // Add Regular Resources, and Associated Web Resources
-                    foreach (var resource in settings.Webresources)
+                    foreach (var resource in currentSettings.Webresources)
                     {
                         resources.Add(resource);
                         if (resource.AssociatedResources.Any())
@@ -913,16 +927,16 @@ Are you sure you want to delete this webresource?",
                     }
 
                     // Process post Update command
-                    if (!string.IsNullOrEmpty(Settings.Instance.AfterUpdateCommand))
+                    if (!string.IsNullOrEmpty(settings.AfterUpdateCommand))
                     {
                         foreach (var webResource in resourcesUpdated)
                         {
-                            EventManager.ActAfterUpdate(webResource, Settings.Instance);
+                            EventManager.ActAfterUpdate(webResource, settings);
                         }
                     }
 
                     // if publish
-                    if (settings.Publish && resourcesUpdated.Count > 0)
+                    if (currentSettings.Publish && resourcesUpdated.Count > 0)
                     {
                         bw.ReportProgress(2, "Publishing web resources...");
 
@@ -930,26 +944,26 @@ Are you sure you want to delete this webresource?",
                     }
 
                     // Process post Publish command
-                    if (!string.IsNullOrEmpty(Settings.Instance.AfterPublishCommand))
+                    if (!string.IsNullOrEmpty(settings.AfterPublishCommand))
                     {
                         foreach (var webResource in resourcesUpdated)
                         {
-                            EventManager.ActAfterPublish(webResource, Settings.Instance);
+                            EventManager.ActAfterPublish(webResource, settings);
                         }
                     }
 
-                    if (settings.AddToSolution && !string.IsNullOrEmpty(settings.SolutionUniqueName) && resourcesUpdated.Count > 0)
+                    if (currentSettings.AddToSolution && !string.IsNullOrEmpty(currentSettings.SolutionUniqueName) && resourcesUpdated.Count > 0)
                     {
                         bw.ReportProgress(3, "Adding web resources to solution...");
-                        Webresource.AddToSolution(resourcesUpdated, settings.SolutionUniqueName, Service);
+                        Webresource.AddToSolution(resourcesUpdated, currentSettings.SolutionUniqueName, Service);
                     }
 
                     e.Result = new UpdateResourcesResult
                     {
                         FaultedResources = resources.Except(resourcesUpdated),
-                        Publish = settings.Publish,
-                        AddToSolution = settings.AddToSolution,
-                        SolutionUniqueName = settings.SolutionUniqueName
+                        Publish = currentSettings.Publish,
+                        AddToSolution = currentSettings.AddToSolution,
+                        SolutionUniqueName = currentSettings.SolutionUniqueName
                     };
                 },
                 ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); },
@@ -993,7 +1007,7 @@ Are you sure you want to delete this webresource?",
             });
         }
 
-        private void LoadWebresources(LoadResourcesSettings settings)
+        private void LoadWebresources(LoadResourcesSettings loadSettings)
         {
             tv.Enabled = false;
             tv.OrganizationMajorVersion = ConnectionDetail?.OrganizationMajorVersion ?? -1;
@@ -1008,7 +1022,7 @@ Are you sure you want to delete this webresource?",
 
                 var args = (LoadResourcesSettings)e.Argument;
 
-                var items = Webresource.RetrieveWebresources(this, Service, args.Solution?.Id ?? Guid.Empty,
+                var items = Webresource.RetrieveWebresources(this, Service, settings, args.Solution?.Id ?? Guid.Empty,
                      args.TypesToload,
                      args.FilterByLcid,
                      response.RetrieveProvisionedLanguages);
@@ -1022,18 +1036,18 @@ Are you sure you want to delete this webresource?",
                 }
             })
             {
-                AsyncArgument = settings,
+                AsyncArgument = loadSettings,
                 PostWorkCallBack = e =>
                 {
                     tv.Enabled = true;
-                    tv.DisplayNodes((IEnumerable<Webresource>)e.Result, settings.Solution);
+                    tv.DisplayNodes((IEnumerable<Webresource>)e.Result, loadSettings.Solution);
 
-                    if (settings.Solution != null)
+                    if (loadSettings.Solution != null)
                     {
                         tsmiReloadFromCurrentSolution.Text = string.Format(
                             tsmiReloadFromCurrentSolution.Tag.ToString(),
-                            settings.Solution.GetAttributeValue<string>("friendlyname"),
-                            settings.Solution.GetAttributeValue<string>("version"));
+                            loadSettings.Solution.GetAttributeValue<string>("friendlyname"),
+                            loadSettings.Solution.GetAttributeValue<string>("version"));
                         tsmiReloadFromCurrentSolution.Visible = true;
                     }
                     else
@@ -1055,18 +1069,15 @@ Are you sure you want to delete this webresource?",
                 // Let the user decides where to find files
                 var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true);
 
-                if (!string.IsNullOrWhiteSpace(localSettings.FolderPath) && Directory.Exists(localSettings.FolderPath))
+                if (!string.IsNullOrWhiteSpace(settings.LastFolderUsed) && Directory.Exists(settings.LastFolderUsed))
                 {
-                    fbd.FolderPath = localSettings.FolderPath;
+                    fbd.FolderPath = settings.LastFolderUsed;
                 }
 
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    Settings.Instance.LastFolderUsed = fbd.FolderPath;
-                    Settings.Instance.Save();
-
-                    localSettings.FolderPath = fbd.FolderPath;
-                    SettingsManager.Instance.Save(GetType(), localSettings, ConnectionDetail.ConnectionId.ToString());
+                    settings.LastFolderUsed = fbd.FolderPath;
+                    settings.Save(ConnectionDetail?.ConnectionId.ToString());
 
                     if (fbd.FolderPath.EndsWith("\\"))
                         fbd.FolderPath = fbd.FolderPath.Substring(0, fbd.FolderPath.Length - 1);
@@ -1076,9 +1087,9 @@ Are you sure you want to delete this webresource?",
                     var invalidFilenames = new List<string>();
                     WebresourcesCache.Clear();
                     tv.DisplayWaitingForUpdatePanel();
-                    var resources = Webresource.RetrieveFromDirectory(this, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail?.OrganizationMajorVersion ?? -1);
+                    var resources = Webresource.RetrieveFromDirectory(this, settings, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail?.OrganizationMajorVersion ?? -1);
 
-                    tv.DisplayNodes(resources, null, Settings.Instance.ExpandAllOnLoadingResources);
+                    tv.DisplayNodes(resources, null, settings.ExpandAllOnLoadingResources);
 
                     if (invalidFilenames.Count > 0)
                     {
@@ -1106,18 +1117,15 @@ Are you sure you want to delete this webresource?",
         private void SaveToDisk(IEnumerable<Webresource> resources, bool withRoot = false)
         {
             var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false);
-            if (!string.IsNullOrEmpty(localSettings.FolderPath))
+            if (!string.IsNullOrEmpty(settings.LastFolderUsed))
             {
-                fbd.FolderPath = localSettings.FolderPath;
+                fbd.FolderPath = settings.LastFolderUsed;
             }
 
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                Settings.Instance.LastFolderUsed = fbd.FolderPath;
-                Settings.Instance.Save();
-
-                localSettings.FolderPath = fbd.FolderPath;
-                SettingsManager.Instance.Save(GetType(), localSettings, ConnectionDetail.ConnectionId.ToString());
+                settings.LastFolderUsed = fbd.FolderPath;
+                settings.Save(ConnectionDetail?.ConnectionId.ToString());
 
                 foreach (var resource in resources)
                 {

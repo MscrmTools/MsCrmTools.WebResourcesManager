@@ -52,9 +52,9 @@ namespace MscrmTools.WebresourcesManager.AppCode
             throw new UnknownExtensionException($@"File extension '{extension}' cannot be mapped to a webresource type!");
         }
 
-        public static bool IsValidExtension(string ext)
+        public static bool IsValidExtension(string ext, Settings settings)
         {
-            if (Settings.Instance.LoadOnlyValidExtensions)
+            if (settings.LoadOnlyValidExtensions)
             {
                 ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
                 return ValidExtensions.Contains(ext);
@@ -63,10 +63,10 @@ namespace MscrmTools.WebresourcesManager.AppCode
             return true;
         }
 
-        public static bool SkipErrorForInvalidExtension(string ext)
+        public static bool SkipErrorForInvalidExtension(string ext, Settings settings)
         {
             ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
-            return ValidExtensions.Contains(ext) || (Settings.Instance.PushTsMapFiles && ExtensionsToSkipLoadingErrorMessage.Contains(ext));
+            return ValidExtensions.Contains(ext) || (settings.PushTsMapFiles && ExtensionsToSkipLoadingErrorMessage.Contains(ext));
         }
     }
 }

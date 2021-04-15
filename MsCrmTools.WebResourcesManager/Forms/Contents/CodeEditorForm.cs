@@ -501,13 +501,13 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
             {
                 if (Resource.Type == (int)WebresourceType.Script)
                 {
-                    var compressor = new JavaScriptCompressor { ObfuscateJavascript = Settings.Instance.ObfuscateJavascript };
+                    var compressor = new JavaScriptCompressor { ObfuscateJavascript = Settings.ObfuscateJavascript };
                     Resource.UpdatedStringContent = compressor.Compress(Resource.UpdatedStringContent);
                     scintilla.Text = Resource.UpdatedStringContent;
                 }
                 else if (Resource.Type == (int)WebresourceType.Css)
                 {
-                    var compressor = new CssCompressor { RemoveComments = Settings.Instance.RemoveCssComments };
+                    var compressor = new CssCompressor { RemoveComments = Settings.RemoveCssComments };
                     Resource.UpdatedStringContent = compressor.Compress(Resource.UpdatedStringContent);
                     scintilla.Text = Resource.UpdatedStringContent;
                 }
