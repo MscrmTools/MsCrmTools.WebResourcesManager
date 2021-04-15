@@ -99,6 +99,16 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
 
             this.filePath = filePath;
+
+            if (string.IsNullOrEmpty(this.filePath) && !string.IsNullOrEmpty(settings.LastFolderUsed))
+            {
+                string expectedFilePath = Path.Combine(settings.LastFolderUsed, name?.Replace("/", "\\") ?? "");
+                if (File.Exists(expectedFilePath))
+                {
+                    this.filePath = expectedFilePath;
+                }
+            }
+
             loadedOn = DateTime.Now;
             Plugin = parent;
 
@@ -117,6 +127,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
             this.record = record;
             StringContent = GetPlainText();
             updatedStringContent = StringContent;
+
+            if (string.IsNullOrEmpty(filePath) && !string.IsNullOrEmpty(settings.LastFolderUsed))
+            {
+                string expectedFilePath = Path.Combine(settings.LastFolderUsed, record.GetAttributeValue<string>("name")?.Replace("/", "\\") ?? "");
+                if (File.Exists(expectedFilePath))
+                {
+                    filePath = expectedFilePath;
+                }
+            }
 
             Synced = true;
             State = WebresourceState.None;
@@ -165,6 +184,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
             loadedOn = DateTime.Now;
             Plugin = parent;
             this.filePath = filePath;
+
+            if (string.IsNullOrEmpty(this.filePath) && !string.IsNullOrEmpty(settings.LastFolderUsed))
+            {
+                string expectedFilePath = Path.Combine(settings.LastFolderUsed, resourceName.Replace("/", "\\") ?? "");
+                if (File.Exists(expectedFilePath))
+                {
+                    this.filePath = expectedFilePath;
+                }
+            }
 
             LoadAssociatedResources();
         }
