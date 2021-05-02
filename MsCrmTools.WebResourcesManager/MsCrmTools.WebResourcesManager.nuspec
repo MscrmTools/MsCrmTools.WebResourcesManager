@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>MsCrmTools.WebResourcesManager</id>
+    <version>2.2021.4.16</version>
+    <title>WebResources Manager for XrmToolBox</title>
+    <authors>MscrmTools</authors>
+    <owners>MscrmTools</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/MscrmTools/MsCrmTools.WebResourcesManager</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/logo_0100.png</iconUrl>
+    <description>Manage your webresources easily</description>
+    <summary>Manage your webresources easily</summary>
+    <releaseNotes>Fixed whitelist prefixes when multiple prefixes are added (#108)</releaseNotes>
+    <tags>XrmToolBox Plugin WebResourceManager</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2020.2.36" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\Plugins\MsCrmTools.WebResourcesManager.dll" target="lib\net452\Plugins" />
+  </files>
+</package>

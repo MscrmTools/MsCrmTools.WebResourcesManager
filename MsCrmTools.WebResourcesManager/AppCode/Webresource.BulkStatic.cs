@@ -209,6 +209,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     if (!string.IsNullOrEmpty(settings.ExcludedPrefixes))
                     {
                         var prefixes = settings.ExcludedPrefixes.Split(',');
+
                         foreach (var prefix in prefixes)
                         {
                             qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.DoesNotBeginWith, prefix);
@@ -218,9 +219,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
                     if (!string.IsNullOrEmpty(settings.IncludedPrefixes))
                     {
                         var prefixes = settings.IncludedPrefixes.Split(',');
+                        var prefixFilter = new FilterExpression(LogicalOperator.Or);
+                        qe.Criteria.Filters.First().AddFilter(prefixFilter);
+
                         foreach (var prefix in prefixes)
                         {
-                            qe.Criteria.Filters.First().AddCondition("name", ConditionOperator.BeginsWith, prefix);
+                            prefixFilter.AddCondition("name", ConditionOperator.BeginsWith, prefix);
                         }
                     }
 

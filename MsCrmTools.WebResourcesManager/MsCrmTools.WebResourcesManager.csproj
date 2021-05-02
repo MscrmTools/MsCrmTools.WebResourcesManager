@@ -369,6 +369,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MsCrmTools.WebResourcesManager.nuspec" />
     <None Include="packages.config" />
     <None Include="Resources\component.png" />
   </ItemGroup>
