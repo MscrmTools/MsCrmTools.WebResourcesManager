@@ -11,7 +11,8 @@
     <iconUrl>https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/logo_0100.png</iconUrl>
     <description>Manage your webresources easily</description>
     <summary>Manage your webresources easily</summary>
-    <releaseNotes>Fixed whitelist prefixes when multiple prefixes are added (#108)</releaseNotes>
+    <releaseNotes>Added loading of webresources from managed solutions (#109)
+    Fixed path of webresources when loading from disk (#112) - Thank you @BetimBeja</releaseNotes>
     <tags>XrmToolBox Plugin WebResourceManager</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2020.2.36" />
