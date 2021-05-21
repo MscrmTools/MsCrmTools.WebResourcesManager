@@ -458,7 +458,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                         {
                             try
                             {
-                                var name = $"{folderNode.ResourceFullPath}/{fiChild.Name}";
+                                var name = $"{folderNode.FullPath.Replace("\\","/")}/{fiChild.Name}";
 
                                 var resource = new Webresource(name, fiChild.FullName, WebresourceType.Auto,
                                     mainControl, Settings);
