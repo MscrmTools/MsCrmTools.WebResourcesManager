@@ -76,7 +76,7 @@ namespace MscrmTools.WebresourcesManager.Forms
             btnSolutionPickerValidate_Click(null, null);
         }
 
-        private EntityCollection RetrieveSolutions()
+        private EntityCollection RetrieveSolutions(string friendlyName = null)
         {
             try
             {
@@ -84,35 +84,18 @@ namespace MscrmTools.WebresourcesManager.Forms
                 qe.Distinct = true;
                 qe.ColumnSet = Solution.Columns;
                 qe.Criteria = new FilterExpression();
-                qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
                 qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
                 qe.Criteria.AddCondition(new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default"));
 
-                return innerService.RetrieveMultiple(qe);
-            }
-            catch (Exception error)
-            {
-                if (error.InnerException is FaultException)
+                if (!string.IsNullOrEmpty(friendlyName))
                 {
-                    throw new Exception("Error while retrieving solutions: " + error.InnerException.Message);
+                    qe.Criteria.AddCondition(new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{friendlyName}%"));
                 }
 
-                throw new Exception("Error while retrieving solutions: " + error.Message);
-            }
-        }
-
-        private EntityCollection RetrieveSolutions(string friendlyName)
-        {
-            try
-            {
-                QueryExpression qe = new QueryExpression("solution");
-                qe.Distinct = true;
-                qe.ColumnSet = Solution.Columns;
-                qe.Criteria = new FilterExpression();
-                qe.Criteria.AddCondition(new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{friendlyName}%"));
-                qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
-                qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
-                qe.Criteria.AddCondition(new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default"));
+                if (!chkDisplayManaged.Checked)
+                {
+                    qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
+                }
 
                 return innerService.RetrieveMultiple(qe);
             }
