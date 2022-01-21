@@ -785,6 +785,10 @@ Are you sure you want to delete this webresource?",
             {
                 LoadWebresources(lastSettings);
             }
+            else if (e.ClickedItem == tsmiBulkDelete)
+            {
+                DeleteWebResources();
+            }
             else if (e.ClickedItem == tsmiUpdateWebresources)
             {
                 var us = new UpdateResourcesSettings
@@ -820,6 +824,48 @@ Are you sure you want to delete this webresource?",
         #endregion Menu Items Events
 
         #region CRM
+
+        public void DeleteWebResources()
+        {
+            var resourcesToDelete = tv.CheckedWebresources;
+
+            if (MessageBox.Show(this, $@"Are you sure you want to delete {resourcesToDelete.Count} webresource(s)?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
+            tv.Service = Service;
+
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Deleting web resources...",
+                AsyncArgument = resourcesToDelete,
+                Work = (bw, e) =>
+                {
+                    var resources = (List<Webresource>)e.Argument;
+
+                    foreach (var resource in resources)
+                    {
+                        try
+                        {
+                            bw.ReportProgress(1, $"Deleting {resource}...");
+                            Invoke(new Action(() => { resource.Delete(Service); }));
+
+                            resource.LastException = null;
+                        }
+                        catch (Exception error)
+                        {
+                            resource.LastException = error;
+                        }
+                    }
+                },
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); },
+                PostWorkCallBack = e =>
+                {
+                    if (e.Error != null)
+                    {
+                        MessageBox.Show(this, e.Error.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            });
+        }
 
         public void LoadWebresourcesGeneral(bool fromSolution)
         {

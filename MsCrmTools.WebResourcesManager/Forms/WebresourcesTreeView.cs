@@ -52,9 +52,35 @@ namespace MscrmTools.WebresourcesManager.Forms
 
         public event EventHandler ShowPendingUpdatesRequested;
 
+        public List<Webresource> CheckedWebresources
+        {
+            get
+            {
+                var nodes = new List<TreeNode>();
+                GetCheckedNodes(tv.Nodes, nodes);
+
+                return nodes.Where(n => n is WebresourceNode)
+                    .Select(n => ((WebresourceNode)n).Resource)
+                    .ToList();
+            }
+        }
+
         public int OrganizationMajorVersion { get; set; }
+
         public IOrganizationService Service { get; set; }
+
         public Settings Settings { get; set; }
+
+        private void GetCheckedNodes(TreeNodeCollection nodes, List<TreeNode> list)
+        {
+            foreach (TreeNode aNode in nodes)
+            {
+                if (aNode.Checked) list.Add(aNode);
+
+                if (aNode.Nodes.Count != 0)
+                    GetCheckedNodes(aNode.Nodes, list);
+            }
+        }
 
         private void llDismissPendingUpdates_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -458,7 +484,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                         {
                             try
                             {
-                                var name = $"{folderNode.FullPath.Replace("\\","/")}/{fiChild.Name}";
+                                var name = $"{folderNode.FullPath.Replace("\\", "/")}/{fiChild.Name}";
 
                                 var resource = new Webresource(name, fiChild.FullName, WebresourceType.Auto,
                                     mainControl, Settings);

@@ -471,6 +471,8 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
 
             service.Delete(record.LogicalName, record.Id);
+
+            Node?.Remove();
         }
 
         public void GetLatestVersion(bool fromUpdate = false)
