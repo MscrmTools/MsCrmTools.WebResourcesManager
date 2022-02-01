@@ -13,9 +13,13 @@ namespace MscrmTools.WebresourcesManager.Forms
 
             webResourceTypePicker1.ShowV9Types = majorVersion >= 9;
 
-            if (!string.IsNullOrEmpty(settings.ExcludedPrefixes))
+            if (!string.IsNullOrEmpty(settings.IncludedPrefixes))
             {
-                lblFilter.Text = string.Format(lblFilter.Text, string.Join(" or ", settings.ExcludedPrefixes.Split(',')));
+                lblFilter.Text = $"Only webresources with prefix {string.Join(" or ", settings.IncludedPrefixes.Split(','))} will be loaded (Prefix whitelist setting).\n{lblFilter.Text}";
+            }
+            else if (!string.IsNullOrEmpty(settings.ExcludedPrefixes))
+            {
+                lblFilter.Text = $"Webresources with prefix {string.Join(" or ", settings.ExcludedPrefixes.Split(','))} won't be loaded (Prefix blacklist setting).\n{lblFilter.Text}";
             }
             else
             {
