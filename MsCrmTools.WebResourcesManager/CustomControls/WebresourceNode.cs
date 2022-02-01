@@ -34,7 +34,7 @@ namespace MscrmTools.WebresourcesManager.CustomControls
 
         private void Resource_StateChanged(object sender, StateEventArgs e)
         {
-            ((Webresource)sender).Node.TreeView.Invoke(new Action(() =>
+            ((Webresource)sender).Node.TreeView?.Invoke(new Action(() =>
             {
                 ImageIndex = Resource.Synced ? syncedImageIndex : draftImageIndex;
                 SelectedImageIndex = Resource.Synced ? syncedImageIndex : draftImageIndex;

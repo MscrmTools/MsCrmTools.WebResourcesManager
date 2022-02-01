@@ -294,10 +294,15 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             }
 
             resource.Node = node;
-
+            
             if (folder != null && node != null)
             {
+                node.ForeColor = resource.State == WebresourceState.Saved ? Color.Blue :
+                  resource.State == WebresourceState.Draft ? Color.Red : Color.Black;
+
                 folder.Nodes.Add(node);
+
+                (node.Parent as FolderNode)?.SetFolderColor();
             }
 
             return node;
