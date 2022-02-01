@@ -757,7 +757,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        internal void Save(int majorVersion = -1)
+        internal void Save(IOrganizationService service, int majorVersion = -1)
         {
             record["content"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(updatedStringContent));
             StringContent = UpdatedStringContent;
@@ -779,7 +779,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 }
 
                 var path = Path.Combine(settings.LastFolderUsed, Name);
-                SaveToDisk(path);
+                SaveToDisk(path, service);
                 if (HasExtensionlessMappingFile && settings.SyncMatchingJsFilesAsExtensionless)
                 {
                     File.WriteAllText(ExtensionlessMappingFilePath, StringContent);
@@ -787,7 +787,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
             }
         }
 
-        internal string SaveToDisk(string path)
+        internal string SaveToDisk(string path, IOrganizationService service)
         {
             if (string.IsNullOrEmpty(Path.GetExtension(path))
                 && settings.AddMissingExtensionOnDiskWrite)
@@ -803,6 +803,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
+            }
+
+            if (settings.LazyLoadingOfWebResources && string.IsNullOrEmpty(StringContent))
+            {
+                LazyLoadWebResource(service);
             }
 
             File.WriteAllText(path, StringContent);

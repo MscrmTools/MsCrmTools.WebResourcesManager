@@ -72,7 +72,7 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
             {
                 if (Settings.AutoSaveWhenLeaving)
                 {
-                    Resource.Save();
+                    Resource.Save(mainControl.Service);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ Are you sure you want to close this window and lose the changes?";
 
             CleanCompareFolder();
 
-            var file1Path = Resource.SaveToDisk(Path.Combine(Paths.XrmToolBoxPath, "CompareTemp"));
+            var file1Path = Resource.SaveToDisk(Path.Combine(Paths.XrmToolBoxPath, "CompareTemp"), mainControl.Service);
 
             using (var ofd = new OpenFileDialog())
             {
@@ -355,7 +355,7 @@ Are you sure you want to close this window and lose the changes?";
         {
             if (e.ClickedItem == tsmiSave)
             {
-                Resource.Save();
+                Resource.Save(mainControl.Service);
                 tsmiSave.Enabled = false;
             }
             else if (e.ClickedItem == tsmiUpdatePublish)

@@ -1199,16 +1199,7 @@ Are you sure you want to delete this webresource?",
 
                     path = Path.Combine(path, partPath[partPath.Length - 1]);
 
-                    if (resource.Content?.Length > 0)
-                    {
-                        resource.SaveToDisk(path);
-                    }
-                    else
-                    {
-                        if (File.Exists(path))
-                            File.Delete(path);
-                        File.Create(path).Dispose();
-                    }
+                    resource.SaveToDisk(path, Service);
 
                     resource.FilePath = path;
                 }
@@ -1256,7 +1247,7 @@ Are you sure you want to delete this webresource?",
             {
                 if (activeContent is BaseContentForm bcf)
                 {
-                    bcf.Resource.Save();
+                    bcf.Resource.Save(Service);
                 }
 
                 isCtrlM = false;
