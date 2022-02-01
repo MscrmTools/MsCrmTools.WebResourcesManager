@@ -11,8 +11,15 @@
     <iconUrl>https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/logo_0100.png</iconUrl>
     <description>Manage your webresources easily</description>
     <summary>Manage your webresources easily</summary>
-    <releaseNotes>Added loading of webresources from managed solutions (#109)
-    Fixed path of webresources when loading from disk (#112) - Thank you @BetimBeja</releaseNotes>
+    <releaseNotes>
+      Added Javascript keyword of
+      Added bulk delete capability
+      Fixed #117 XRMToolbox Web Resource Manager Plugin Invalid file extension
+      Fixed issue when updating webresource that is not shown in webresource treeview
+      Fixed an issue when auto sync with local folder is enabled and the directory where to save the file does not exist
+      Updated notification for whitelist and blacklist when setting web resources type selection
+      Fixed issue when saving webresources to disk and lazy loading is enabled. Saved files were empty.
+    </releaseNotes>
     <tags>XrmToolBox Plugin WebResourceManager</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2020.2.36" />
