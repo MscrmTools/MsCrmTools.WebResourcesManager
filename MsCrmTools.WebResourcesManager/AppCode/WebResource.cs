@@ -799,6 +799,12 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 }
             }
 
+            var folderPath = Path.GetDirectoryName(path);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
             File.WriteAllText(path, StringContent);
             return path;
         }
