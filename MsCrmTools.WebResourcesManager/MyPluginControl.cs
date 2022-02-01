@@ -1201,8 +1201,7 @@ Are you sure you want to delete this webresource?",
 
                     if (resource.Content?.Length > 0)
                     {
-                        byte[] bytes = Convert.FromBase64String(resource.Content);
-                        File.WriteAllBytes(path, bytes);
+                        resource.SaveToDisk(path);
                     }
                     else
                     {
