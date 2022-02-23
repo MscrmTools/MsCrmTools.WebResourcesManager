@@ -26,6 +26,7 @@ namespace MscrmTools.WebresourcesManager
     {
         private readonly Dictionary<ToolStripItem, Action<MyPluginControl>> onTvItemClickedMap;
         private FolderNode contextFolderNode;
+        private WebresourceNode contextResourceNode;
         private Webresource contextStripResource;
         private ConnectionDetail detail;
         private InvalidFilenamesDialog ifnd;
@@ -548,6 +549,7 @@ Are you sure you want to delete this webresource?",
                 {tsmiAddNewFolder, AddNewFolder },
                 {tsmiCollapse, (c) => c.contextFolderNode.Collapse(false) },
                 {tsmiExpand, (c) => c.contextFolderNode.ExpandAll() },
+                {tsmiDuplicate, (c)=> c.tv.DuplicateWebresource(c.contextResourceNode) }
             };
         }
 
@@ -694,6 +696,8 @@ Are you sure you want to delete this webresource?",
             {
                 DisplayContextMenuStripItems(true);
                 contextStripResource = wn.Resource;
+
+                contextResourceNode = wn;
             }
 
             cmsWebresourceTreeview.Tag = e.Node;

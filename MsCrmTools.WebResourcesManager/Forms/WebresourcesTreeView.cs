@@ -294,7 +294,7 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             }
 
             resource.Node = node;
-            
+
             if (folder != null && node != null)
             {
                 node.ForeColor = resource.State == WebresourceState.Saved ? Color.Blue :
@@ -451,6 +451,28 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
                 }
 
                 AddFilesAsNodes(folderNode, di.GetFiles().Select(f => f.FullName).ToList(), invalidFileNames);
+            }
+        }
+
+        internal void DuplicateWebresource(WebresourceNode node)
+        {
+            var selectedResource = node.Resource;
+            var map = WebresourceMapper.Instance.Items.First(i => (int)i.Type == selectedResource.Type);
+
+            var nwrDialog = new NewWebResourceDialog(map.Extension, OrganizationMajorVersion);
+            if (nwrDialog.ShowDialog(mainControl) == DialogResult.OK)
+            {
+                var name = $"{((FolderNode)node.Parent).ResourceFullPath}/{nwrDialog.WebresourceName}";
+
+                var resource = selectedResource.Clone(name);
+                if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                {
+                    mainControl.WebresourcesCache.Add(resource);
+                }
+
+                AddSingleNode(resource, name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), (FolderNode)node.Parent);
+
+                node.Parent.Expand();
             }
         }
 

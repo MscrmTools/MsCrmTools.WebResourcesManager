@@ -394,7 +394,7 @@ namespace MscrmTools.WebresourcesManager.AppCode
         public TreeNode Node { get; set; }
 
         [Browsable(false)]
-        public MyPluginControl Plugin { get; }
+        public MyPluginControl Plugin { get; internal set; }
 
         [Category("Properties")]
         [DisplayName("State")]
@@ -455,6 +455,34 @@ namespace MscrmTools.WebresourcesManager.AppCode
             Plugin.DisplayWaitingForUpdatePanel();
         }
 
+        public Webresource Clone(string newName, string displayName = null, int? languageCode = null)
+        {
+            var wr = new Webresource(settings)
+            {
+                record = record,
+                AssociatedResources = AssociatedResources.ToList(),
+                Content = Content,
+                DependencyXml = DependencyXml,
+                Description = Description,
+                DisplayName = displayName ?? DisplayName,
+                LanguageCode = languageCode ?? LanguageCode,
+                LastException = LastException,
+                Name = newName,
+                Plugin = Plugin,
+                StringContent = StringContent,
+                UpdatedStringContent = UpdatedStringContent
+            };
+
+            wr.record.Id = Guid.Empty;
+            wr.record.Attributes.Remove("webresourceid");
+            wr.record.Attributes.Remove("createdon");
+            wr.record.Attributes.Remove("createdby");
+            wr.record.Attributes.Remove("modifiedon");
+            wr.record.Attributes.Remove("modifiedby");
+
+            return wr;
+        }
+
         public void Create(IOrganizationService service)
         {
             record.Id = service.Create(record);
@@ -472,7 +500,14 @@ namespace MscrmTools.WebresourcesManager.AppCode
 
             service.Delete(record.LogicalName, record.Id);
 
-            Node?.Remove();
+            if (Node?.TreeView?.InvokeRequired ?? false)
+            {
+                Node?.TreeView.Invoke(new Action(() => { Node?.Remove(); }));
+            }
+            else
+            {
+                Node?.Remove();
+            }
         }
 
         public void GetLatestVersion(bool fromUpdate = false)
