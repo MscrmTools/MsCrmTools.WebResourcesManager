@@ -35,12 +35,12 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
 
         private void dgv_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            Resource.Content = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
+            Resource.UpdatedStringContent = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
         }
 
         private void dgv_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
-            Resource.Content = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
+            Resource.UpdatedStringContent = Encoding.UTF8.GetString(Convert.FromBase64String(GetBase64WebResourceContent()));
         }
 
         private void DisplayResx()
@@ -50,27 +50,41 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
                 return;
             }
 
-            byte[] b = Convert.FromBase64String(Resource.Content);
-
-            Stream stream = new MemoryStream(b);
-
-            table = new DataTable();
-            table.Columns.Add(new DataColumn("Key"));
-            table.Columns.Add(new DataColumn("Value"));
-
-            rsxr = new ResXResourceReader(stream);
-            foreach (DictionaryEntry d in rsxr)
+            MemoryStream stream;
+            ResXResourceWriter resx = null;
+            if (string.IsNullOrWhiteSpace(Resource.Content))
             {
-                if (string.IsNullOrEmpty(d.Key?.ToString()))
+                string newContent;
+                using (stream = new MemoryStream())
                 {
-                    continue;
+                    using (resx = new ResXResourceWriter(stream))
+                    {
+                        resx.AddResource("Sample_Key", "Sample value");
+                    }
+                    Resource.UpdatedStringContent = Encoding.UTF8.GetString(stream.ToArray());
+                    Resource.Content = Resource.UpdatedStringContent;
                 }
-                table.Rows.Add(d.Key.ToString(), d.Value?.ToString());
             }
-            rsxr.Close();
 
-            dgv.DataSource = table;
+            byte[] b = Encoding.UTF8.GetBytes(Resource.StringContent);
+            stream = new MemoryStream(b);
+            using (rsxr = new ResXResourceReader(stream))
+            {
+                table = new DataTable();
+                table.Columns.Add(new DataColumn("Key"));
+                table.Columns.Add(new DataColumn("Value"));
 
+                foreach (DictionaryEntry d in rsxr)
+                {
+                    if (string.IsNullOrEmpty(d.Key?.ToString()))
+                    {
+                        continue;
+                    }
+                    table.Rows.Add(d.Key.ToString(), d.Value?.ToString());
+                }
+
+                dgv.DataSource = table;
+            }
             dgv.CellValueChanged += dgv_CellValueChanged;
             dgv.UserDeletedRow += dgv_UserDeletedRow;
         }
