@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
@@ -164,7 +166,41 @@ namespace MscrmTools.WebresourcesManager.AppCode
         [Description("CRM doesn't enforce adding an extension to a webresource.  If there is a local file \"new_a\" and another \"new_a.js\", \"new_a.js\" will be pushed as \"new_a\"")]
         public bool SyncMatchingJsFilesAsExtensionless { get; set; } = true;
 
+        private ObservableCollection<string> ignoredFiles;
+        [Category("Pending Updates Settings")]
+        [DisplayName("Ignored Files")]
+        [Description("Semicolon-separated list of files to not display in the Pending Updates dialog. Use wildcard * as desired.")]
+        [Editor(@"System.Windows.Forms.Design.StringCollectionEditor,System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
+        [TypeConverter(typeof(ListConverter))]
+        public ObservableCollection<string> IgnoredFiles
+        {
+            get => ignoredFiles;
+            set
+            {
+                if (ignoredFiles != value)
+                {
+                    if (ignoredFiles != null)
+                    {
+                        ignoredFiles.CollectionChanged -= onIgnoredFilesChanged;
+                    }
+
+                    ignoredFiles = value;
+
+                    if (ignoredFiles != null)
+                    {
+                        ignoredFiles.CollectionChanged += onIgnoredFilesChanged;
+                    }
+                }
+            }
+        }
         [Browsable(false)] public DockState TreeviewDockState { get; set; } = DockState.DockLeft;
+
+        public event EventHandler SettingChangedCustom;
+
+        public Settings()
+        {
+            this.IgnoredFiles = new ObservableCollection<string>();
+        }
 
         public static Settings Load(string name = null)
         {
@@ -195,6 +231,11 @@ namespace MscrmTools.WebresourcesManager.AppCode
                 IgnoredLocalFiles[i] = IgnoredLocalFiles[i].Trim();
             }
             SettingsManager.Instance.Save(GetType(), this, name);
+        }
+
+        private void onIgnoredFilesChanged(object sender, EventArgs e)
+        {
+            this.SettingChangedCustom?.Invoke(this, new EventArgs());
         }
     }
 }

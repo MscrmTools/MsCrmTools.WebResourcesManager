@@ -1,8 +1,11 @@
-﻿using MscrmTools.WebresourcesManager.AppCode;
+﻿using Microsoft.VisualBasic.CompilerServices;
+using MscrmTools.WebresourcesManager.AppCode;
 using MscrmTools.WebresourcesManager.AppCode.Args;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -12,6 +15,17 @@ namespace MscrmTools.WebresourcesManager.Forms
     {
         private readonly MyPluginControl mainControl;
 
+        private IEnumerable<string> ignoredFiles = new string[0];
+        public IEnumerable<string> IgnoredFiles
+        {
+            get => ignoredFiles;
+            set
+            {
+                ignoredFiles = value;
+
+                Invoke(new Action(() => refreshWebResource()));
+            }
+        }
         public PendingUpdatesDialog(MyPluginControl control)
         {
             InitializeComponent();
@@ -79,18 +93,37 @@ namespace MscrmTools.WebresourcesManager.Forms
         {
             Invoke(new Action(() =>
             {
-                clbWebresources.Items.Clear();
+                refreshWebResource();
+            }));
+        }
 
-                foreach (var resource in mainControl.WebresourcesCache.Where(r => r.State == WebresourceState.Saved))
+        private void refreshWebResource()
+        {
+            clbWebresources.Items.Clear();
+
+            foreach (var resource in mainControl.WebresourcesCache.Where(savedAndNotIgnored))
+            {
+                clbWebresources.Items.Add(resource);
+                clbWebresources.SetItemChecked(clbWebresources.Items.Count - 1, true);
+            }
+
+            btnApply.Enabled = clbWebresources.Items.Count > 0;
+
+            TabText = $"Pending Updates {(clbWebresources.Items.Count > 0 ? $" ({clbWebresources.Items.Count})" : "")}";
+
+            bool savedAndNotIgnored(Webresource r) =>
+                r.State == WebresourceState.Saved
+                && !isIgnored(r);
+
+            bool isIgnored(Webresource r)
+            {
+                if (IgnoredFiles.Any(i => LikeOperator.LikeString(r.Name, i, Microsoft.VisualBasic.CompareMethod.Text)))
                 {
-                    clbWebresources.Items.Add(resource);
-                    clbWebresources.SetItemChecked(clbWebresources.Items.Count - 1, true);
+                    return true;
                 }
 
-                btnApply.Enabled = clbWebresources.Items.Count > 0;
-
-                TabText = $"Pending Updates {(clbWebresources.Items.Count > 0 ? $" ({clbWebresources.Items.Count})" : "")}";
-            }));
+                return false;
+            }
         }
 
         private void WebresourcesCache_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
