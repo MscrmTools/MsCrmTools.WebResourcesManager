@@ -457,11 +457,21 @@ Are you sure you want to delete this webresource?",
             }
         }
 
-        private void DisplayContextMenuStripItems(bool visible)
+        private void DisplayContextMenuStripItems(bool visible, Webresource wr = null)
         {
             foreach (ToolStripItem item in cmsWebresourceTreeview.Items)
             {
                 item.Visible = visible;
+            }
+
+            // SVG
+            if (wr?.Type == 11)
+            {
+                tsmiSetTableIcon.Visible = visible && !string.IsNullOrEmpty(wr.Name) && wr.Synced;
+            }
+            else
+            {
+                tsmiSetTableIcon.Visible = false;
             }
 
             tsmiAddNewFolder.Visible = !visible;
@@ -549,7 +559,13 @@ Are you sure you want to delete this webresource?",
                 {tsmiAddNewFolder, AddNewFolder },
                 {tsmiCollapse, (c) => c.contextFolderNode.Collapse(false) },
                 {tsmiExpand, (c) => c.contextFolderNode.ExpandAll() },
-                {tsmiDuplicate, (c)=> c.tv.DuplicateWebresource(c.contextResourceNode) }
+                {tsmiDuplicate, (c)=> c.tv.DuplicateWebresource(c.contextResourceNode) },
+                {tsmiSetTableIcon, (c) =>
+                {
+                    var dlg = new UpdateEntityImageDialog(Service, c.contextStripResource.Name);
+                    dlg.ShowDialog(this);
+                }
+                }
             };
         }
 
@@ -694,7 +710,7 @@ Are you sure you want to delete this webresource?",
             }
             else if (e.Node is WebresourceNode wn)
             {
-                DisplayContextMenuStripItems(true);
+                DisplayContextMenuStripItems(true, wn.Resource);
                 contextStripResource = wn.Resource;
 
                 contextResourceNode = wn;

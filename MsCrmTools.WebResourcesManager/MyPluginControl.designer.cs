@@ -69,6 +69,7 @@
             this.tsmiNewXsl = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNewResx = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAddNewFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSetTableIcon = new System.Windows.Forms.ToolStripMenuItem();
             this.tssFolder1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiCollapse = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExpand = new System.Windows.Forms.ToolStripMenuItem();
@@ -364,6 +365,7 @@
             this.tsmiCopyNameToClipboard,
             this.tssResource4,
             this.tsmiSetDependencies,
+            this.tsmiSetTableIcon,
             this.tssResource5,
             this.tsmiProperties});
             this.cmsWebresourceTreeview.Name = "contextMenuStripTreeView";
@@ -434,6 +436,13 @@
             this.tsmiAddNewFolder.Name = "tsmiAddNewFolder";
             this.tsmiAddNewFolder.Size = new System.Drawing.Size(479, 32);
             this.tsmiAddNewFolder.Text = "Add new folder";
+           
+            // 
+            // tsmiSetTableIcon
+            // 
+            this.tsmiSetTableIcon.Name = "tsmiSetTableIcon";
+            this.tsmiSetTableIcon.Size = new System.Drawing.Size(479, 32);
+            this.tsmiSetTableIcon.Text = "Apply this image to a table";
             // 
             // tssFolder1
             // 
@@ -646,6 +655,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiNewXsl;
         private System.Windows.Forms.ToolStripMenuItem tsmiNewResx;
         private System.Windows.Forms.ToolStripMenuItem tsmiAddNewFolder;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSetTableIcon;
         private System.Windows.Forms.ToolStripSeparator tssFolder1;
         private System.Windows.Forms.ToolStripMenuItem tsmiRenameWebresource;
         private System.Windows.Forms.ToolStripSeparator tssFolder2;
