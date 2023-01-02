@@ -1,75 +1,76 @@
-pool:
-  name: Hosted VS2017
-  demands:
-  - msbuild
-  - visualstudio
+jobs:
+- job: 'BuildSolution'
 
-variables:
-  ToolName: 'MsCrmTools.WebResourcesManager'
+  pool:
+    vmImage: windows-latest
 
-steps:
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.6.0'
-  inputs:
-    versionSpec: 4.6.0
-    checkLatest: true
+  variables:
+    ToolName: 'MsCrmTools.WebResourcesManager'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
-  inputs:
-    restoreSolution: '$(Parameters.solution)'
+  steps:
+  - task: NuGetToolInstaller@0
+    displayName: 'Use NuGet 4.6.0'
+    inputs:
+      versionSpec: 4.6.0
+      checkLatest: true
 
-- task: VSBuild@1
-  displayName: 'Build solution **\*.sln'
-  inputs:
-    solution: '$(Parameters.solution)'
-    vsVersion: "15.0"
-    platform: 'any cpu'
-    configuration: 'release'
+  - task: NuGetCommand@2
+    displayName: 'NuGet restore'
+    inputs:
+      restoreSolution: '$(Parameters.solution)'
 
-- task: "AssembyInfoReader@2"
-  displayName: 'Get Assembly version'
+  - task: VSBuild@1
+    displayName: 'Build solution **\*.sln'
+    inputs:
+      solution: '$(Parameters.solution)'
+      vsVersion: "15.0"
+      platform: 'any cpu'
+      configuration: 'release'
 
-- task: NuGetCommand@2
-  displayName: 'Create Nuget package'
-  inputs:
-    command: pack
-    packagesToPack: '**/*.nuspec'
-    versioningScheme: byEnvVar
-    versionEnvVar: AssemblyInfo.AssemblyVersion
+  - task: "AssembyInfoReader@2"
+    displayName: 'Get Assembly version'
 
-- task: AzureKeyVault@1
-  displayName: 'Get Code signin certificate'
-  inputs:
-    azureSubscription: 'Visual Studio Ultimate avec MSDN (c15be07d-a965-4473-8099-eac957b8e27a)'
-    KeyVaultName: XrmToolBoxKeyVault
-    #SecretsFilter: "CodeSigning-TanguyTouzard"
+  - task: NuGetCommand@2
+    displayName: 'Create Nuget package'
+    inputs:
+      command: pack
+      packagesToPack: '**/*.nuspec'
+      versioningScheme: byEnvVar
+      versionEnvVar: AssemblyInfo.AssemblyVersion
 
-- powershell: |
-   # Write your PowerShell commands here.
-   $kvSecretBytes = [System.Convert]::FromBase64String("$(CodeSigning-TanguyTouzard)")
-   [System.IO.File]::WriteAllBytes("$(Build.SourcesDirectory)\certificate.pfx", $kvSecretBytes)
-  displayName: 'Store certificate locally'
+  - task: AzureKeyVault@1
+    displayName: 'Get Code signin certificate'
+    inputs:
+      azureSubscription: 'Visual Studio Ultimate avec MSDN (c15be07d-a965-4473-8099-eac957b8e27a)'
+      KeyVaultName: XrmToolBoxKeyVault
+      #SecretsFilter: "CodeSigning-TanguyTouzard"
 
-- task: NuGetCommand@2
-  displayName: 'Sign Nuget package'
-  inputs:
-    command: custom
-    arguments: 'sign "$(Build.ArtifactStagingDirectory)\$(ToolName).$(AssemblyInfo.AssemblyVersion).nupkg" -CertificatePath "$(Build.SourcesDirectory)\certificate.pfx" -Timestamper "http://timestamp.digicert.com"'
+  - powershell: |
+      # Write your PowerShell commands here.
+      $kvSecretBytes = [System.Convert]::FromBase64String("$(CodeSigning-TanguyTouzard)")
+      [System.IO.File]::WriteAllBytes("$(Build.SourcesDirectory)\certificate.pfx", $kvSecretBytes)
+    displayName: 'Store certificate locally'
 
-- powershell: |
-   # Write your PowerShell commands here.
-   Remove-Item "$(Build.SourcesDirectory)\certificate.pfx"
-  displayName: 'Delete local certificate'
+  - task: NuGetCommand@2
+    displayName: 'Sign Nuget package'
+    inputs:
+      command: custom
+      arguments: 'sign "$(Build.ArtifactStagingDirectory)\$(ToolName).$(AssemblyInfo.AssemblyVersion).nupkg" -CertificatePath "$(Build.SourcesDirectory)\certificate.pfx" -Timestamper "http://timestamp.digicert.com"'
 
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-  inputs:
-    SourceFolder: '$(build.sourcesdirectory)'
-    Contents: '**\*$(ToolName)*.nupkg'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+  - powershell: |
+      # Write your PowerShell commands here.
+      Remove-Item "$(Build.SourcesDirectory)\certificate.pfx"
+    displayName: 'Delete local certificate' 
+      
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+    inputs:
+      SourceFolder: '$(build.sourcesdirectory)'
+      Contents: '**\*$(ToolName)*.nupkg'
+      TargetFolder: '$(build.artifactstagingdirectory)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      PathtoPublish: '$(build.artifactstagingdirectory)'
