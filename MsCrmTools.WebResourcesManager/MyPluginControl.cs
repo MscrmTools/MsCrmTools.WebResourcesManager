@@ -7,6 +7,7 @@ using MscrmTools.WebresourcesManager.AppCode.Exceptions;
 using MscrmTools.WebresourcesManager.CustomControls;
 using MscrmTools.WebresourcesManager.Forms;
 using MscrmTools.WebresourcesManager.Forms.Contents;
+using MsCrmTools.WebResourcesManager.Forms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -468,10 +469,18 @@ Are you sure you want to delete this webresource?",
             if (wr?.Type == 11)
             {
                 tsmiSetTableIcon.Visible = visible && !string.IsNullOrEmpty(wr.Name) && wr.Synced;
+                tsmiAddEventToForm.Visible = false;
+            }
+            // Script
+            else if (wr?.Type == 3)
+            {
+                tsmiAddEventToForm.Visible = visible && !string.IsNullOrEmpty(wr.Name) && wr.Synced;
+                tsmiSetTableIcon.Visible = false;
             }
             else
             {
                 tsmiSetTableIcon.Visible = false;
+                tsmiAddEventToForm.Visible = false;
             }
 
             tsmiAddNewFolder.Visible = !visible;
@@ -564,7 +573,13 @@ Are you sure you want to delete this webresource?",
                 {
                     var dlg = new UpdateEntityImageDialog(Service, c.contextStripResource.Name);
                     dlg.ShowDialog(this);
-                }
+                }},
+                {
+                    tsmiAddEventToForm, (c) =>
+                    {
+                        var dlg = new CreateEventDialog(c.contextStripResource.Name,Service);
+                        dlg.ShowDialog(this);
+                    }
                 }
             };
         }

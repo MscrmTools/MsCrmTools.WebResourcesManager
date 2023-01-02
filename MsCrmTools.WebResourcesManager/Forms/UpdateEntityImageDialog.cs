@@ -195,7 +195,8 @@ namespace MscrmTools.WebresourcesManager.Forms
                     SubItems =
                     {
                         new ListViewItem.ListViewSubItem{Text = emd.LogicalName}
-                    }
+                    },
+                    ForeColor = string.IsNullOrEmpty(emd.IconVectorName) ? Color.Black : Color.LightGray
                 }).ToArray());
             };
             bw.RunWorkerAsync();

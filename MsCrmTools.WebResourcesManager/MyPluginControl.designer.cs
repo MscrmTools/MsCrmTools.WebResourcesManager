@@ -70,6 +70,7 @@
             this.tsmiNewResx = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAddNewFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSetTableIcon = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAddEventToForm = new System.Windows.Forms.ToolStripMenuItem();
             this.tssFolder1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiCollapse = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExpand = new System.Windows.Forms.ToolStripMenuItem();
@@ -365,6 +366,7 @@
             this.tsmiCopyNameToClipboard,
             this.tssResource4,
             this.tsmiSetDependencies,
+            this.tsmiAddEventToForm,
             this.tsmiSetTableIcon,
             this.tssResource5,
             this.tsmiProperties});
@@ -436,7 +438,12 @@
             this.tsmiAddNewFolder.Name = "tsmiAddNewFolder";
             this.tsmiAddNewFolder.Size = new System.Drawing.Size(479, 32);
             this.tsmiAddNewFolder.Text = "Add new folder";
-           
+            // 
+            // tsmiAddEventToForm
+            // 
+            this.tsmiAddEventToForm.Name = "tsmiAddEventToForm";
+            this.tsmiAddEventToForm.Size = new System.Drawing.Size(479, 32);
+            this.tsmiAddEventToForm.Text = "Add this script to a form";
             // 
             // tsmiSetTableIcon
             // 
@@ -655,6 +662,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiNewXsl;
         private System.Windows.Forms.ToolStripMenuItem tsmiNewResx;
         private System.Windows.Forms.ToolStripMenuItem tsmiAddNewFolder;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddEventToForm;
         private System.Windows.Forms.ToolStripMenuItem tsmiSetTableIcon;
         private System.Windows.Forms.ToolStripSeparator tssFolder1;
         private System.Windows.Forms.ToolStripMenuItem tsmiRenameWebresource;

@@ -242,6 +242,14 @@
     <Compile Include="AppCode\ListConverter.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LoadResourcesSettings.cs" />
+    <Compile Include="AppCode\Script\CdsForm.cs" />
+    <Compile Include="AppCode\Script\CdsFormControl.cs" />
+    <Compile Include="AppCode\Script\CdsHomePageGrid.cs" />
+    <Compile Include="AppCode\Script\CdsView.cs" />
+    <Compile Include="AppCode\Script\IUiUtem.cs" />
+    <Compile Include="AppCode\Script\Script.cs" />
+    <Compile Include="AppCode\Script\ScriptsManager.cs" />
+    <Compile Include="AppCode\Script\XmlExtensions.cs" />
     <Compile Include="AppCode\Settings.cs" />
     <Compile Include="AppCode\Solution.Static.cs" />
     <Compile Include="AppCode\TreeNodeSorter.cs" />
@@ -310,6 +318,12 @@
     </Compile>
     <Compile Include="Forms\Contents\ResxContentForm.Designer.cs">
       <DependentUpon>ResxContentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CreateEventDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CreateEventDialog.designer.cs">
+      <DependentUpon>CreateEventDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CustomFolderBrowserDialog.cs">
       <SubType>Form</SubType>
@@ -453,6 +467,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Contents\ResxContentForm.resx">
       <DependentUpon>ResxContentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CreateEventDialog.resx">
+      <DependentUpon>CreateEventDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
