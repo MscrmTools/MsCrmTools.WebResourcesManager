@@ -12,8 +12,8 @@
     <description>Manage your webresources easily</description>
     <summary>Manage your webresources easily</summary>
     <releaseNotes>
-      Added duplicate feature for web resource
-      Fixed usage of resx web resource type
+      Added feature to add an SVG image to a table (use right click)
+      Added feature to add an event to a form (use right click)
     </releaseNotes>
     <tags>XrmToolBox Plugin WebResourceManager</tags>
     <dependencies>
