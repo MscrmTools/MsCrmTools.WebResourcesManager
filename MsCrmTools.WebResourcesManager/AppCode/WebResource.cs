@@ -804,13 +804,15 @@ namespace MscrmTools.WebresourcesManager.AppCode
             {
                 if (string.IsNullOrEmpty(settings.LastFolderUsed))
                 {
-                    var cfb = new CustomFolderBrowserDialog(majorVersion, true, false);
-                    if (cfb.ShowDialog(Plugin) != DialogResult.OK)
+                    using (var cfb = new CustomFolderBrowserDialog(majorVersion, true, false))
                     {
-                        return;
-                    }
+                        if (cfb.ShowDialog(Plugin) != DialogResult.OK)
+                        {
+                            return;
+                        }
 
-                    settings.LastFolderUsed = cfb.FolderPath;
+                        settings.LastFolderUsed = cfb.FolderPath;
+                    }
                 }
 
                 var path = Path.Combine(settings.LastFolderUsed, Name);

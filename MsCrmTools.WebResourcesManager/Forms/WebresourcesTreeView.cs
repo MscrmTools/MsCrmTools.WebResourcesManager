@@ -421,20 +421,22 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
         {
             var map = WebresourceMapper.Instance.Items.First(i => i.Type == type);
 
-            var nwrDialog = new NewWebResourceDialog(map.Extension, OrganizationMajorVersion);
-            if (nwrDialog.ShowDialog(mainControl) == DialogResult.OK)
+            using (var nwrDialog = new NewWebResourceDialog(map.Extension, OrganizationMajorVersion))
             {
-                var name = $"{parentNode.ResourceFullPath}/{nwrDialog.WebresourceName}";
-
-                var resource = new Webresource(name, null, type, mainControl, Settings);
-                if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                if (nwrDialog.ShowDialog(mainControl) == DialogResult.OK)
                 {
-                    mainControl.WebresourcesCache.Add(resource);
+                    var name = $"{parentNode.ResourceFullPath}/{nwrDialog.WebresourceName}";
+
+                    var resource = new Webresource(name, null, type, mainControl, Settings);
+                    if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                    {
+                        mainControl.WebresourcesCache.Add(resource);
+                    }
+
+                    AddSingleNode(resource, name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), parentNode);
+
+                    parentNode.Expand();
                 }
-
-                AddSingleNode(resource, name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), parentNode);
-
-                parentNode.Expand();
             }
         }
 
@@ -459,20 +461,22 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
             var selectedResource = node.Resource;
             var map = WebresourceMapper.Instance.Items.First(i => (int)i.Type == selectedResource.Type);
 
-            var nwrDialog = new NewWebResourceDialog(map.Extension, OrganizationMajorVersion);
-            if (nwrDialog.ShowDialog(mainControl) == DialogResult.OK)
+            using (var nwrDialog = new NewWebResourceDialog(map.Extension, OrganizationMajorVersion))
             {
-                var name = $"{((FolderNode)node.Parent).ResourceFullPath}/{nwrDialog.WebresourceName}";
-
-                var resource = selectedResource.Clone(name);
-                if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                if (nwrDialog.ShowDialog(mainControl) == DialogResult.OK)
                 {
-                    mainControl.WebresourcesCache.Add(resource);
+                    var name = $"{((FolderNode)node.Parent).ResourceFullPath}/{nwrDialog.WebresourceName}";
+
+                    var resource = selectedResource.Clone(name);
+                    if (mainControl.WebresourcesCache.All(w => w.Name != resource.Name))
+                    {
+                        mainControl.WebresourcesCache.Add(resource);
+                    }
+
+                    AddSingleNode(resource, name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), (FolderNode)node.Parent);
+
+                    node.Parent.Expand();
                 }
-
-                AddSingleNode(resource, name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries), (FolderNode)node.Parent);
-
-                node.Parent.Expand();
             }
         }
 
@@ -660,16 +664,17 @@ Webresources will be considered has unchanged", @"Question", MessageBoxButtons.Y
 
         private void tsbNewRoot_Click(object sender, EventArgs e)
         {
-            var nrd = new NewRootDialog { StartPosition = FormStartPosition.CenterParent };
-
-            if (nrd.ShowDialog(ParentForm) == DialogResult.OK)
+            using (var nrd = new NewRootDialog { StartPosition = FormStartPosition.CenterParent })
             {
-                var rootNode = new FolderNode(true, nrd.RootName);
+                if (nrd.ShowDialog(ParentForm) == DialogResult.OK)
+                {
+                    var rootNode = new FolderNode(true, nrd.RootName);
 
-                tv.Nodes.Add(rootNode);
+                    tv.Nodes.Add(rootNode);
 
-                tv.TreeViewNodeSorter = new NodeSorter();
-                tv.Sort();
+                    tv.TreeViewNodeSorter = new NodeSorter();
+                    tv.Sort();
+                }
             }
         }
 

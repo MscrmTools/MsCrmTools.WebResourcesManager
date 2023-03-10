@@ -105,13 +105,15 @@ namespace MscrmTools.WebresourcesManager
                 {
                     if (toCsv)
                     {
-                        var sfd = new SaveFileDialog { Filter = @"CSV file (*.csv)|*.csv" };
-                        if (sfd.ShowDialog(this) == DialogResult.OK)
+                        using (var sfd = new SaveFileDialog { Filter = @"CSV file (*.csv)|*.csv" })
                         {
-                            using (var fileStream = new FileStream(sfd.FileName, FileMode.OpenOrCreate))
-                            using (var writer = new StreamWriter(fileStream, Encoding.Default))
+                            if (sfd.ShowDialog(this) == DialogResult.OK)
                             {
-                                writer.WriteLine(sb.ToString());
+                                using (var fileStream = new FileStream(sfd.FileName, FileMode.OpenOrCreate))
+                                using (var writer = new StreamWriter(fileStream, Encoding.Default))
+                                {
+                                    writer.WriteLine(sb.ToString());
+                                }
                             }
                         }
                     }
@@ -197,22 +199,25 @@ namespace MscrmTools.WebresourcesManager
 
         private static void AddExistingFile(MyPluginControl plugin)
         {
-            var ofd = new OpenFileDialog { Multiselect = true, Title = @"Select file(s) to add as webresource(s)" };
-
-            if (ofd.ShowDialog(plugin.ParentForm) == DialogResult.OK)
+            using (var ofd = new OpenFileDialog { Multiselect = true, Title = @"Select file(s) to add as webresource(s)" })
             {
-                var invalidFileNames = new List<string>();
-                plugin.tv.AddFilesAsNodes(plugin.contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
-                plugin.ShowInvalidFiles(invalidFileNames);
+                if (ofd.ShowDialog(plugin.ParentForm) == DialogResult.OK)
+                {
+                    var invalidFileNames = new List<string>();
+                    plugin.tv.AddFilesAsNodes(plugin.contextFolderNode, ofd.FileNames.ToList(), invalidFileNames);
+                    plugin.ShowInvalidFiles(invalidFileNames);
+                }
             }
         }
 
         private static void AddNewFolder(MyPluginControl plugin)
         {
-            var newFolderDialog = new NewFolderDialog(plugin.ConnectionDetail?.OrganizationMajorVersion ?? -1);
-            if (newFolderDialog.ShowDialog(plugin) == DialogResult.OK)
+            using (var newFolderDialog = new NewFolderDialog(plugin.ConnectionDetail?.OrganizationMajorVersion ?? -1))
             {
-                plugin.tv.AddSingleFolder(plugin.contextFolderNode, newFolderDialog.FolderName);
+                if (newFolderDialog.ShowDialog(plugin) == DialogResult.OK)
+                {
+                    plugin.tv.AddSingleFolder(plugin.contextFolderNode, newFolderDialog.FolderName);
+                }
             }
         }
 
@@ -237,14 +242,16 @@ namespace MscrmTools.WebresourcesManager
 
                 if (result == DialogResult.Yes)
                 {
-                    var ofd = new OpenFileDialog();
-                    if (ofd.ShowDialog(plugin) == DialogResult.OK)
+                    using (var ofd = new OpenFileDialog())
                     {
-                        plugin.contextStripResource.FilePath = ofd.FileName;
-                    }
-                    else
-                    {
-                        return;
+                        if (ofd.ShowDialog(plugin) == DialogResult.OK)
+                        {
+                            plugin.contextStripResource.FilePath = ofd.FileName;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 }
                 else
@@ -258,20 +265,21 @@ namespace MscrmTools.WebresourcesManager
 
         private static void RenameWebResource(MyPluginControl plugin)
         {
-            var renameDialog = new RenameWebResourceDialog(plugin.contextStripResource.Name, plugin.ConnectionDetail?.OrganizationMajorVersion ?? -1);
-
-            if (renameDialog.ShowDialog(plugin) == DialogResult.OK)
+            using (var renameDialog = new RenameWebResourceDialog(plugin.contextStripResource.Name, plugin.ConnectionDetail?.OrganizationMajorVersion ?? -1))
             {
-                if (plugin.contextStripResource.Name != renameDialog.WebResourceName)
+                if (renameDialog.ShowDialog(plugin) == DialogResult.OK)
                 {
-                    if (plugin.contextStripResource.Id == Guid.Empty)
+                    if (plugin.contextStripResource.Name != renameDialog.WebResourceName)
                     {
-                        plugin.contextStripResource.Name = renameDialog.WebResourceName;
-                        plugin.contextStripResource.Rename(plugin.contextStripResource.Node, renameDialog.WebResourceName);
-                    }
-                    else
-                    {
-                        plugin.ExecuteMethod(plugin.RenameWebresource, renameDialog.WebResourceName);
+                        if (plugin.contextStripResource.Id == Guid.Empty)
+                        {
+                            plugin.contextStripResource.Name = renameDialog.WebResourceName;
+                            plugin.contextStripResource.Rename(plugin.contextStripResource.Node, renameDialog.WebResourceName);
+                        }
+                        else
+                        {
+                            plugin.ExecuteMethod(plugin.RenameWebresource, renameDialog.WebResourceName);
+                        }
                     }
                 }
             }
@@ -279,10 +287,14 @@ namespace MscrmTools.WebresourcesManager
 
         private static void SetDependencyXml(MyPluginControl plugin)
         {
-            var dialog = new DependencyDialog(plugin.contextStripResource, plugin);
-            if (dialog.ShowDialog(plugin) == DialogResult.OK)
+            using (var dialog = new DependencyDialog(plugin.contextStripResource, plugin))
             {
-                plugin.contextStripResource.DependencyXml = dialog.UpdatedDependencyXml;
+                {
+                    if (dialog.ShowDialog(plugin) == DialogResult.OK)
+                    {
+                        plugin.contextStripResource.DependencyXml = dialog.UpdatedDependencyXml;
+                    }
+                }
             }
         }
 
@@ -303,6 +315,7 @@ namespace MscrmTools.WebresourcesManager
             for (var i = 0; i < toClose.Count; i++)
             {
                 toClose[i].Close();
+                toClose[i].Dispose();
             }
         }
 
@@ -310,6 +323,12 @@ namespace MscrmTools.WebresourcesManager
         {
             if (e.ClickedItem == cmsTabsCloseThis)
             {
+                var content = dpMain.ActiveContent as BaseContentForm;
+                if (content != null)
+                {
+                    content.Close();
+                    content.Dispose();
+                }
                 (dpMain.ActiveContent as BaseContentForm)?.Close();
             }
             else if (e.ClickedItem == cmsTabsCloseExceptThis)
@@ -321,6 +340,7 @@ namespace MscrmTools.WebresourcesManager
                     if (content != currentContent)
                     {
                         content.Close();
+                        content.Dispose();
                     }
                 }
             }
@@ -330,6 +350,7 @@ namespace MscrmTools.WebresourcesManager
                 foreach (var content in list)
                 {
                     content.Close();
+                    content.Dispose();
                 }
             }
         }
@@ -525,8 +546,10 @@ Are you sure you want to delete this webresource?",
                     },
                 PostWorkCallBack = e =>
                 {
-                    var dialog = new UnusedWebResourcesListDialog((List<Webresource>)e.Result, Service);
-                    dialog.ShowDialog(this);
+                    using (var dialog = new UnusedWebResourcesListDialog((List<Webresource>)e.Result, Service))
+                    {
+                        dialog.ShowDialog(this);
+                    }
                 }
             });
         }
@@ -571,14 +594,17 @@ Are you sure you want to delete this webresource?",
                 {tsmiDuplicate, (c)=> c.tv.DuplicateWebresource(c.contextResourceNode) },
                 {tsmiSetTableIcon, (c) =>
                 {
-                    var dlg = new UpdateEntityImageDialog(Service, c.contextStripResource.Name);
+                    using(var dlg = new UpdateEntityImageDialog(Service, c.contextStripResource.Name))
+                    {
                     dlg.ShowDialog(this);
+                    }
                 }},
                 {
                     tsmiAddEventToForm, (c) =>
                     {
-                        var dlg = new CreateEventDialog(c.contextStripResource.Name,Service);
+                        using(var dlg = new CreateEventDialog(c.contextStripResource.Name,Service)){
                         dlg.ShowDialog(this);
+                        }
                     }
                 }
             };
@@ -771,14 +797,16 @@ Are you sure you want to delete this webresource?",
 
                 if (result == DialogResult.Yes)
                 {
-                    var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false) { Text = @"Local folder" };
-                    if (fbd.ShowDialog(plugin) == DialogResult.OK)
+                    using (var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false) { Text = @"Local folder" })
                     {
-                        plugin.contextFolderNode.FolderPath = fbd.FolderPath;
-                    }
-                    else
-                    {
-                        return;
+                        if (fbd.ShowDialog(plugin) == DialogResult.OK)
+                        {
+                            plugin.contextFolderNode.FolderPath = fbd.FolderPath;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 }
                 else
@@ -911,35 +939,39 @@ Are you sure you want to delete this webresource?",
             // display
             if (fromSolution)
             {
-                var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent };
-                if (sPicker.ShowDialog(ParentForm) == DialogResult.OK)
+                using (var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent })
                 {
-                    lastSettings.Solution = sPicker.SelectedSolution;
-                    lastSettings.LoadAllWebresources = sPicker.LoadAllWebresources;
-
-                    if (lastSettings.LoadAllWebresources)
+                    if (sPicker.ShowDialog(ParentForm) == DialogResult.OK)
                     {
-                        lastSettings.FilterByLcid = sPicker.FilterByLcid;
+                        lastSettings.Solution = sPicker.SelectedSolution;
+                        lastSettings.LoadAllWebresources = sPicker.LoadAllWebresources;
+
+                        if (lastSettings.LoadAllWebresources)
+                        {
+                            lastSettings.FilterByLcid = sPicker.FilterByLcid;
+                        }
                     }
-                }
-                else
-                {
-                    return;
+                    else
+                    {
+                        return;
+                    }
                 }
             }
 
             if (!lastSettings.LoadAllWebresources)
             {
                 // Display web resource types selection dialog
-                var dialog = new WebResourceTypeSelectorDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1, settings);
-                if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
+                using (var dialog = new WebResourceTypeSelectorDialog(ConnectionDetail?.OrganizationMajorVersion ?? -1, settings))
                 {
-                    lastSettings.TypesToload = dialog.TypesToLoad;
-                    lastSettings.FilterByLcid = dialog.FilterByLcid;
-                }
-                else
-                {
-                    return;
+                    if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
+                    {
+                        lastSettings.TypesToload = dialog.TypesToLoad;
+                        lastSettings.FilterByLcid = dialog.FilterByLcid;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -955,15 +987,16 @@ Are you sure you want to delete this webresource?",
         {
             if (us.AddToSolution)
             {
-                var sPicker = new SolutionPicker(Service, true) { StartPosition = FormStartPosition.CenterParent };
-
-                if (sPicker.ShowDialog(this) == DialogResult.OK)
+                using (var sPicker = new SolutionPicker(Service, true) { StartPosition = FormStartPosition.CenterParent })
                 {
-                    us.SolutionUniqueName = sPicker.SelectedSolution["uniquename"].ToString();
-                }
-                else
-                {
-                    return;
+                    if (sPicker.ShowDialog(this) == DialogResult.OK)
+                    {
+                        us.SolutionUniqueName = sPicker.SelectedSolution["uniquename"].ToString();
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -1069,19 +1102,21 @@ Are you sure you want to delete this webresource?",
 
                     if (unsyncResources.Any() || otherResources.Any())
                     {
-                        var dialog = new ConcurrencySummaryDialog(unsyncResources, otherResources);
-                        if (dialog.ShowDialog(this) == DialogResult.Retry)
+                        using (var dialog = new ConcurrencySummaryDialog(unsyncResources, otherResources))
                         {
-                            var retryUs = new UpdateResourcesSettings
+                            if (dialog.ShowDialog(this) == DialogResult.Retry)
                             {
-                                Webresources = unsyncResources,
-                                Publish = result.Publish,
-                                AddToSolution = result.AddToSolution,
-                                SolutionUniqueName = result.SolutionUniqueName,
-                                Overwrite = true
-                            };
+                                var retryUs = new UpdateResourcesSettings
+                                {
+                                    Webresources = unsyncResources,
+                                    Publish = result.Publish,
+                                    AddToSolution = result.AddToSolution,
+                                    SolutionUniqueName = result.SolutionUniqueName,
+                                    Overwrite = true
+                                };
 
-                            UpdateWebResources(retryUs);
+                                UpdateWebResources(retryUs);
+                            }
                         }
                     }
                 }
@@ -1148,43 +1183,44 @@ Are you sure you want to delete this webresource?",
             try
             {
                 // Let the user decides where to find files
-                var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true);
-
-                if (!string.IsNullOrWhiteSpace(settings.LastFolderUsed) && Directory.Exists(settings.LastFolderUsed))
+                using (var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true))
                 {
-                    fbd.FolderPath = settings.LastFolderUsed;
-                }
-
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    settings.LastFolderUsed = fbd.FolderPath;
-                    settings.Save(ConnectionDetail?.ConnectionId.ToString());
-
-                    if (fbd.FolderPath.EndsWith("\\"))
-                        fbd.FolderPath = fbd.FolderPath.Substring(0, fbd.FolderPath.Length - 1);
-
-                    CloseOpenedContents();
-
-                    var invalidFilenames = new List<string>();
-                    WebresourcesCache.Clear();
-                    tv.DisplayWaitingForUpdatePanel();
-                    var resources = Webresource.RetrieveFromDirectory(this, settings, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail?.OrganizationMajorVersion ?? -1);
-
-                    tv.DisplayNodes(resources, null, settings.ExpandAllOnLoadingResources);
-
-                    if (invalidFilenames.Count > 0)
+                    if (!string.IsNullOrWhiteSpace(settings.LastFolderUsed) && Directory.Exists(settings.LastFolderUsed))
                     {
-                        if (ifnd == null || ifnd.IsDisposed)
-                        {
-                            ifnd = new InvalidFilenamesDialog();
-                        }
-
-                        ifnd.InvalidFiles = invalidFilenames;
-                        ifnd.Show(dpMain, DockState.DockBottom);
+                        fbd.FolderPath = settings.LastFolderUsed;
                     }
-                    else if (ifnd != null && !ifnd.IsDisposed)
+
+                    if (fbd.ShowDialog() == DialogResult.OK)
                     {
-                        ifnd.InvalidFiles = invalidFilenames;
+                        settings.LastFolderUsed = fbd.FolderPath;
+                        settings.Save(ConnectionDetail?.ConnectionId.ToString());
+
+                        if (fbd.FolderPath.EndsWith("\\"))
+                            fbd.FolderPath = fbd.FolderPath.Substring(0, fbd.FolderPath.Length - 1);
+
+                        CloseOpenedContents();
+
+                        var invalidFilenames = new List<string>();
+                        WebresourcesCache.Clear();
+                        tv.DisplayWaitingForUpdatePanel();
+                        var resources = Webresource.RetrieveFromDirectory(this, settings, fbd.FolderPath, fbd.ExtensionsToLoad, invalidFilenames, ConnectionDetail?.OrganizationMajorVersion ?? -1);
+
+                        tv.DisplayNodes(resources, null, settings.ExpandAllOnLoadingResources);
+
+                        if (invalidFilenames.Count > 0)
+                        {
+                            if (ifnd == null || ifnd.IsDisposed)
+                            {
+                                ifnd = new InvalidFilenamesDialog();
+                            }
+
+                            ifnd.InvalidFiles = invalidFilenames;
+                            ifnd.Show(dpMain, DockState.DockBottom);
+                        }
+                        else if (ifnd != null && !ifnd.IsDisposed)
+                        {
+                            ifnd.InvalidFiles = invalidFilenames;
+                        }
                     }
                 }
             }
@@ -1197,46 +1233,48 @@ Are you sure you want to delete this webresource?",
 
         private void SaveToDisk(IEnumerable<Webresource> resources, bool withRoot = false)
         {
-            var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false);
-            if (!string.IsNullOrEmpty(settings.LastFolderUsed))
+            using (var fbd = new CustomFolderBrowserDialog(tv.OrganizationMajorVersion, true, false))
             {
-                fbd.FolderPath = settings.LastFolderUsed;
-            }
-
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                settings.LastFolderUsed = fbd.FolderPath;
-                settings.Save(ConnectionDetail?.ConnectionId.ToString());
-
-                foreach (var resource in resources)
+                if (!string.IsNullOrEmpty(settings.LastFolderUsed))
                 {
-                    string[] partPath = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                    string path = fbd.FolderPath;
+                    fbd.FolderPath = settings.LastFolderUsed;
+                }
 
-                    if (withRoot)
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    settings.LastFolderUsed = fbd.FolderPath;
+                    settings.Save(ConnectionDetail?.ConnectionId.ToString());
+
+                    foreach (var resource in resources)
                     {
-                        for (int i = 0; i < partPath.Length - 1; i++)
-                        {
-                            path = Path.Combine(path, partPath[i]);
+                        string[] partPath = resource.Name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                        string path = fbd.FolderPath;
 
-                            if (!Directory.Exists(path))
+                        if (withRoot)
+                        {
+                            for (int i = 0; i < partPath.Length - 1; i++)
                             {
-                                Directory.CreateDirectory(path);
+                                path = Path.Combine(path, partPath[i]);
+
+                                if (!Directory.Exists(path))
+                                {
+                                    Directory.CreateDirectory(path);
+                                }
                             }
                         }
+
+                        if (resource.Node.Parent is FolderNode fldNode)
+                        {
+                            fldNode.FolderPath = path;
+                            fldNode.Synced = true;
+                        }
+
+                        path = Path.Combine(path, partPath[partPath.Length - 1]);
+
+                        resource.SaveToDisk(path, Service);
+
+                        resource.FilePath = path;
                     }
-
-                    if (resource.Node.Parent is FolderNode fldNode)
-                    {
-                        fldNode.FolderPath = path;
-                        fldNode.Synced = true;
-                    }
-
-                    path = Path.Combine(path, partPath[partPath.Length - 1]);
-
-                    resource.SaveToDisk(path, Service);
-
-                    resource.FilePath = path;
                 }
             }
         }

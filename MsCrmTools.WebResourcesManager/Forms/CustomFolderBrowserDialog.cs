@@ -32,27 +32,29 @@ namespace MscrmTools.WebresourcesManager.Forms
             }
         }
 
-        public sealed override string Text
+        public List<string> ExtensionsToLoad { get; private set; }
+
+        public string FolderPath { get; set; }
+
+        public override sealed string Text
         {
             get => base.Text;
             set => base.Text = value;
         }
 
-        public List<string> ExtensionsToLoad { get; private set; }
-        public string FolderPath { get; set; }
-
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            var fbd = new FolderBrowserDialog
+            using (var fbd = new FolderBrowserDialog
             {
                 Description = @"Select the folder where the files are located",
                 ShowNewFolderButton = true
-            };
-
-            if (fbd.ShowDialog(this) == DialogResult.OK)
+            })
             {
-                txtFolderPath.Text = fbd.SelectedPath;
-                FolderPath = fbd.SelectedPath;
+                if (fbd.ShowDialog(this) == DialogResult.OK)
+                {
+                    txtFolderPath.Text = fbd.SelectedPath;
+                    FolderPath = fbd.SelectedPath;
+                }
             }
         }
 
