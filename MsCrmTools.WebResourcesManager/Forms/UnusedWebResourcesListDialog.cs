@@ -38,11 +38,13 @@ namespace MscrmTools.WebresourcesManager.Forms
 
             if (DialogResult.No ==
                 MessageBox.Show(this,
-                                @"Are your sure you want to delete selected web resources?\r\n\r\nEven web resources without any dependencies could be used by other web resources",
+                                @"Are your sure you want to delete selected web resources?
+
+Even web resources without any dependencies could be used by other web resources",
                                 @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                 return;
 
-            var list = (from ListViewItem item in lvWebResources.SelectedItems select (Entity)item.Tag).ToList();
+            var list = (from ListViewItem item in lvWebResources.SelectedItems select (Webresource)item.Tag).ToList();
             pbDelete.Visible = true;
 
             var bwDelete = new BackgroundWorker();
@@ -56,16 +58,16 @@ namespace MscrmTools.WebresourcesManager.Forms
         private void BwDeleteDoWork(object sender, DoWorkEventArgs e)
         {
             var bw = (BackgroundWorker)sender;
-            var wrs = (List<Entity>)e.Argument;
+            var wrs = (List<Webresource>)e.Argument;
 
             int i = 1;
             foreach (var wr in wrs)
             {
-                bw.ReportProgress((i * 100) / wrs.Count, "Deleting web resource " + wr["name"] + "...");
+                bw.ReportProgress((i * 100) / wrs.Count, "Deleting web resource " + wr.Name + "...");
 
                 try
                 {
-                    service.Delete(wr.LogicalName, wr.Id);
+                    service.Delete("webresource", wr.Id);
                 }
                 finally
                 {
@@ -85,6 +87,15 @@ namespace MscrmTools.WebresourcesManager.Forms
         {
             pbDelete.Value = 0;
             pbDelete.Visible = false;
+        }
+
+        private void CopySelectedValuesToClipboard()
+        {
+            var builder = new StringBuilder();
+            foreach (ListViewItem item in lvWebResources.SelectedItems)
+                builder.AppendLine(item.Text);
+
+            Clipboard.SetText(builder.ToString());
         }
 
         private void lvWebResources_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -107,15 +118,6 @@ namespace MscrmTools.WebresourcesManager.Forms
 
             if (e.Control && e.KeyCode == Keys.C)
                 CopySelectedValuesToClipboard();
-        }
-
-        private void CopySelectedValuesToClipboard()
-        {
-            var builder = new StringBuilder();
-            foreach (ListViewItem item in lvWebResources.SelectedItems)
-                builder.AppendLine(item.Text);
-
-            Clipboard.SetText(builder.ToString());
         }
     }
 }
