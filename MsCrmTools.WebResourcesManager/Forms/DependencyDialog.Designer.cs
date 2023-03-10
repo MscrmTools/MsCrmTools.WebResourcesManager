@@ -60,19 +60,17 @@
             this.pnlHeader.Controls.Add(this.lblHeader);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
-            this.pnlHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1063, 120);
+            this.pnlHeader.Size = new System.Drawing.Size(1035, 100);
             this.pnlHeader.TabIndex = 0;
             // 
             // lblHeaderDesc
             // 
             this.lblHeaderDesc.AutoSize = true;
             this.lblHeaderDesc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHeaderDesc.Location = new System.Drawing.Point(15, 65);
-            this.lblHeaderDesc.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblHeaderDesc.Location = new System.Drawing.Point(12, 54);
             this.lblHeaderDesc.Name = "lblHeaderDesc";
-            this.lblHeaderDesc.Size = new System.Drawing.Size(744, 32);
+            this.lblHeaderDesc.Size = new System.Drawing.Size(599, 28);
             this.lblHeaderDesc.TabIndex = 1;
             this.lblHeaderDesc.Text = "Define web resources that need to be loaded with this web resource";
             // 
@@ -80,10 +78,9 @@
             // 
             this.lblHeader.AutoSize = true;
             this.lblHeader.Font = new System.Drawing.Font("Segoe UI Light", 14F);
-            this.lblHeader.Location = new System.Drawing.Point(15, 11);
-            this.lblHeader.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblHeader.Location = new System.Drawing.Point(12, 9);
             this.lblHeader.Name = "lblHeader";
-            this.lblHeader.Size = new System.Drawing.Size(414, 45);
+            this.lblHeader.Size = new System.Drawing.Size(348, 38);
             this.lblHeader.TabIndex = 0;
             this.lblHeader.Text = "Web resource dependencies";
             // 
@@ -92,20 +89,19 @@
             this.pnlFooter.Controls.Add(this.btnCancel);
             this.pnlFooter.Controls.Add(this.btnOK);
             this.pnlFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlFooter.Location = new System.Drawing.Point(0, 700);
-            this.pnlFooter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlFooter.Location = new System.Drawing.Point(0, 584);
             this.pnlFooter.Name = "pnlFooter";
-            this.pnlFooter.Size = new System.Drawing.Size(1063, 76);
+            this.pnlFooter.Size = new System.Drawing.Size(1035, 63);
             this.pnlFooter.TabIndex = 1;
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(911, 17);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnCancel.Location = new System.Drawing.Point(910, 14);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(137, 42);
+            this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 15;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -116,10 +112,10 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Enabled = false;
-            this.btnOK.Location = new System.Drawing.Point(761, 17);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnOK.Location = new System.Drawing.Point(788, 14);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(137, 42);
+            this.btnOK.Size = new System.Drawing.Size(112, 35);
             this.btnOK.TabIndex = 14;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -130,10 +126,9 @@
             this.pnlMain.Controls.Add(this.lvDependencies);
             this.pnlMain.Controls.Add(this.toolStrip1);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(0, 120);
-            this.pnlMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlMain.Location = new System.Drawing.Point(0, 100);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(1063, 580);
+            this.pnlMain.Size = new System.Drawing.Size(1035, 484);
             this.pnlMain.TabIndex = 2;
             // 
             // lvDependencies
@@ -145,10 +140,10 @@
             this.chDescription});
             this.lvDependencies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvDependencies.FullRowSelect = true;
-            this.lvDependencies.Location = new System.Drawing.Point(0, 38);
-            this.lvDependencies.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvDependencies.HideSelection = false;
+            this.lvDependencies.Location = new System.Drawing.Point(0, 86);
             this.lvDependencies.Name = "lvDependencies";
-            this.lvDependencies.Size = new System.Drawing.Size(1063, 542);
+            this.lvDependencies.Size = new System.Drawing.Size(1553, 641);
             this.lvDependencies.TabIndex = 1;
             this.lvDependencies.UseCompatibleStateImageBehavior = false;
             this.lvDependencies.View = System.Windows.Forms.View.Details;
@@ -184,56 +179,56 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(1063, 38);
+            this.toolStrip1.Size = new System.Drawing.Size(1553, 57);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "tsMain";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(202, 35);
+            this.toolStripLabel1.Size = new System.Drawing.Size(172, 52);
             this.toolStripLabel1.Text = "Select web resource:";
             // 
             // toolStripComboBox1
             // 
             this.toolStripComboBox1.DropDownWidth = 200;
+            this.toolStripComboBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(488, 38);
+            this.toolStripComboBox1.Size = new System.Drawing.Size(300, 57);
             // 
             // tsbAdd
             // 
             this.tsbAdd.Image = ((System.Drawing.Image)(resources.GetObject("tsbAdd.Image")));
             this.tsbAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAdd.Name = "tsbAdd";
-            this.tsbAdd.Size = new System.Drawing.Size(83, 35);
+            this.tsbAdd.Size = new System.Drawing.Size(66, 52);
             this.tsbAdd.Text = "Add";
             this.tsbAdd.Click += new System.EventHandler(this.tsbAdd_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 57);
             // 
             // tsbRemove
             // 
             this.tsbRemove.Image = ((System.Drawing.Image)(resources.GetObject("tsbRemove.Image")));
             this.tsbRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRemove.Name = "tsbRemove";
-            this.tsbRemove.Size = new System.Drawing.Size(119, 35);
+            this.tsbRemove.Size = new System.Drawing.Size(96, 52);
             this.tsbRemove.Text = "Remove";
             this.tsbRemove.Click += new System.EventHandler(this.tsbRemove_Click);
             // 
             // DependencyDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1063, 776);
+            this.ClientSize = new System.Drawing.Size(1035, 647);
             this.ControlBox = false;
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlFooter);
             this.Controls.Add(this.pnlHeader);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "DependencyDialog";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

@@ -1,17 +1,17 @@
-﻿using System;
+﻿using MscrmTools.WebresourcesManager.AppCode;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using MscrmTools.WebresourcesManager.AppCode;
 
 namespace MscrmTools.WebresourcesManager.Forms
 {
     public partial class DependencyDialog : Form
     {
-        private string dependencyXml;
-        private readonly MyPluginControl mainControl;
         private readonly bool isCompatible;
+        private readonly MyPluginControl mainControl;
+        private string dependencyXml;
 
         public DependencyDialog(Webresource resource, MyPluginControl control)
         {
@@ -20,9 +20,49 @@ namespace MscrmTools.WebresourcesManager.Forms
             mainControl = control;
 
             InitializeComponent();
+
+            var maxText = "";
+            foreach (var wr in mainControl.WebresourcesCache)
+            {
+                if (maxText.Length < wr.Name.Length) maxText = wr.Name;
+            }
+            var maxTextSize = TextRenderer.MeasureText(maxText, toolStripComboBox1.Font);
+            toolStripComboBox1.AutoSize = false;
+            toolStripComboBox1.Width = maxTextSize.Width + 16;
         }
 
         public string UpdatedDependencyXml => dependencyXml;
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            var doc = new XDocument(
+                new XElement("Dependencies",
+                    new XElement("Dependency",
+                        new XAttribute("componentType", "WebResource"),
+                        lvDependencies.Items.Cast<ListViewItem>().Select(i =>
+                            new XElement("Library",
+                                new XAttribute("name", ((Webresource)i.Tag).ToString()),
+                                new XAttribute("displayName",
+                                    ((Webresource)i.Tag).DisplayName ?? ""),
+                                new XAttribute("languagecode",
+                                    ((Webresource)i.Tag).LanguageCode == 0 ? "" : ((Webresource)i.Tag).LanguageCode.ToString()),
+                                new XAttribute("description",
+                                    ((Webresource)i.Tag).Description ?? ""),
+                                new XAttribute("libraryUniqueId", Guid.NewGuid().ToString("B"))
+                            )
+                        )
+                    )
+                )
+            );
+
+            dependencyXml = doc.ToString();
+            Close();
+        }
 
         private void DependencyDialog_Load(object sender, EventArgs e)
         {
@@ -63,37 +103,6 @@ namespace MscrmTools.WebresourcesManager.Forms
                     lvDependencies.Items.Add(item);
                 }
             }
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            var doc = new XDocument(
-                new XElement("Dependencies",
-                    new XElement("Dependency",
-                        new XAttribute("componentType", "WebResource"),
-                        lvDependencies.Items.Cast<ListViewItem>().Select(i =>
-                            new XElement("Library",
-                                new XAttribute("name", ((Webresource)i.Tag).ToString()),
-                                new XAttribute("displayName",
-                                    ((Webresource)i.Tag).DisplayName ?? ""),
-                                new XAttribute("languagecode",
-                                    ((Webresource)i.Tag).LanguageCode == 0 ? "" : ((Webresource)i.Tag).LanguageCode.ToString()),
-                                new XAttribute("description",
-                                    ((Webresource)i.Tag).Description ?? ""),
-                                new XAttribute("libraryUniqueId", Guid.NewGuid().ToString("B"))
-                            )
-                        )
-                    )
-                )
-            );
-
-            dependencyXml = doc.ToString();
-            Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            Close();
         }
 
         private void tsbAdd_Click(object sender, EventArgs e)
