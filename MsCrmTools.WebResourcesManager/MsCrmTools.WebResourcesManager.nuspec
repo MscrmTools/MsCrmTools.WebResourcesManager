@@ -12,9 +12,8 @@
     <description>Manage your webresources easily</description>
     <summary>Manage your webresources easily</summary>
     <releaseNotes>
-      Fixed unused webresources deletion dialog (#119)
-      Fixed layout issue in webresource dependency dialog menu
-      Optimized memory usage
+      Use context menu to check for active layer and remove it if found
+      Added new shortcut Ctrl+P to save, update and publish in one operation
     </releaseNotes>
     <tags>XrmToolBox Plugin WebResourceManager</tags>
     <dependencies>
