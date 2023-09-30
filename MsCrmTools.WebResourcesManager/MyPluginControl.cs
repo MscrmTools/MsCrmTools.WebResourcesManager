@@ -1,6 +1,7 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.WebresourcesManager.AppCode;
 using MscrmTools.WebresourcesManager.AppCode.Args;
 using MscrmTools.WebresourcesManager.AppCode.Exceptions;
@@ -518,6 +519,81 @@ Are you sure you want to delete this webresource?",
             tssResource5.Visible = visible && ConnectionDetail?.OrganizationMajorVersion >= 9;
         }
 
+        private void FindActiveLayer()
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = $"Searching an active layer for {contextStripResource.Name}...",
+                Work = (bw, evt) =>
+                {
+                    var query = new QueryExpression("msdyn_componentlayer")
+                    {
+                        NoLock = true,
+                        ColumnSet = new ColumnSet(true),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                        {
+                                    new ConditionExpression("msdyn_solutioncomponentname",ConditionOperator.Equal,"WebResource"),
+                                    new ConditionExpression("msdyn_componentid",ConditionOperator.Equal, contextStripResource.Id),
+                                    new ConditionExpression("msdyn_solutionname",ConditionOperator.Equal, "Active"),
+                        }
+                        }
+                    };
+
+                    var result = Service.RetrieveMultiple(query);
+
+                    evt.Result = result;
+                },
+                PostWorkCallBack = evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(ParentForm, $@"An error occured while searching for an active layer: {evt.Error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    var result = (EntityCollection)evt.Result;
+
+                    if (result.Entities.Count == 0)
+                    {
+                        MessageBox.Show(this, "No active layer has been found for this web resource.\n\nYou are all good!", "No Active layer found!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    var dr = MessageBox.Show(this, "An active layer has been found!\n\nWould you like to remove it?", "Active layer found!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (dr == DialogResult.Yes)
+                    {
+                        WorkAsync(new WorkAsyncInfo
+                        {
+                            Message = $"Removing active layer for {contextStripResource.Name}...",
+                            Work = (bw2, evt2) =>
+                            {
+                                var request = new OrganizationRequest("RemoveActiveCustomizations");
+                                request.Parameters["SolutionComponentName"] = result.Entities.First().GetAttributeValue<string>("msdyn_solutioncomponentname");
+                                request.Parameters["ComponentId"] = result.Entities.First().GetAttributeValue<Guid>("msdyn_componentid");
+
+                                Service.Execute(request);
+
+                                Invoke(new Action(() =>
+                                {
+                                    contextStripResource.GetLatestVersion();
+                                }));
+                            },
+                            PostWorkCallBack = evt2 =>
+                            {
+                                if (evt.Error != null)
+                                {
+                                    MessageBox.Show(ParentForm, $@"An error occured while removing the active layer: {evt.Error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
         private void FindUnusedResources()
         {
             WorkAsync(new WorkAsyncInfo
@@ -562,6 +638,7 @@ Are you sure you want to delete this webresource?",
                 {tsmiUpdate, (c) => c.UpdateResources() },
                 {tsmiUpdatePublish, (c) => c.UpdateResources(true) },
                 {tsmiUpdatePublishAdd, (c) => c.UpdateResources(true, true) },
+                {tsmiFindActiveLayer, (c) => c.FindActiveLayer() },
 
                 // File
                 {tsmiRefreshFileFromDisk, RefreshFileFromDisk },
@@ -941,7 +1018,7 @@ Are you sure you want to delete this webresource?",
             {
                 using (var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent })
                 {
-                    if (sPicker.ShowDialog(ParentForm) == DialogResult.OK)
+                    if (sPicker?.ShowDialog(ParentForm) == DialogResult.OK)
                     {
                         lastSettings.Solution = sPicker.SelectedSolution;
                         lastSettings.LoadAllWebresources = sPicker.LoadAllWebresources;
