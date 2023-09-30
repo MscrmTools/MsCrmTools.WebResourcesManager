@@ -1403,6 +1403,25 @@ Are you sure you want to delete this webresource?",
                 isCtrlM = false;
                 isCtrlK = false;
             }
+            else if (e.Control && e.KeyCode == Keys.P)
+            {
+                e.SuppressKeyPress = true;
+                if (activeContent is BaseContentForm bcf)
+                {
+                    e.Handled = true;
+                    bcf.Resource.Save(Service);
+                    var us = new UpdateResourcesSettings
+                    {
+                        Webresources = new List<Webresource> { bcf.Resource },
+                        Publish = true
+                    };
+
+                    ExecuteMethod(UpdateWebResources, us);
+                }
+
+                isCtrlM = false;
+                isCtrlK = false;
+            }
             else if (e.Control && e.KeyCode == Keys.U)
             {
                 if (!isCtrlK)

@@ -97,6 +97,7 @@ namespace MscrmTools.WebresourcesManager.Forms.Contents
             scintilla.ClearCmdKey(Keys.Control | Keys.U);
             scintilla.ClearCmdKey(Keys.Control | Keys.M);
             scintilla.ClearCmdKey(Keys.Control | Keys.O);
+            scintilla.ClearCmdKey(Keys.Control | Keys.P);
             scintilla.AssignCmdKey(Keys.Shift | Keys.Delete, Command.LineDelete);
         }
 
