@@ -250,20 +250,36 @@ namespace MsCrmTools.WebResourcesManager.Forms
             logicalName = logicalName.Substring(0, logicalName.Length - 1);
             var emd = sm.Metadata.First(em => em.LogicalName == logicalName);
 
-            var forms = sm.Forms.Where(f => f.GetAttributeValue<string>("objecttypecode") == logicalName
-                                          && (f.GetAttributeValue<OptionSetValue>("type").Value == 2
-                                          || f.GetAttributeValue<OptionSetValue>("type").Value == 7));
+            var bwMain = new BackgroundWorker() { WorkerReportsProgress = true };
+            bwMain.DoWork += (bw, evt) =>
+            {
+                sm.LoadScriptsByEntity(logicalName, true);
+                sm.LoadViewsByEntity(logicalName);
+                sm.LoadCustomControlsByEntity(logicalName);
+            };
+            bwMain.ProgressChanged += (bw, evt) =>
+            {
+            };
+            bwMain.RunWorkerCompleted += (bw, evt) =>
+            {
+                var forms = sm.Forms.Where(f => f.GetAttributeValue<string>("objecttypecode") == logicalName
+                                              && (f.GetAttributeValue<OptionSetValue>("type").Value == 2
+                                              || f.GetAttributeValue<OptionSetValue>("type").Value == 7));
 
-            var homepageGrids =
-                sm.HomePageGrids.Where(h => h.GetAttributeValue<string>("primaryentitytypecode") == logicalName);
+                var homepageGrids =
+                    sm.HomePageGrids.Where(h => h.GetAttributeValue<string>("primaryentitytypecode") == logicalName);
 
-            var views = sm.Views.Where(v => v.GetAttributeValue<string>("returnedtypecode") == logicalName);
+                var views = sm.Views.Where(v => v.GetAttributeValue<string>("returnedtypecode") == logicalName);
 
-            cbbUiItems.Items.Clear();
-            cbbUiItems.Items.AddRange(forms.Select(f => new CdsForm(f)).Cast<object>().ToArray());
-            cbbUiItems.Items.AddRange(homepageGrids.Select(h => new CdsHomePageGrid(h)).Cast<object>().ToArray());
-            cbbUiItems.Items.AddRange(views.Where(v => !string.IsNullOrEmpty(v.GetAttributeValue<string>("layoutxml"))).Select(v => new CdsView(v, emd)).Cast<object>().ToArray());
-            cbbUiItems.SelectedIndex = 0;
+                cbbUiItems.SelectedIndexChanged -= cbbForm_SelectedIndexChanged;
+                cbbUiItems.Items.Clear();
+                cbbUiItems.Items.AddRange(forms.Select(f => new CdsForm(f)).Cast<object>().ToArray());
+                cbbUiItems.Items.AddRange(homepageGrids.Select(h => new CdsHomePageGrid(h)).Cast<object>().ToArray());
+                cbbUiItems.Items.AddRange(views.Where(v => !string.IsNullOrEmpty(v.GetAttributeValue<string>("layoutxml"))).Select(v => new CdsView(v, emd)).Cast<object>().ToArray());
+                cbbUiItems.SelectedIndexChanged += cbbForm_SelectedIndexChanged;
+                cbbUiItems.SelectedIndex = 0;
+            };
+            bwMain.RunWorkerAsync();
         }
 
         private void cbbEvent_SelectedIndexChanged(object sender, EventArgs e)
@@ -278,8 +294,11 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private void cbbForm_SelectedIndexChanged(object sender, EventArgs e)
         {
+            cbbControl.SelectedIndexChanged -= cbbControl_SelectedIndexChanged;
             cbbControl.Items.Clear();
             cbbControl.Items.AddRange(((IUiUtem)cbbUiItems.SelectedItem).GetControls(sm.UserLcid).Cast<object>().ToArray());
+            cbbControl.SelectedIndexChanged += cbbControl_SelectedIndexChanged;
+
             cbbControl.SelectedIndex = 0;
 
             var isView = cbbUiItems.SelectedItem is CdsView;
@@ -317,9 +336,11 @@ namespace MsCrmTools.WebResourcesManager.Forms
                     return;
                 }
 
+                cbbEntity.SelectedIndexChanged -= cbbEntity_SelectedIndexChanged;
                 cbbEntity.Items.AddRange(sm.Metadata.Select(emd => $"{emd.DisplayName?.UserLocalizedLabel?.Label ?? "N/A"} ({emd.LogicalName})").Cast<object>().ToArray());
                 cbbEntity.SelectedIndex = 0;
                 rdbRegisterEvent_CheckedChanged(rdbRegisterEvent, new EventArgs());
+                cbbEntity.SelectedIndexChanged += cbbEntity_SelectedIndexChanged;
             };
             bwMain.RunWorkerAsync();
         }

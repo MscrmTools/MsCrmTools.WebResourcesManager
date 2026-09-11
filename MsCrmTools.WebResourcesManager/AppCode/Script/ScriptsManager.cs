@@ -41,6 +41,21 @@ namespace MsCrmTools.WebResourcesManager.AppCode.Script
             _emds = GetEntities(solutions, loadManagedEntities);
             Metadata = _emds.Where(x => x.DisplayName.UserLocalizedLabel != null).ToList();
 
+            //_worker.ReportProgress(0, "Loading Forms Scripts...");
+            //LoadScripts(Metadata, crmVersion.Major >= 6);
+
+            //_worker.ReportProgress(0, "Loading Views Icon Scripts...");
+            //LoadViews(Metadata);
+
+            //if (crmVersion >= new Version(8, 2, 0, 0))
+            //{
+            //    _worker.ReportProgress(0, "Loading Homepages Scripts...");
+            //    LoadCustomControls(Metadata);
+            //}
+        }
+
+        public void FindUiControls(string entityLogicalName, Version crmVersion)
+        {
             _worker.ReportProgress(0, "Loading Forms Scripts...");
             LoadScripts(Metadata, crmVersion.Major >= 6);
 
@@ -52,6 +67,80 @@ namespace MsCrmTools.WebResourcesManager.AppCode.Script
                 _worker.ReportProgress(0, "Loading Homepages Scripts...");
                 LoadCustomControls(Metadata);
             }
+        }
+
+        public void LoadCustomControlsByEntity(string entityLogicalName)
+        {
+            if (HomePageGrids.FirstOrDefault(h => h.GetAttributeValue<string>("primaryentitytypecode") == entityLogicalName) != null)
+            {
+                return;
+            }
+
+            var ccs = _service.RetrieveMultiple(new QueryExpression("customcontroldefaultconfig")
+            {
+                ColumnSet = new ColumnSet("eventsxml", "primaryentitytypecode"),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("primaryentitytypecode", ConditionOperator.Equal, entityLogicalName),
+                    }
+                }
+            });
+
+            var homePageGrids = ccs.Entities.ToList();
+            HomePageGrids.AddRange(homePageGrids);
+        }
+
+        public void LoadScriptsByEntity(string entityLogicalName, bool supportFormActivationState)
+        {
+            if (Forms.FirstOrDefault(h => h.GetAttributeValue<string>("objecttypecode") == entityLogicalName) != null)
+            {
+                return;
+            }
+
+            var query = new QueryExpression("systemform")
+            {
+                ColumnSet = new ColumnSet("name", "formxml", "type", "objecttypecode"),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, entityLogicalName)
+                    }
+                }
+            };
+
+            if (supportFormActivationState)
+            {
+                query.ColumnSet.AddColumn("formactivationstate");
+            }
+
+            var forms = _service.RetrieveMultiple(query).Entities.ToList();
+            Forms.AddRange(forms);
+        }
+
+        public void LoadViewsByEntity(string entityLogicalName)
+        {
+            if (Views.FirstOrDefault(h => h.GetAttributeValue<string>("returnedtypecode") == entityLogicalName) != null)
+            {
+                return;
+            }
+
+            var query = new QueryExpression("savedquery")
+            {
+                ColumnSet = new ColumnSet("layoutxml", "name", "returnedtypecode"),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("returnedtypecode", ConditionOperator.Equal, entityLogicalName)
+                    }
+                }
+            };
+
+            var views = _service.RetrieveMultiple(query).Entities.ToList();
+            Views.AddRange(views);
         }
 
         public void UpdateForms(List<Script> scripts)
